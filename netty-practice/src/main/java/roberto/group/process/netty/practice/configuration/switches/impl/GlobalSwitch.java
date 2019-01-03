@@ -9,7 +9,7 @@
  */
 package roberto.group.process.netty.practice.configuration.switches.impl;
 
-import roberto.group.process.netty.practice.configuration.ConfigManager;
+import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
 import roberto.group.process.netty.practice.configuration.switches.Switch;
 
 import java.util.BitSet;
