@@ -12,9 +12,10 @@ package roberto.group.process.netty.practice.connection;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.AttributeKey;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import roberto.group.process.netty.practice.invoke.InvokeFuture;
+import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
 import roberto.group.process.netty.practice.protocol.ProtocolCode;
 import roberto.group.process.netty.practice.utils.RemotingUtil;
 
@@ -36,8 +37,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Connection {
     private static final Logger LOGGER = LoggerFactory.getLogger(Connection.class);
 
+    @Getter
     private Channel channel;
 
+    @Getter
     private ConnectionURL connectionURL;
 
     private final ConcurrentHashMap<Integer, InvokeFuture> invokeFutureMap = new ConcurrentHashMap<Integer, InvokeFuture>(4);
@@ -52,9 +55,9 @@ public class Connection {
     /** 用于记录连接被引用次数 - 主要提供连接回收使用 **/
     private final AtomicInteger referenceCount = new AtomicInteger();
 
-    public Channel getChannel() {
-        return this.channel;
-    }
+    /** 用户保存连接自定义属性 **/
+    private final ConcurrentHashMap<String, Object> attributes = new ConcurrentHashMap();
+
 
     public String getLocalIP() {
         return RemotingUtil.parseLocalIP(this.channel);
@@ -92,9 +95,32 @@ public class Connection {
         return this.channel != null && this.channel.isActive();
     }
 
-    public ConnectionURL getConnectionURL() {
-        return connectionURL;
+    public InvokeFuture addInvokeFuture(InvokeFuture future) {
+        return this.invokeFutureMap.putIfAbsent(future.invokeId(), future);
     }
+
+    public InvokeFuture removeInvokeFuture(int invokeId) {
+        return this.invokeFutureMap.remove(invokeId);
+    }
+
+    /** 连接自定义属性START **/
+    public void clearAttributes() {
+        attributes.clear();
+    }
+
+    public void removeAttribute(String key) {
+        attributes.remove(key);
+    }
+
+    public Object getAttribute(String key) {
+        return attributes.get(key);
+    }
+
+    public Object setAttributeIfAbsent(String key, Object value) {
+        return attributes.putIfAbsent(key, value);
+    }
+    /** 连接自定义属性END **/
+
 
     /**
      * 功能描述: <br>

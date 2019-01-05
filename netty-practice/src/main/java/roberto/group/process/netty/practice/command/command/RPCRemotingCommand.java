@@ -1,0 +1,181 @@
+/**
+ * FileName: RPCRemotingCommand
+ * Author:   HuangTaiHong
+ * Date:     2019/1/4 16:14
+ * Description: Remoting command.
+ * History:
+ * <author>          <time>          <version>          <desc>
+ * 作者姓名           修改时间           版本号              描述
+ */
+package roberto.group.process.netty.practice.command.command;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
+import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
+import roberto.group.process.netty.practice.configuration.switches.impl.ProtocolSwitch;
+import roberto.group.process.netty.practice.exception.DeserializationException;
+import roberto.group.process.netty.practice.exception.SerializationException;
+import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.protocol.ProtocolCode;
+import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
+import roberto.group.process.netty.practice.serialize.serialize.manager.DeserializeLevel;
+
+/**
+ * 〈一句话功能简述〉<br>
+ * 〈Remoting command.〉
+ *
+ * * proto: code for protocol
+ * * ver1: version for protocol
+ * * type: request/response/request oneway
+ * * cmdcode: code for remoting command
+ * * ver2:version for remoting command
+ * * requestId: id of request
+ * * codec: code for codec
+ * * switch: function switch for protocol
+ * * headerLen: length of header
+ * * contentLen: length of content
+ * * CRC32: CRC32 of the frame(Exists when ver1 > 1)
+ *
+ * @author HuangTaiHong
+ * @create 2019/1/4
+ * @since 1.0.0
+ */
+@NoArgsConstructor
+public abstract class RPCRemotingCommand implements RemotingCommand {
+    /** For serialization */
+    private static final long serialVersionUID = -3570261012462596503L;
+
+    @Getter
+    @Setter
+    private int id;
+
+    @Getter
+    @Setter
+    private byte type;
+
+    @Getter
+    @Setter
+    private byte version = 0x1;
+
+    @Getter
+    @Setter
+    private RemoteCommandCode remoteCommandCode;
+
+    @Getter
+    @Setter
+    private byte serializer = ConfigManager.serializer;
+
+    @Getter
+    @Setter
+    private ProtocolSwitch protocolSwitch = new ProtocolSwitch();
+
+    /** The class of content */
+    @Getter
+    private byte[] clazz;
+    private short clazzLength = 0;
+    /** Header is used for transparent transmission */
+    @Getter
+    private byte[] header;
+    private short headerLength = 0;
+    /** The bytes format of the content of the command */
+    @Getter
+    private byte[] content;
+    private int contentLength = 0;
+
+    @Getter
+    @Setter
+    /** invoke context of each rpc command */
+    private InvokeContext invokeContext;
+
+    public RPCRemotingCommand(byte type) {
+        this();
+        this.type = type;
+    }
+
+    public RPCRemotingCommand(RemoteCommandCode remoteCommandCode) {
+        this();
+        this.remoteCommandCode = remoteCommandCode;
+    }
+
+    public RPCRemotingCommand(byte type, RemoteCommandCode remoteCommandCode) {
+        this(remoteCommandCode);
+        this.type = type;
+    }
+
+    public RPCRemotingCommand(byte version, byte type, RemoteCommandCode remoteCommandCode) {
+        this(type, remoteCommandCode);
+        this.version = version;
+    }
+
+    public void setClazz(byte[] clazz) {
+        if (clazz != null) {
+            this.clazz = clazz;
+            this.clazzLength = (short) clazz.length;
+        }
+    }
+
+    public void setContent(byte[] content) {
+        if (content != null) {
+            this.content = content;
+            this.contentLength = content.length;
+        }
+    }
+
+    @Override
+    public void serialize() throws SerializationException {
+        this.serializeClazz();
+        this.serializeHeader(this.invokeContext);
+        this.serializeContent(this.invokeContext);
+    }
+
+    @Override
+    public void deserialize() throws DeserializationException {
+        this.deserializeClazz();
+        this.deserializeHeader(this.invokeContext);
+        this.deserializeContent(this.invokeContext);
+    }
+
+    public void deserialize(long mask) throws DeserializationException {
+        if (mask <= DeserializeLevel.DESERIALIZE_CLAZZ) {
+            this.deserializeClazz();
+        } else if (mask <= DeserializeLevel.DESERIALIZE_HEADER) {
+            this.deserializeClazz();
+            this.deserializeHeader(this.getInvokeContext());
+        } else if (mask <= DeserializeLevel.DESERIALIZE_ALL) {
+            this.deserialize();
+        }
+    }
+
+    @Override
+    public ProtocolCode getProtocolCode() {
+        return ProtocolCode.fromBytes(RPCProtocol.PROTOCOL_CODE);
+    }
+
+    public void serializeClazz() throws SerializationException {
+
+    }
+
+    public void deserializeClazz() throws DeserializationException {
+
+    }
+
+    public void serializeHeader(InvokeContext invokeContext) throws SerializationException {
+
+    }
+
+    public void deserializeHeader(InvokeContext invokeContext) throws DeserializationException {
+
+    }
+
+    @Override
+    public void serializeContent(InvokeContext invokeContext) throws SerializationException {
+
+    }
+
+    @Override
+    public void deserializeContent(InvokeContext invokeContext) throws DeserializationException {
+
+    }
+}

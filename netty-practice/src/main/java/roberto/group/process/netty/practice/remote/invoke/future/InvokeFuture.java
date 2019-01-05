@@ -2,21 +2,23 @@
  * FileName: InvokeFuture
  * Author:   HuangTaiHong
  * Date:     2019/1/2 10:55
- * Description: 异步执行器接口
+ * Description: The future of an invocation.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.invoke;
+package roberto.group.process.netty.practice.remote.invoke.future;
 
 import io.netty.util.Timeout;
 import roberto.group.process.netty.practice.command.command.RemotingCommand;
+import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
+import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 
 import java.net.InetSocketAddress;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈异步执行器接口〉
+ * 〈The future of an invocation.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -25,7 +27,7 @@ import java.net.InetSocketAddress;
 public interface InvokeFuture {
     /**
      * 功能描述: <br>
-     * 〈获取任务ID〉
+     * 〈Get the id of the invocation.〉
      *
      * @return > int
      * @author HuangTaiHong
@@ -35,7 +37,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈异步任务是否已完成〉
+     * 〈Whether the future is done.〉
      *
      * @return > boolean
      * @author HuangTaiHong
@@ -45,7 +47,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈设置异常信息〉
+     * 〈Set the cause if exception caught.〉
      *
      * @param cause
      * @author HuangTaiHong
@@ -55,7 +57,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈获取异常信息〉
+     * 〈Get the cause of exception of the future.〉
      *
      * @return > java.lang.Throwable
      * @author HuangTaiHong
@@ -65,7 +67,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈设置响应结果〉
+     * 〈Put the response to the future.〉
      *
      * @param response
      * @author HuangTaiHong
@@ -75,7 +77,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈阻塞等待响应〉
+     * 〈Wait response with unlimit timeout.〉
      *
      * @return > roberto.group.process.netty.practice.command.command.RemotingCommand
      * @throws InterruptedException
@@ -86,7 +88,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈超时阻塞等待响应〉
+     * 〈Wait response with timeout.〉
      *
      * @param timeoutMillis
      * @return > roberto.group.process.netty.practice.command.command.RemotingCommand
@@ -98,7 +100,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈创建连接已关闭响应〉
+     * 〈Create a remoting command response when connection closed.〉
      *
      * @param responseHost
      * @return > roberto.group.process.netty.practice.command.command.RemotingCommand
@@ -109,9 +111,9 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈获取回调处理器〉
+     * 〈Get the application callback of the future.〉
      *
-     * @return > roberto.group.process.netty.practice.invoke.InvokeCallback
+     * @return > roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback
      * @author HuangTaiHong
      * @date 2019.01.02 11:02:07
      */
@@ -119,7 +121,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈执行回调〉
+     * 〈Execute the callback.〉
      *
      * @author HuangTaiHong
      * @date 2019.01.02 10:59:21
@@ -128,7 +130,7 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈异步执行异常回调〉
+     * 〈Asynchronous execute the callback abnormally.〉
      *
      * @author HuangTaiHong
      * @date 2019.01.02 10:59:49
@@ -137,26 +139,17 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈添加超时时间〉
+     * 〈Get invoke context.〉
      *
-     * @param timeout
+     * @return > roberto.group.process.netty.practice.remote.invoke.context.InvokeContext
      * @author HuangTaiHong
-     * @date 2019.01.02 11:02:49
+     * @date 2019.01.02 11:04:35
      */
-    void addTimeout(Timeout timeout);
+    InvokeContext getInvokeContext();
 
     /**
      * 功能描述: <br>
-     * 〈关闭超时机制〉
-     *
-     * @author HuangTaiHong
-     * @date 2019.01.02 11:03:08
-     */
-    void cancelTimeout();
-
-    /**
-     * 功能描述: <br>
-     * 〈设置任务执行上下文〉
+     * 〈set invoke context.〉
      *
      * @param invokeContext
      * @author HuangTaiHong
@@ -166,17 +159,30 @@ public interface InvokeFuture {
 
     /**
      * 功能描述: <br>
-     * 〈获取任务执行上下文〉
+     * 〈Add timeout for the future.〉
      *
-     * @return > roberto.group.process.netty.practice.invoke.InvokeContext
+     * @param timeout
      * @author HuangTaiHong
-     * @date 2019.01.02 11:04:35
+     * @date 2019.01.02 11:02:49
      */
-    InvokeContext getInvokeContext();
+    void addTimeout(Timeout timeout);
 
     /**
      * 功能描述: <br>
-     * 〈获取类加载器〉
+     * 〈Cancel the timeout.〉
+     *
+     *  Added a scheduled task when performing an asynchronous request
+     *
+     *  Need to close the previous scheduled task after the request is successful
+     *
+     * @author HuangTaiHong
+     * @date 2019.01.02 11:03:08
+     */
+    void cancelTimeout();
+
+    /**
+     * 功能描述: <br>
+     * 〈Get application classloader.〉
      *
      * @return > java.lang.ClassLoader
      * @author HuangTaiHong

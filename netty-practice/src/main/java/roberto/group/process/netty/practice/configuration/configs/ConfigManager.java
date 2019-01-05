@@ -10,7 +10,7 @@
 package roberto.group.process.netty.practice.configuration.configs;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈配置管理器〉
  *
  * @author HuangTaiHong
@@ -18,6 +18,12 @@ package roberto.group.process.netty.practice.configuration.configs;
  * @since 1.0.0
  */
 public class ConfigManager {
+    public static final byte serializer = serializer();
+
+    public static byte serializer() {
+        return getByte(ConfigsSupport.SERIALIZER, ConfigsSupport.SERIALIZER_DEFAULT);
+    }
+
     public static int netty_io_ratio() {
         return getInt(ConfigsSupport.NETTY_IO_RATIO, ConfigsSupport.NETTY_IO_RATIO_DEFAULT);
     }
@@ -43,6 +49,10 @@ public class ConfigManager {
     }
 
     /** 获取系统属性相关 **/
+    public static byte getByte(String key, String defaultValue) {
+        return Byte.parseByte(System.getProperty(key, defaultValue));
+    }
+
     public static boolean getBool(String key, String defaultValue) {
         return Boolean.parseBoolean(System.getProperty(key, defaultValue));
     }

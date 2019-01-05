@@ -40,8 +40,8 @@ public class ProtocolCodeBasedEncoder extends MessageToByteEncoder<Serializable>
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Serializable msg, ByteBuf out) throws Exception {
-        Attribute<ProtocolCode> att = ctx.channel().attr(Connection.PROTOCOL);
         ProtocolCode protocolCode;
+        Attribute<ProtocolCode> att = ctx.channel().attr(Connection.PROTOCOL);
         if (att == null || att.get() == null) {
             protocolCode = this.defaultProtocolCode;
         } else {

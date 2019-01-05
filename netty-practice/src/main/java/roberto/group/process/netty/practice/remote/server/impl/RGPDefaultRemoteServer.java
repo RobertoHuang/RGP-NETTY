@@ -14,15 +14,20 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
 import roberto.group.process.netty.practice.command.processor.AuthenticationProcessor;
 import roberto.group.process.netty.practice.command.processor.RemotingCommandProcessor;
 import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
 import roberto.group.process.netty.practice.connection.ConnectionEventListener;
+import roberto.group.process.netty.practice.connection.DefaultConnectionManager;
+import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
+import roberto.group.process.netty.practice.handler.RPCConnectionEventHandler;
+import roberto.group.process.netty.practice.remote.RPCRemoting;
+import roberto.group.process.netty.practice.remote.parse.RemotingAddressParser;
+import roberto.group.process.netty.practice.remote.parse.impl.RPCAddressParser;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 import roberto.group.process.netty.practice.utils.NettyEventLoopUtil;
 
@@ -36,14 +41,23 @@ import java.util.concurrent.ExecutorService;
  * @create 2019/1/2
  * @since 1.0.0
  */
+@Slf4j
 public class RGPDefaultRemoteServer extends AbstractRemotingServer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RGPDefaultRemoteServer.class);
-
     private ChannelFuture channelFuture;
 
+    private RemotingAddressParser addressParser;
+
+    /** connection manager */
+    private DefaultConnectionManager connectionManager;
+
+    /** connection event handler */
     private ConnectionEventHandler connectionEventHandler;
 
+    /** connection event listener */
     private ConnectionEventListener connectionEventListener = new ConnectionEventListener();
+
+    /** RPC remoting */
+    protected RPCRemoting remoting;
 
     /** ServerBootstrap **/
     private ServerBootstrap serverBootstrap;
@@ -53,7 +67,6 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
 
     /** 初始化Worker线程 **/
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2, new NamedThreadFactory("rgp-netty-server-worker", true));
-
 
     static {
         if (workerGroup instanceof NioEventLoopGroup) {
@@ -74,7 +87,6 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
 
     public RGPDefaultRemoteServer(int port, boolean manageConnection) {
         super(port);
-        // 是否启用连接管理
         if (manageConnection) {
             this.switches().turnOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH);
         }
@@ -87,9 +99,27 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
         }
     }
 
+    public RGPDefaultRemoteServer(int port, boolean manageConnection, boolean syncStop) {
+        this(port, manageConnection);
+        if (syncStop) {
+            this.switches().turnOn(GlobalSwitch.SERVER_SYNC_STOP);
+        }
+    }
 
+    @Override
     protected void doInit() {
+        if (this.addressParser == null) {
+            this.addressParser = new RPCAddressParser();
+        }
 
+        if (this.switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
+            this.connectionEventHandler = new RPCConnectionEventHandler(switches());
+            this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
+            this.connectionEventHandler.setConnectionManager(new DefaultConnectionManager(new RandomSelectStrategy()));
+        } else {
+            this.connectionEventHandler = new ConnectionEventHandler(switches());
+            this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
+        }
     }
 
     protected boolean doStart() {
@@ -118,5 +148,9 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
 
     public void registerProcessor(byte protocolCode, RemoteCommandCode commandCode, RemotingCommandProcessor<?> processor) {
 
+    }
+
+    protected void initRPCRemoting() {
+        this.remoting = new RPCRemoting(new RpcCommandFactory(), this.addressParser, this.connectionManager);
     }
 }

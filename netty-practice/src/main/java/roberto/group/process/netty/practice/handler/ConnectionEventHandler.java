@@ -15,6 +15,8 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.util.Attribute;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
@@ -49,6 +51,8 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     private ReconnectManager reconnectManager;
 
+    @Getter
+    @Setter
     private ConnectionManager connectionManager;
 
     private ConnectionEventListener eventListener;
@@ -61,6 +65,15 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     public ConnectionEventHandler(GlobalSwitch globalSwitch) {
         this.globalSwitch = globalSwitch;
+    }
+
+    public void setConnectionEventListener(ConnectionEventListener listener) {
+        if (listener != null) {
+            this.eventListener = listener;
+            if (this.eventExecutor == null) {
+                this.eventExecutor = new ConnectionEventExecutor();
+            }
+        }
     }
 
     @Override
