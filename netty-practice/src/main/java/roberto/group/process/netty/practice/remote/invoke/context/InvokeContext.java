@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 〈一句话功能简述〉<br>
  * 〈Invoke Context〉
  *
- *  将被保存在InvokeFuture中使用
+ * 将被保存在InvokeFuture中使用
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -31,6 +31,15 @@ public class InvokeContext {
     public final static String RGP_CRC_SWITCH = "bolt.invoke.crc.switch";
     /** 用户自定义编解码器 **/
     public final static String RGP_CUSTOM_SERIALIZER = "bolt.invoke.custom.serializer";
+
+    /** invoke context keys of bolt client and server side **/
+    public final static String BOLT_INVOKE_REQUEST_ID = "bolt.invoke.request.id";
+
+    /** invoke context keys of server side **/
+    public final static String SERVER_LOCAL_IP = "bolt.server.local.ip";
+    public final static String SERVER_LOCAL_PORT = "bolt.server.local.port";
+    public final static String SERVER_REMOTE_IP = "bolt.server.remote.ip";
+    public final static String SERVER_REMOTE_PORT = "bolt.server.remote.port";
 
     private ConcurrentHashMap<String, Object> context = new ConcurrentHashMap(INITIAL_SIZE);
 

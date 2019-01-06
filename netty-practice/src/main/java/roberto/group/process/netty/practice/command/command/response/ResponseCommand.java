@@ -39,7 +39,7 @@ public class ResponseCommand extends RPCRemotingCommand {
 
     @Getter
     @Setter
-    private ResponseCommandStatus responseCommandStatus;
+    private ResponseStatusEnum responseStatus;
 
     @Getter
     @Setter

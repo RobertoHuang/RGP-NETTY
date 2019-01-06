@@ -40,12 +40,12 @@ public interface CommandFactory {
      *
      * @param <T>
      * @param responseObject
-     * @param remotingCommand
+     * @param requestCommand
      * @return > T
      * @author HuangTaiHong
      * @date 2019.01.04 14:04:13
      */
-    <T extends RemotingCommand> T createResponse(final Object responseObject, RemotingCommand remotingCommand);
+    <T extends RemotingCommand> T createResponse(final Object responseObject, RemotingCommand requestCommand);
 
     /**
      * 功能描述: <br>

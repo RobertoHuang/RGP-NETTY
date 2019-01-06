@@ -1,5 +1,5 @@
 /**
- * FileName: ResponseCommandStatus
+ * FileName: ResponseStatusEnum
  * Author:   HuangTaiHong
  * Date:     2019/1/5 13:30
  * Description: Status of the response.
@@ -17,7 +17,7 @@ package roberto.group.process.netty.practice.command.command.response;
  * @create 2019/1/5
  * @since 1.0.0
  */
-public enum ResponseCommandStatus {
+public enum ResponseStatusEnum {
     SUCCESS,
     ERROR,
     SERVER_EXCEPTION,
@@ -65,7 +65,7 @@ public enum ResponseCommandStatus {
         throw new IllegalArgumentException("Unknown status," + this);
     }
 
-    public static ResponseCommandStatus valueOf(short value) {
+    public static ResponseStatusEnum valueOf(short value) {
         switch (value) {
             case 0x0000:
                 return SUCCESS;

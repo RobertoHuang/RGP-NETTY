@@ -7,13 +7,13 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.server.impl;
+package roberto.group.process.netty.practice.entrance.server.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import roberto.group.process.netty.practice.configuration.configs.impl.AbstractConfigurableInstance;
 import roberto.group.process.netty.practice.configuration.container.ConfigTypeEnum;
-import roberto.group.process.netty.practice.remote.server.RemotingServer;
+import roberto.group.process.netty.practice.entrance.server.RemotingServer;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicBoolean;

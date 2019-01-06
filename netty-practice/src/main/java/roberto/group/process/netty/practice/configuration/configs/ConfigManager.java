@@ -24,9 +24,34 @@ public class ConfigManager {
         return getByte(ConfigsSupport.SERIALIZER, ConfigsSupport.SERIALIZER_DEFAULT);
     }
 
+    /************************************************************
+     *                 properties for bootstrap                 *
+     ***********************************************************/
+    public static boolean tcp_nodelay() {
+        return getBool(ConfigsSupport.TCP_NODELAY, ConfigsSupport.TCP_NODELAY_DEFAULT);
+    }
+
+    public static boolean tcp_so_reuseaddr() {
+        return getBool(ConfigsSupport.TCP_SO_REUSEADDR, ConfigsSupport.TCP_SO_REUSEADDR_DEFAULT);
+    }
+
+    public static int tcp_so_backlog() {
+        return getInt(ConfigsSupport.TCP_SO_BACKLOG, ConfigsSupport.TCP_SO_BACKLOG_DEFAULT);
+    }
+
+    public static boolean tcp_so_keepalive() {
+        return getBool(ConfigsSupport.TCP_SO_KEEPALIVE, ConfigsSupport.TCP_SO_KEEPALIVE_DEFAULT);
+    }
+
     public static int netty_io_ratio() {
         return getInt(ConfigsSupport.NETTY_IO_RATIO, ConfigsSupport.NETTY_IO_RATIO_DEFAULT);
     }
+
+    public static boolean netty_buffer_pooled() {
+        return getBool(ConfigsSupport.NETTY_BUFFER_POOLED, ConfigsSupport.NETTY_BUFFER_POOLED_DEFAULT);
+    }
+
+
 
     public static boolean conn_reconnect_switch() {
         return getBool(ConfigsSupport.CONN_RECONNECT_SWITCH, ConfigsSupport.CONN_RECONNECT_SWITCH_DEFAULT);
@@ -47,6 +72,18 @@ public class ConfigManager {
     public static int netty_buffer_high_watermark() {
         return getInt(ConfigsSupport.NETTY_BUFFER_HIGH_WATERMARK, ConfigsSupport.NETTY_BUFFER_HIGH_WATERMARK_DEFAULT);
     }
+
+    public static boolean netty_epoll_lt_enabled() {
+        return getBool(ConfigsSupport.NETTY_EPOLL_LT, ConfigsSupport.NETTY_EPOLL_LT_DEFAULT);
+    }
+
+    /************************************************************
+     *                 properties for bootstrap                 *
+     ***********************************************************/
+    public static boolean tcp_idle_switch() {
+        return getBool(ConfigsSupport.TCP_IDLE_SWITCH, ConfigsSupport.TCP_IDLE_SWITCH_DEFAULT);
+    }
+
 
     /** 获取系统属性相关 **/
     public static byte getByte(String key, String defaultValue) {

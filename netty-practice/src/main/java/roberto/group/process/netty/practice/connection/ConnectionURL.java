@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.connection;
 
 import lombok.Getter;
 import roberto.group.process.netty.practice.configuration.configs.ConfigsSupport;
-import roberto.group.process.netty.practice.remote.parse.RemotingAddressParser;
+import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 
 import java.lang.ref.SoftReference;
 import java.util.Properties;
@@ -37,6 +37,7 @@ public class ConnectionURL {
     private int port;
 
     /** unique key of this url */
+    @Getter
     private String uniqueKey;
 
     /** URL args: protocol */

@@ -7,7 +7,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote;
+package roberto.group.process.netty.practice.remote.remote;
 
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.command.command.RPCCommandType;
@@ -23,9 +23,11 @@ import roberto.group.process.netty.practice.connection.DefaultConnectionManager;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.exception.SerializationException;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
+import roberto.group.process.netty.practice.remote.invoke.callback.impl.RPCInvokeCallbackListener;
 import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
-import roberto.group.process.netty.practice.remote.parse.RemotingAddressParser;
+import roberto.group.process.netty.practice.remote.invoke.future.impl.DefaultInvokeFuture;
+import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.utils.RemotingUtil;
 
 /**
@@ -33,8 +35,8 @@ import roberto.group.process.netty.practice.utils.RemotingUtil;
  * 〈RPC remoting capability.〉
  *
  * 将客户端的请求地址 -> Connection对象
- * -> 客户端根据请求地址获取Connection对象
- * -> 服务端根据请求地址获取Connection对象
+ *      1. 客户端根据请求地址获取Connection对象
+ *      2. 服务端根据请求地址获取Connection对象
  *
  * 将客户端的请求实体 -> RemotingCommand
  *
@@ -105,6 +107,16 @@ public abstract class RPCRemoting extends Remoting {
         super.invokeWithCallback(connection, requestCommand, invokeCallback, timeoutMillis);
     }
 
+    @Override
+    protected InvokeFuture createInvokeFuture(RemotingCommand request, InvokeContext invokeContext) {
+        return new DefaultInvokeFuture(request.getId(), null, null, request.getProtocolCode().getFirstByte(), this.getCommandFactory(), invokeContext);
+    }
+
+    @Override
+    protected InvokeFuture createInvokeFuture(Connection connection, RemotingCommand request, InvokeContext invokeContext, InvokeCallback invokeCallback) {
+        return new DefaultInvokeFuture(request.getId(), new RPCInvokeCallbackListener(RemotingUtil.parseRemoteAddress(connection.getChannel())), invokeCallback, request.getProtocolCode().getFirstByte(), this.getCommandFactory(), invokeContext);
+    }
+
     protected RemotingCommand buildRemotingCommand(Object request, InvokeContext invokeContext, int timeoutMillis) throws SerializationException {
         RPCRequestCommand command = this.getCommandFactory().createRequestCommand(request);
         if (null != invokeContext) {
@@ -172,7 +184,7 @@ public abstract class RPCRemoting extends Remoting {
      * @param request
      * @param invokeContext
      * @param timeoutMillis
-     * @return > roberto.group.process.netty.practice.remote.RPCResponseFuture
+     * @return > roberto.group.process.netty.practice.remote.remote.RPCResponseFuture
      * @throws RemotingException
      * @throws InterruptedException
      * @author HuangTaiHong

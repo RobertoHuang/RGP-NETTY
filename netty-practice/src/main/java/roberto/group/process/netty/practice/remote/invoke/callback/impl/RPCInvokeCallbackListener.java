@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.command.command.response.ResponseCommand;
-import roberto.group.process.netty.practice.command.command.response.ResponseCommandStatus;
+import roberto.group.process.netty.practice.command.command.response.ResponseStatusEnum;
 import roberto.group.process.netty.practice.command.command.response.impl.RPCResponseCommand;
 import roberto.group.process.netty.practice.exception.CodecException;
 import roberto.group.process.netty.practice.exception.ConnectionClosedException;
@@ -82,14 +82,14 @@ public class RPCInvokeCallbackListener implements InvokeCallbackListener {
             } catch (InterruptedException e) {
                 log.error("Exception caught when getting response from InvokeFuture. The address is {}", this.remoteAddress, e);
             }
-            if (response == null || response.getResponseCommandStatus() != ResponseCommandStatus.SUCCESS) {
+            if (response == null || response.getResponseStatus() != ResponseStatusEnum.SUCCESS) {
                 try {
                     Exception exception;
                     if (response == null) {
-                        exception = new InvokeException("Exception caught in invocation. The address is " + this.remoteAddress + " responseStatus:" + ResponseCommandStatus.UNKNOWN, invokeFuture.getCause());
+                        exception = new InvokeException("Exception caught in invocation. The address is " + this.remoteAddress + " responseStatus:" + ResponseStatusEnum.UNKNOWN, invokeFuture.getCause());
                     } else {
                         response.setInvokeContext(invokeFuture.getInvokeContext());
-                        switch (response.getResponseCommandStatus()) {
+                        switch (response.getResponseStatus()) {
                             case TIMEOUT:
                                 exception = new InvokeTimeoutException("Invoke timeout when invoke with callback.The address is " + this.remoteAddress);
                                 break;
@@ -109,7 +109,7 @@ public class RPCInvokeCallbackListener implements InvokeCallbackListener {
                                 }
                                 break;
                             default:
-                                exception = new InvokeException("Exception caught in invocation. The address is " + this.remoteAddress + " responseStatus:" + response.getResponseCommandStatus(), invokeFuture.getCause());
+                                exception = new InvokeException("Exception caught in invocation. The address is " + this.remoteAddress + " responseStatus:" + response.getResponseStatus(), invokeFuture.getCause());
                         }
                     }
                     callback.onException(exception);

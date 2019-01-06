@@ -23,10 +23,37 @@ public class ConfigsSupport {
     public static final String CONN_SERVICE_STATUS_OFF = "off";
     public static final String CONN_SERVICE_STATUS_ON = "on";
 
+    /************************************************************
+     *      configs and default values for bootstrap START      *
+     ***********************************************************/
+    /** TCP_NODELAY option */
+    public static final String TCP_NODELAY = "bolt.tcp.nodelay";
+    /** 如果要求高实时性有数据发送时就马上发送就关闭 如果需要减少发送次数减少网络交互就开启 true表示关闭，false表示开启 **/
+    public static final String TCP_NODELAY_DEFAULT = "true";
+
+    /** TCP SO_REUSEADDR option */
+    public static final String TCP_SO_REUSEADDR = "bolt.tcp.so.reuseaddr";
+    /** 端口释放后立即就可以被再次使用 **/
+    public static final String TCP_SO_REUSEADDR_DEFAULT = "true";
+
+    /** TCP SO_BACKLOG option */
+    public static final String TCP_SO_BACKLOG = "bolt.tcp.so.backlog";
+    /** 标识当服务器请求处理线程全满时 用于临时存放已完成三次握手的请求的队列的最大长度 **/
+    public static final String TCP_SO_BACKLOG_DEFAULT = "1024";
+
+    /** TCP SO_KEEPALIVE option */
+    public static final String TCP_SO_KEEPALIVE = "bolt.tcp.so.keepalive";
+    /** 是否开启TCP底层心跳机制 **/
+    public static final String TCP_SO_KEEPALIVE_DEFAULT = "true";
+
     /** I/O操作在EventLoop中占的时间比(0-100) **/
     public static final String NETTY_IO_RATIO = "rgp.netty.io.ratio";
     /** Netty默认为50(即执行I/O的时间与非I/O的时间相同) **/
     public static final String NETTY_IO_RATIO_DEFAULT = "70";
+
+    /** Netty buffer allocator, enabled as default **/
+    public static final String NETTY_BUFFER_POOLED = "bolt.netty.buffer.pooled";
+    public static final String NETTY_BUFFER_POOLED_DEFAULT = "true";
 
     /** 是否自动重连 **/
     public static final String CONN_RECONNECT_SWITCH = "rgp.conn.reconnect.switch";
@@ -51,6 +78,17 @@ public class ConfigsSupport {
     /** Netty Buffer高水位 **/
     public static final String NETTY_BUFFER_HIGH_WATERMARK = "rgp.netty.buffer.high.watermark";
     public static final String NETTY_BUFFER_HIGH_WATERMARK_DEFAULT = Integer.toString(64 * 1024);
+
+    /** Netty epoll level trigger enabled */
+    public static final String NETTY_EPOLL_LT = "bolt.netty.epoll.lt";
+    public static final String NETTY_EPOLL_LT_DEFAULT = "true";
+
+    /************************************************************
+     *        configs and default values for idle START         *
+     ***********************************************************/
+    /** TCP idle switch */
+    public static final String TCP_IDLE_SWITCH = "bolt.tcp.heartbeat.switch";
+    public static final String TCP_IDLE_SWITCH_DEFAULT = "true";
 
     /** 默认字符编码 */
     public static final String DEFAULT_CHARSET = "UTF-8";

@@ -7,10 +7,10 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.server;
+package roberto.group.process.netty.practice.entrance.server;
 
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
-import roberto.group.process.netty.practice.command.processor.AuthenticationProcessor;
+import roberto.group.process.netty.practice.command.processor.CustomProcessor;
 import roberto.group.process.netty.practice.command.processor.RemotingCommandProcessor;
 
 import java.util.concurrent.ExecutorService;
@@ -83,7 +83,7 @@ public interface RemotingServer {
      * @author HuangTaiHong
      * @date 2018.12.29 15:29:25
      */
-    void registerAuthenticationProcessor(AuthenticationProcessor<?> processor);
+    void registerCustomProcessor(CustomProcessor<?> processor);
 
     /**
      * 功能描述: <br>

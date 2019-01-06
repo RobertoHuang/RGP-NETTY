@@ -9,6 +9,8 @@
  */
 package roberto.group.process.netty.practice.command.handler;
 
+import roberto.group.process.netty.practice.remote.remote.RPCRemotingContext;
+
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -29,4 +31,16 @@ public interface CommandHandler {
      * @date 2019.01.05 19:50:00
      */
     ExecutorService getDefaultExecutor();
+
+    /**
+     * 功能描述: <br>
+     * 〈Handle the command.〉
+     *
+     * @param remotingContext
+     * @param msg
+     * @throws Exception
+     * @author HuangTaiHong
+     * @date 2019.01.06 17:26:13
+     */
+    void handleCommand(RPCRemotingContext remotingContext, Object msg) throws Exception;
 }

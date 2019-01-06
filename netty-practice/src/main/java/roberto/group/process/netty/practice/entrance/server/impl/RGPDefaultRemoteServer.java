@@ -7,15 +7,25 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.server.impl;
+package roberto.group.process.netty.practice.entrance.server.impl;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.WriteBufferWaterMark;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import lombok.extern.slf4j.Slf4j;
+import roberto.group.process.netty.practice.codec.ProtocolCodeBasedDecoder;
+import roberto.group.process.netty.practice.codec.ProtocolCodeBasedEncoder;
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
+import roberto.group.process.netty.practice.command.factory.impl.RPCCommandFactory;
 import roberto.group.process.netty.practice.command.processor.AuthenticationProcessor;
 import roberto.group.process.netty.practice.command.processor.RemotingCommandProcessor;
 import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
@@ -25,9 +35,10 @@ import roberto.group.process.netty.practice.connection.DefaultConnectionManager;
 import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
 import roberto.group.process.netty.practice.handler.RPCConnectionEventHandler;
-import roberto.group.process.netty.practice.remote.RPCRemoting;
-import roberto.group.process.netty.practice.remote.parse.RemotingAddressParser;
-import roberto.group.process.netty.practice.remote.parse.impl.RPCAddressParser;
+import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
+import roberto.group.process.netty.practice.remote.help.impl.RPCAddressParser;
+import roberto.group.process.netty.practice.remote.remote.RPCRemoting;
+import roberto.group.process.netty.practice.remote.remote.server.RPCServerRemoting;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 import roberto.group.process.netty.practice.utils.NettyEventLoopUtil;
 
@@ -66,7 +77,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
     private final EventLoopGroup bossGroup = NettyEventLoopUtil.newEventLoopGroup(1, new NamedThreadFactory("rgp-netty-server-boss", false));
 
     /** 初始化Worker线程 **/
-    private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2, new NamedThreadFactory("rgp-netty-server-worker", true));
+    private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2, new NamedThreadFactory("bolt-netty-server-worker", true));
 
     static {
         if (workerGroup instanceof NioEventLoopGroup) {
@@ -120,6 +131,35 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
             this.connectionEventHandler = new ConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
         }
+
+        this.initRPCRemoting();
+        this.serverBootstrap = new ServerBootstrap();
+        this.serverBootstrap.group(bossGroup, workerGroup)
+                .channel(NettyEventLoopUtil.getServerSocketChannelClass())
+                .option(ChannelOption.SO_BACKLOG, ConfigManager.tcp_so_backlog())
+                .option(ChannelOption.SO_REUSEADDR, ConfigManager.tcp_so_reuseaddr())
+                .childOption(ChannelOption.TCP_NODELAY, ConfigManager.tcp_nodelay())
+                .childOption(ChannelOption.SO_KEEPALIVE, ConfigManager.tcp_so_keepalive());
+        // set write buffer water mark
+        this.initWriteBufferWaterMark();
+        // init byte buf allocator
+        if (ConfigManager.netty_buffer_pooled()) {
+            this.serverBootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT).childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+        } else {
+            this.serverBootstrap.option(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT).childOption(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT);
+        }
+        // enable trigger mode for epoll if need
+        NettyEventLoopUtil.enableTriggeredMode(serverBootstrap);
+        final boolean idleSwitch = ConfigManager.tcp_idle_switch();
+        this.serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                ChannelPipeline pipeline = socketChannel.pipeline();
+                pipeline.addLast("decoder", new ProtocolCodeBasedDecoder());
+                pipeline.addLast("encoder", new ProtocolCodeBasedEncoder());
+
+            }
+        })
     }
 
     protected boolean doStart() {
@@ -150,7 +190,25 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
 
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈init netty write buffer water mark〉
+     *
+     * @author HuangTaiHong
+     * @date 2019.01.06 16:42:10
+     */
+    private void initWriteBufferWaterMark() {
+        int lowWaterMark = this.netty_buffer_low_watermark();
+        int highWaterMark = this.netty_buffer_high_watermark();
+        if (lowWaterMark > highWaterMark) {
+            throw new IllegalArgumentException(String.format("[server side] bolt netty high water mark {%s} should not be smaller than low water mark {%s} bytes)", highWaterMark, lowWaterMark));
+        } else {
+            log.warn("[server side] bolt netty low water mark is {} bytes, high water mark is {} bytes", lowWaterMark, highWaterMark);
+            this.serverBootstrap.childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(lowWaterMark, highWaterMark));
+        }
+    }
+
     protected void initRPCRemoting() {
-        this.remoting = new RPCRemoting(new RpcCommandFactory(), this.addressParser, this.connectionManager);
+        this.remoting = new RPCServerRemoting(new RPCCommandFactory(), this.addressParser, this.connectionManager);
     }
 }

@@ -7,7 +7,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.parse;
+package roberto.group.process.netty.practice.remote.help;
 
 import roberto.group.process.netty.practice.connection.ConnectionURL;
 

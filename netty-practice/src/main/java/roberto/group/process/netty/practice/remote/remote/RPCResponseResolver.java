@@ -7,12 +7,12 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote;
+package roberto.group.process.netty.practice.remote.remote;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import roberto.group.process.netty.practice.command.command.response.ResponseCommand;
-import roberto.group.process.netty.practice.command.command.response.ResponseCommandStatus;
+import roberto.group.process.netty.practice.command.command.response.ResponseStatusEnum;
 import roberto.group.process.netty.practice.command.command.response.impl.RPCResponseCommand;
 import roberto.group.process.netty.practice.exception.CodecException;
 import roberto.group.process.netty.practice.exception.ConnectionClosedException;
@@ -37,10 +37,10 @@ import roberto.group.process.netty.practice.exception.remote.InvokeTimeoutExcept
 public class RPCResponseResolver {
     public static Object resolveResponseObject(ResponseCommand responseCommand, String address) throws RemotingException {
         preProcess(responseCommand, address);
-        if (responseCommand.getResponseCommandStatus() == ResponseCommandStatus.SUCCESS) {
+        if (responseCommand.getResponseStatus() == ResponseStatusEnum.SUCCESS) {
             return toResponseObject(responseCommand);
         } else {
-            String errorMsg = String.format("RPC invocation exception: %s, the address is %s, id=%s", responseCommand.getResponseCommandStatus(), address, responseCommand.getId());
+            String errorMsg = String.format("RPC invocation exception: %s, the address is %s, id=%s", responseCommand.getResponseStatus(), address, responseCommand.getId());
             log.warn(errorMsg);
             if (responseCommand.getCause() != null) {
                 throw new InvokeException(errorMsg, responseCommand.getCause());
@@ -57,7 +57,7 @@ public class RPCResponseResolver {
             errorMsg = String.format("Rpc invocation timeout[responseCommand null]! the address is %s", address);
             exception = new InvokeTimeoutException(errorMsg);
         } else {
-            switch (responseCommand.getResponseCommandStatus()) {
+            switch (responseCommand.getResponseStatus()) {
                 case TIMEOUT:
                     errorMsg = String.format("Rpc invocation timeout[responseCommand TIMEOUT]! the address is %s", address);
                     exception = new InvokeTimeoutException(errorMsg);

@@ -9,9 +9,12 @@
  */
 package roberto.group.process.netty.practice.utils;
 
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollChannelOption;
 import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollMode;
 import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.epoll.EpollSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -44,5 +47,15 @@ public class NettyEventLoopUtil {
 
     public static Class<? extends ServerSocketChannel> getServerSocketChannelClass() {
         return epollEnabled ? EpollServerSocketChannel.class : NioServerSocketChannel.class;
+    }
+
+    public static void enableTriggeredMode(ServerBootstrap serverBootstrap) {
+        if (epollEnabled) {
+            if (ConfigManager.netty_epoll_lt_enabled()) {
+                serverBootstrap.childOption(EpollChannelOption.EPOLL_MODE, EpollMode.LEVEL_TRIGGERED);
+            } else {
+                serverBootstrap.childOption(EpollChannelOption.EPOLL_MODE, EpollMode.EDGE_TRIGGERED);
+            }
+        }
     }
 }

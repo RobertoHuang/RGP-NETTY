@@ -56,8 +56,7 @@ public abstract class AbstractConfigurableInstance implements ConfigurableInstan
     }
 
     public int netty_buffer_high_watermark() {
-        if (null != configContainer
-                && configContainer.contains(configType, ConfigItemEnum.NETTY_BUFFER_HIGH_WATER_MARK)) {
+        if (null != configContainer && configContainer.contains(configType, ConfigItemEnum.NETTY_BUFFER_HIGH_WATER_MARK)) {
             return (Integer) configContainer.get(configType, ConfigItemEnum.NETTY_BUFFER_HIGH_WATER_MARK);
         } else {
             return ConfigManager.netty_buffer_high_watermark();

@@ -7,7 +7,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote;
+package roberto.group.process.netty.practice.remote.remote;
 
 import lombok.AllArgsConstructor;
 import roberto.group.process.netty.practice.command.command.response.ResponseCommand;

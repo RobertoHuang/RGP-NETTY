@@ -21,43 +21,25 @@ import java.util.concurrent.ConcurrentMap;
  * @since 1.0.0
  */
 public class ProtocolManager {
-    private static final ConcurrentMap<ProtocolCode, Protocol> protocols = new ConcurrentHashMap<ProtocolCode, Protocol>();
+    private static final ConcurrentMap<ProtocolCode, Protocol> PROTOCOLS = new ConcurrentHashMap();
 
     public static Protocol getProtocol(ProtocolCode protocolCode) {
-        return protocols.get(protocolCode);
+        return PROTOCOLS.get(protocolCode);
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈注册协议〉
-     *
-     * @param protocol
-     * @param protocolCodeBytes
-     * @author HuangTaiHong
-     * @date 2019.01.02 19:39:56
-     */
     public static void registerProtocol(Protocol protocol, byte... protocolCodeBytes) {
-        registerProtocol(protocol, ProtocolCode.fromBytes(protocolCodeBytes));
+        registerProtocol(ProtocolCode.fromBytes(protocolCodeBytes), protocol);
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈注销协议〉
-     *
-     * @param protocolCode
-     * @return > roberto.group.process.netty.practice.protocol.Protocol
-     * @author HuangTaiHong
-     * @date 2019.01.02 19:40:12
-     */
     public static Protocol unRegisterProtocol(byte... protocolCode) {
-        return ProtocolManager.protocols.remove(ProtocolCode.fromBytes(protocolCode));
+        return ProtocolManager.PROTOCOLS.remove(ProtocolCode.fromBytes(protocolCode));
     }
 
-    public static void registerProtocol(Protocol protocol, ProtocolCode protocolCode) {
+    private static void registerProtocol(ProtocolCode protocolCode, Protocol protocol) {
         if (null == protocolCode || null == protocol) {
             throw new RuntimeException("Protocol: " + protocol + " and protocol code:" + protocolCode + " should not be null!");
         }
-        Protocol exists = ProtocolManager.protocols.putIfAbsent(protocolCode, protocol);
+        Protocol exists = ProtocolManager.PROTOCOLS.putIfAbsent(protocolCode, protocol);
         if (exists != null) {
             throw new RuntimeException("Protocol for code: " + protocolCode + " already exists!");
         }
