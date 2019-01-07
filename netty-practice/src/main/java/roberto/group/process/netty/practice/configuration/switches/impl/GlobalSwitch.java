@@ -26,6 +26,7 @@ public class GlobalSwitch implements Switch {
     public static final int CONN_RECONNECT_SWITCH = 0;
     /** 连接状态监测开关 **/
     public static final int CONN_MONITOR_SWITCH = 1;
+    /** 连接管理进程开关 **/
     public static final int SERVER_MANAGE_CONNECTION_SWITCH = 2;
     public static final int SERVER_SYNC_STOP = 3;
 

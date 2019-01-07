@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionEventListener;
-import roberto.group.process.netty.practice.connection.ConnectionEventTypeEnum;
+import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
 import roberto.group.process.netty.practice.connection.ConnectionManager;
 import roberto.group.process.netty.practice.connection.ReconnectManager;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;

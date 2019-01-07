@@ -9,6 +9,8 @@
  */
 package roberto.group.process.netty.practice.connection;
 
+import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;

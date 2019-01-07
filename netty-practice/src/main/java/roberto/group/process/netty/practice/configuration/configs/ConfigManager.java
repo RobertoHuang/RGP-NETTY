@@ -84,6 +84,28 @@ public class ConfigManager {
         return getBool(ConfigsSupport.TCP_IDLE_SWITCH, ConfigsSupport.TCP_IDLE_SWITCH_DEFAULT);
     }
 
+    public static int tcp_server_idle() {
+        return getInt(ConfigsSupport.TCP_SERVER_IDLE, ConfigsSupport.TCP_SERVER_IDLE_DEFAULT);
+    }
+
+    /************************************************************
+     *            properties for processor manager              *
+     ***********************************************************/
+    public static int default_tp_min_size() {
+        return getInt(ConfigsSupport.TP_MIN_SIZE, ConfigsSupport.TP_MIN_SIZE_DEFAULT);
+    }
+
+    public static int default_tp_max_size() {
+        return getInt(ConfigsSupport.TP_MAX_SIZE, ConfigsSupport.TP_MAX_SIZE_DEFAULT);
+    }
+
+    public static int default_tp_queue_size() {
+        return getInt(ConfigsSupport.TP_QUEUE_SIZE, ConfigsSupport.TP_QUEUE_SIZE_DEFAULT);
+    }
+
+    public static int default_tp_keepalive_time() {
+        return getInt(ConfigsSupport.TP_KEEPALIVE_TIME, ConfigsSupport.TP_KEEPALIVE_TIME_DEFAULT);
+    }
 
     /** 获取系统属性相关 **/
     public static byte getByte(String key, String defaultValue) {

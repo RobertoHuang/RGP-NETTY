@@ -10,6 +10,7 @@
 package roberto.group.process.netty.practice.command.factory;
 
 import roberto.group.process.netty.practice.command.command.RemotingCommand;
+import roberto.group.process.netty.practice.command.command.response.ResponseStatusEnum;
 
 import java.net.InetSocketAddress;
 
@@ -59,6 +60,33 @@ public interface CommandFactory {
      * @date 2019.01.04 14:04:42
      */
     <T extends RemotingCommand> T createExceptionResponse(int id, String errorMsg);
+
+    /**
+     * 功能描述: <br>
+     * 〈create exception response command〉
+     *
+     * @param <T>
+     * @param id
+     * @param status
+     * @return > T
+     * @author HuangTaiHong
+     * @date 2019.01.07 14:27:55
+     */
+    <T extends RemotingCommand> T createExceptionResponse(int id, ResponseStatusEnum status);
+
+    /**
+     * 功能描述: <br>
+     * 〈create exception response command〉
+     *
+     * @param <T>    the type parameter
+     * @param id
+     * @param status
+     * @param t
+     * @return > T
+     * @author HuangTaiHong
+     * @date 2019.01.07 15:40:15
+     */
+    <T extends RemotingCommand> T createExceptionResponse(int id, ResponseStatusEnum status, final Throwable t);
 
     /**
      * 功能描述: <br>

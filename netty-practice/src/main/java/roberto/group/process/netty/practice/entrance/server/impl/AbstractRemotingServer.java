@@ -9,6 +9,7 @@
  */
 package roberto.group.process.netty.practice.entrance.server.impl;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import roberto.group.process.netty.practice.configuration.configs.impl.AbstractConfigurableInstance;
@@ -27,8 +28,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 1.0.0
  */
 public abstract class AbstractRemotingServer extends AbstractConfigurableInstance implements RemotingServer {
+    @Getter
     private String ip;
 
+    @Getter
     private int port;
 
     private AtomicBoolean started = new AtomicBoolean(false);
@@ -91,7 +94,7 @@ public abstract class AbstractRemotingServer extends AbstractConfigurableInstanc
      * @author HuangTaiHong
      * @date 2019.01.02 10:20:01
      */
-    protected abstract boolean doStart();
+    protected abstract boolean doStart() throws InterruptedException;
 
     /**
      * 功能描述: <br>

@@ -15,13 +15,15 @@ import io.netty.util.AttributeKey;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
 import roberto.group.process.netty.practice.protocol.ProtocolCode;
+import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
+import roberto.group.process.netty.practice.utils.ConcurrentHashSet;
 import roberto.group.process.netty.practice.utils.RemotingUtil;
 
 import java.net.InetSocketAddress;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,9 +47,13 @@ public class Connection {
 
     private final ConcurrentHashMap<Integer, InvokeFuture> invokeFutureMap = new ConcurrentHashMap<Integer, InvokeFuture>(4);
 
+
     public static final AttributeKey<Byte> VERSION = AttributeKey.valueOf("version");
     public static final AttributeKey<ProtocolCode> PROTOCOL = AttributeKey.valueOf("protocol");
     public static final AttributeKey<Connection> CONNECTION = AttributeKey.valueOf("connection");
+
+    /** 连接标识符 **/
+    private Set<String> poolKeys = new ConcurrentHashSet<>();
 
     /** 连接关闭状态 **/
     private AtomicBoolean closed = new AtomicBoolean(false);
@@ -58,6 +64,16 @@ public class Connection {
     /** 用户保存连接自定义属性 **/
     private final ConcurrentHashMap<String, Object> attributes = new ConcurrentHashMap();
 
+    public Connection(Channel channel) {
+        this.channel = channel;
+        this.channel.attr(CONNECTION).set(this);
+    }
+
+    public Connection(Channel channel, ConnectionURL connectionURL) {
+        this(channel);
+        this.connectionURL = connectionURL;
+        this.poolKeys.add(connectionURL.getUniqueKey());
+    }
 
     public String getLocalIP() {
         return RemotingUtil.parseLocalIP(this.channel);

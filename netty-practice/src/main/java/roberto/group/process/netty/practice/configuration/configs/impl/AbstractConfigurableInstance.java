@@ -34,12 +34,12 @@ public abstract class AbstractConfigurableInstance implements ConfigurableInstan
         this.configType = configType;
     }
 
-    public ConfigContainer configs() {
-        return this.configContainer;
-    }
-
     public GlobalSwitch switches() {
         return this.globalSwitch;
+    }
+
+    public ConfigContainer configs() {
+        return this.configContainer;
     }
 
     public void initWriteBufferWaterMark(int low, int high) {

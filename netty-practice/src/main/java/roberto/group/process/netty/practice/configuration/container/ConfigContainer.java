@@ -2,7 +2,7 @@
  * FileName: ConfigContainer
  * Author:   HuangTaiHong
  * Date:     2018/12/29 17:28
- * Description: 配置容器接口
+ * Description: the interface of a config container
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,10 @@ package roberto.group.process.netty.practice.configuration.container;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈配置容器接口〉
+ * 〈the interface of a config container〉
+ *
+ *  Mainly used to manage config by user api, this is instance related, not globally.
+ *  That is to say, different remoting instance client or server hold different ConfigContainer.
  *
  * @author HuangTaiHong
  * @create 2018/12/29

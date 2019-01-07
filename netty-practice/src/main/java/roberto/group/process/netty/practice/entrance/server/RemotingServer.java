@@ -10,8 +10,8 @@
 package roberto.group.process.netty.practice.entrance.server;
 
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
-import roberto.group.process.netty.practice.command.processor.CustomProcessor;
-import roberto.group.process.netty.practice.command.processor.RemotingCommandProcessor;
+import roberto.group.process.netty.practice.command.processor.custom.UserProcessor;
+import roberto.group.process.netty.practice.command.processor.processor.RemotingProcessor;
 
 import java.util.concurrent.ExecutorService;
 
@@ -52,7 +52,7 @@ public interface RemotingServer {
      * @author HuangTaiHong
      * @date 2018.12.29 14:59:50
      */
-    String getServerIp();
+    String getIp();
 
     /**
      * 功能描述: <br>
@@ -62,7 +62,7 @@ public interface RemotingServer {
      * @author HuangTaiHong
      * @date 2018.12.29 15:00:10
      */
-    int getServerPort();
+    int getPort();
 
     /**
      * 功能描述: <br>
@@ -83,7 +83,7 @@ public interface RemotingServer {
      * @author HuangTaiHong
      * @date 2018.12.29 15:29:25
      */
-    void registerCustomProcessor(CustomProcessor<?> processor);
+    void registerCustomProcessor(UserProcessor<?> processor);
 
     /**
      * 功能描述: <br>
@@ -95,5 +95,5 @@ public interface RemotingServer {
      * @author HuangTaiHong
      * @date 2018.12.29 15:21:37
      */
-    void registerProcessor(byte protocolCode, RemoteCommandCode commandCode, RemotingCommandProcessor<?> processor);
+    void registerProcessor(byte protocolCode, RemoteCommandCode commandCode, RemotingProcessor<?> processor);
 }

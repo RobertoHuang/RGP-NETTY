@@ -41,6 +41,9 @@ public class InvokeContext {
     public final static String SERVER_REMOTE_IP = "bolt.server.remote.ip";
     public final static String SERVER_REMOTE_PORT = "bolt.server.remote.port";
 
+    /** invoke context keys of bolt client and server side **/
+    public final static String BOLT_PROCESS_WAIT_TIME = "bolt.invoke.wait.time";
+
     private ConcurrentHashMap<String, Object> context = new ConcurrentHashMap(INITIAL_SIZE);
 
     public void clear() {

@@ -23,8 +23,10 @@ import roberto.group.process.netty.practice.protocol.Protocol;
  */
 public class RPCProtocol implements Protocol {
     public static final byte PROTOCOL_CODE = (byte) 1;
+    public static final int DEFAULT_PROTOCOL_CODE_LENGTH = 1;
 
     public static final byte PROTOCOL_VERSION_1 = (byte) 1;
+
 
     @Override
     public CommandEncoder getEncoder() {

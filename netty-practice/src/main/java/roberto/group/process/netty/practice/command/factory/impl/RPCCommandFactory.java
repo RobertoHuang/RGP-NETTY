@@ -53,16 +53,32 @@ public class RPCCommandFactory implements CommandFactory {
     }
 
     @Override
+    public RPCResponseCommand createExceptionResponse(int id, ResponseStatusEnum status) {
+        RPCResponseCommand responseCommand = new RPCResponseCommand();
+        responseCommand.setId(id);
+        responseCommand.setResponseStatus(status);
+        return responseCommand;
+    }
+
+    @Override
     public RPCResponseCommand createExceptionResponse(int id, Throwable t, String errorMsg) {
         RPCResponseCommand response;
         if (t == null) {
             response = new RPCResponseCommand(id, new RPCServerException(errorMsg));
         } else {
-            response = new RPCResponseCommand(id, new RPCServerException(errorMsg, t));
+            response = new RPCResponseCommand(id, createServerException(t, errorMsg));
         }
         response.setResponseClass(RPCServerException.class.getName());
         response.setResponseStatus(ResponseStatusEnum.SERVER_EXCEPTION);
         return response;
+    }
+
+    @Override
+    public RPCResponseCommand createExceptionResponse(int id, ResponseStatusEnum status, Throwable t) {
+        RPCResponseCommand responseCommand = this.createExceptionResponse(id, status);
+        responseCommand.setResponseObject(createServerException(t, null));
+        responseCommand.setResponseClass(RPCServerException.class.getName());
+        return responseCommand;
     }
 
     @Override
@@ -91,5 +107,22 @@ public class RPCCommandFactory implements CommandFactory {
         responseCommand.setResponseTimeMillis(System.currentTimeMillis());
         responseCommand.setResponseHost(address);
         return responseCommand;
+    }
+
+    /**
+     * 功能描述: <br>
+     * 〈create server exception using error msg and fill the stack trace using the stack trace of throwable.〉
+     *
+     * @param t
+     * @param errorMsg
+     * @return > roberto.group.process.netty.practice.exception.remote.RPCServerException
+     * @author HuangTaiHong
+     * @date 2019.01.07 20:23:15
+     */
+    private RPCServerException createServerException(Throwable t, String errorMsg) {
+        String formattedErrMsg = String.format("[Server]OriginErrorMsg: %s: %s. AdditionalErrorMsg: %s", t.getClass().getName(), t.getMessage(), errorMsg);
+        RPCServerException e = new RPCServerException(formattedErrMsg);
+        e.setStackTrace(t.getStackTrace());
+        return e;
     }
 }

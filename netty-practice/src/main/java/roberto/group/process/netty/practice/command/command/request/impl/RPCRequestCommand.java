@@ -48,9 +48,11 @@ public class RPCRequestCommand extends RequestCommand {
     @Setter
     private Object requestObject;
 
-    private CustomSerializer customSerializer;
-
+    @Getter
+    @Setter
     private transient long arriveTime = -1;
+
+    private CustomSerializer customSerializer;
 
     public RPCRequestCommand() {
         super(RemoteCommandCode.RPC_REQUEST);

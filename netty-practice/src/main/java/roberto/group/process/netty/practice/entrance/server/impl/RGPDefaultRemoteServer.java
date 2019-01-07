@@ -21,28 +21,42 @@ import io.netty.channel.WriteBufferWaterMark;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.codec.ProtocolCodeBasedDecoder;
 import roberto.group.process.netty.practice.codec.ProtocolCodeBasedEncoder;
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
 import roberto.group.process.netty.practice.command.factory.impl.RPCCommandFactory;
-import roberto.group.process.netty.practice.command.processor.AuthenticationProcessor;
-import roberto.group.process.netty.practice.command.processor.RemotingCommandProcessor;
+import roberto.group.process.netty.practice.command.processor.custom.UserProcessor;
+import roberto.group.process.netty.practice.command.processor.processor.RemotingProcessor;
 import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
+import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionEventListener;
+import roberto.group.process.netty.practice.connection.ConnectionEventProcessor;
+import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.connection.DefaultConnectionManager;
+import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
 import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
+import roberto.group.process.netty.practice.handler.AcceptorIdleStateTrigger;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
+import roberto.group.process.netty.practice.handler.RPCBusinessEventHandler;
 import roberto.group.process.netty.practice.handler.RPCConnectionEventHandler;
+import roberto.group.process.netty.practice.protocol.ProtocolCode;
+import roberto.group.process.netty.practice.protocol.ProtocolManager;
+import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.remote.help.impl.RPCAddressParser;
 import roberto.group.process.netty.practice.remote.remote.RPCRemoting;
 import roberto.group.process.netty.practice.remote.remote.server.RPCServerRemoting;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 import roberto.group.process.netty.practice.utils.NettyEventLoopUtil;
+import roberto.group.process.netty.practice.utils.RemotingUtil;
 
+import java.net.InetSocketAddress;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -54,8 +68,22 @@ import java.util.concurrent.ExecutorService;
  */
 @Slf4j
 public class RGPDefaultRemoteServer extends AbstractRemotingServer {
+    /** channelFuture */
     private ChannelFuture channelFuture;
 
+    /** ServerBootstrap **/
+    private ServerBootstrap serverBootstrap;
+
+    /** boss event loop group, boss group should not be daemon, need shutdown manually **/
+    private final EventLoopGroup bossGroup = NettyEventLoopUtil.newEventLoopGroup(1, new NamedThreadFactory("rgp-netty-server-boss", false));
+
+    /** worker event loop group. Reuse I/O worker threads between rpc servers. **/
+    private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2, new NamedThreadFactory("bolt-netty-server-worker", true));
+
+    /** RPC remoting */
+    protected RPCRemoting remoting;
+
+    /** address parser to get custom args **/
     private RemotingAddressParser addressParser;
 
     /** connection manager */
@@ -67,17 +95,8 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
     /** connection event listener */
     private ConnectionEventListener connectionEventListener = new ConnectionEventListener();
 
-    /** RPC remoting */
-    protected RPCRemoting remoting;
-
-    /** ServerBootstrap **/
-    private ServerBootstrap serverBootstrap;
-
-    /** 初始化BOSS线程 **/
-    private final EventLoopGroup bossGroup = NettyEventLoopUtil.newEventLoopGroup(1, new NamedThreadFactory("rgp-netty-server-boss", false));
-
-    /** 初始化Worker线程 **/
-    private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2, new NamedThreadFactory("bolt-netty-server-worker", true));
+    /** user processors of rpc server */
+    private ConcurrentHashMap<String, UserProcessor<?>> customProcessors = new ConcurrentHashMap(4);
 
     static {
         if (workerGroup instanceof NioEventLoopGroup) {
@@ -94,7 +113,6 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
     public RGPDefaultRemoteServer(String ip, int port) {
         this(ip, port, false);
     }
-
 
     public RGPDefaultRemoteServer(int port, boolean manageConnection) {
         super(port);
@@ -155,39 +173,83 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
                 ChannelPipeline pipeline = socketChannel.pipeline();
-                pipeline.addLast("decoder", new ProtocolCodeBasedDecoder());
-                pipeline.addLast("encoder", new ProtocolCodeBasedEncoder());
-
+                pipeline.addLast("decoder", new ProtocolCodeBasedDecoder(RPCProtocol.DEFAULT_PROTOCOL_CODE_LENGTH));
+                pipeline.addLast("encoder", new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RPCProtocol.PROTOCOL_CODE)));
+                if (idleSwitch) {
+                    final int idleTime = ConfigManager.tcp_server_idle();
+                    pipeline.addLast("idleStateHandler", new IdleStateHandler(0, 0, idleTime, TimeUnit.MILLISECONDS));
+                    pipeline.addLast("acceptorIdleStateTrigger", new AcceptorIdleStateTrigger());
+                }
+                pipeline.addLast("connectionEventHandler", connectionEventHandler);
+                pipeline.addLast("handler", new RPCBusinessEventHandler(true, RGPDefaultRemoteServer.this.customProcessors));
+                this.createConnection(socketChannel);
             }
-        })
+
+            private void createConnection(SocketChannel channel) {
+                ConnectionURL connectionURL = addressParser.parse(RemotingUtil.parseRemoteAddress(channel));
+                if (!switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
+                    new Connection(channel, connectionURL);
+                } else {
+                    connectionManager.add(new Connection(channel, connectionURL), connectionURL.getUniqueKey());
+                }
+                channel.pipeline().fireUserEventTriggered(ConnectionEventTypeEnum.CONNECT);
+            }
+        });
     }
 
-    protected boolean doStart() {
-        return false;
+    @Override
+    protected boolean doStart() throws InterruptedException {
+        this.channelFuture = this.serverBootstrap.bind(new InetSocketAddress(getIp(), getPort())).sync();
+        return this.channelFuture.isSuccess();
     }
 
+    @Override
     protected boolean doStop() {
-        return false;
+        if (this.channelFuture != null) {
+            this.channelFuture.channel().close();
+        }
+        if (!this.switches().isOn(GlobalSwitch.SERVER_SYNC_STOP)) {
+            this.bossGroup.shutdownGracefully();
+        } else {
+            this.bossGroup.shutdownGracefully().awaitUninterruptibly();
+        }
+        if (this.switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH) && null != this.connectionManager) {
+            this.connectionManager.removeAll();
+            log.warn("Close all connections from server side!");
+        }
+        log.warn("RPC Server stopped!");
+        return true;
     }
 
-    public String getServerIp() {
-        return null;
-    }
-
-    public int getServerPort() {
-        return 0;
-    }
-
+    @Override
     public void registerDefaultExecutor(byte protocolCode, ExecutorService executor) {
+        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolCode)).getCommandHandler().registerDefaultExecutor(executor);
+    }
+
+    @Override
+    public void registerCustomProcessor(UserProcessor<?> processor) {
 
     }
 
-    public void registerAuthenticationProcessor(AuthenticationProcessor<?> processor) {
-
+    @Override
+    public void registerProcessor(byte protocolCode, RemoteCommandCode commandCode, RemotingProcessor<?> processor) {
+        ProtocolManager.getProtocol(ProtocolCode.fromBytes(protocolCode)).getCommandHandler().registerProcessor(commandCode, processor);
     }
 
-    public void registerProcessor(byte protocolCode, RemoteCommandCode commandCode, RemotingCommandProcessor<?> processor) {
+    public void addConnectionEventProcessor(ConnectionEventTypeEnum type, ConnectionEventProcessor processor) {
+        this.connectionEventListener.addConnectionEventProcessor(type, processor);
+    }
 
+    /**
+     * 功能描述: <br>
+     * 〈init RPC remoting〉
+     *
+     * @author HuangTaiHong
+     * @date 2019.01.07 10:23:00
+     */
+    protected void initRPCRemoting() {
+        RPCCommandFactory commandFactory = new RPCCommandFactory();
+        this.remoting = new RPCServerRemoting(commandFactory, this.addressParser, this.connectionManager);
     }
 
     /**
@@ -206,9 +268,5 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
             log.warn("[server side] bolt netty low water mark is {} bytes, high water mark is {} bytes", lowWaterMark, highWaterMark);
             this.serverBootstrap.childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(lowWaterMark, highWaterMark));
         }
-    }
-
-    protected void initRPCRemoting() {
-        this.remoting = new RPCServerRemoting(new RPCCommandFactory(), this.addressParser, this.connectionManager);
     }
 }
