@@ -35,8 +35,8 @@ import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionEventListener;
 import roberto.group.process.netty.practice.connection.ConnectionEventProcessor;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
-import roberto.group.process.netty.practice.connection.DefaultConnectionManager;
 import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
+import roberto.group.process.netty.practice.connection.manager.impl.DefaultConnectionManager;
 import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
 import roberto.group.process.netty.practice.handler.AcceptorIdleStateTrigger;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
@@ -190,7 +190,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
                 if (!switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
                     new Connection(channel, connectionURL);
                 } else {
-                    connectionManager.add(new Connection(channel, connectionURL), connectionURL.getUniqueKey());
+                    connectionManager.add(connectionURL.getUniqueKey(), new Connection(channel, connectionURL));
                 }
                 channel.pipeline().fireUserEventTriggered(ConnectionEventTypeEnum.CONNECT);
             }

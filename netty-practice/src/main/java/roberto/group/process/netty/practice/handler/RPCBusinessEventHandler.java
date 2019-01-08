@@ -34,26 +34,26 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RPCBusinessEventHandler extends ChannelInboundHandlerAdapter {
     private boolean serverSide;
 
-    private ConcurrentHashMap<String, UserProcessor<?>> customProcessors;
+    private ConcurrentHashMap<String, UserProcessor<?>> userProcessors;
 
     public RPCBusinessEventHandler() {
         this.serverSide = false;
     }
 
-    public RPCBusinessEventHandler(ConcurrentHashMap<String, UserProcessor<?>> customProcessors) {
+    public RPCBusinessEventHandler(ConcurrentHashMap<String, UserProcessor<?>> userProcessors) {
         this.serverSide = false;
-        this.customProcessors = customProcessors;
+        this.userProcessors = userProcessors;
     }
 
-    public RPCBusinessEventHandler(boolean serverSide, ConcurrentHashMap<String, UserProcessor<?>> customProcessors) {
+    public RPCBusinessEventHandler(boolean serverSide, ConcurrentHashMap<String, UserProcessor<?>> userProcessors) {
         this.serverSide = serverSide;
-        this.customProcessors = customProcessors;
+        this.userProcessors = userProcessors;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object message) throws Exception {
         ProtocolCode protocolCode = ctx.channel().attr(Connection.PROTOCOL).get();
         Protocol protocol = ProtocolManager.getProtocol(protocolCode);
-        protocol.getCommandHandler().handleCommand(new RemotingContext(ctx, new InvokeContext(), serverSide, customProcessors), message);
+        protocol.getCommandHandler().handleCommand(new RemotingContext(ctx, new InvokeContext(), serverSide, userProcessors), message);
     }
 }

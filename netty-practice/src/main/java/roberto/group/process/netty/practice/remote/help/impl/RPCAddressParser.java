@@ -183,7 +183,7 @@ public class RPCAddressParser implements RemotingAddressParser {
         if (StringUtils.isNotBlank(connWarmupStr)) {
             connWarmup = Boolean.parseBoolean(connWarmupStr);
         }
-        connectionURL.setConnWarmup(connWarmup);
+        connectionURL.setConnectionWarmup(connWarmup);
     }
 
     /**

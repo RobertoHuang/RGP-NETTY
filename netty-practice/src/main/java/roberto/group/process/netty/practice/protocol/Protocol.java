@@ -11,7 +11,9 @@ package roberto.group.process.netty.practice.protocol;
 
 import roberto.group.process.netty.practice.command.codec.CommandDecoder;
 import roberto.group.process.netty.practice.command.codec.CommandEncoder;
+import roberto.group.process.netty.practice.command.factory.CommandFactory;
 import roberto.group.process.netty.practice.command.handler.CommandHandler;
+import roberto.group.process.netty.practice.heartbeat.HeartbeatTrigger;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -24,7 +26,7 @@ import roberto.group.process.netty.practice.command.handler.CommandHandler;
 public interface Protocol {
     /**
      * 功能描述: <br>
-     * 〈获取命令编码器〉
+     * 〈Get the newEncoder for the protocol.〉
      *
      * @return > roberto.group.process.netty.practice.command.codec.CommandEncoder
      * @author HuangTaiHong
@@ -34,13 +36,23 @@ public interface Protocol {
 
     /**
      * 功能描述: <br>
-     * 〈获取命令解码器〉
+     * 〈Get the decoder for the protocol.〉
      *
      * @return > roberto.group.process.netty.practice.command.codec.CommandDecoder
      * @author HuangTaiHong
      * @date 2019.01.02 19:32:00
      */
     CommandDecoder getDecoder();
+
+    /**
+     * 功能描述: <br>
+     * 〈Get the heartbeat trigger for the protocol.〉
+     *
+     * @return > roberto.group.process.netty.practice.heartbeat.HeartbeatTrigger
+     * @author HuangTaiHong
+     * @date 2019.01.08 17:31:14
+     */
+    HeartbeatTrigger getHeartbeatTrigger();
 
     /**
      * 功能描述: <br>
@@ -51,4 +63,14 @@ public interface Protocol {
      * @date 2019.01.05 19:51:08
      */
     CommandHandler getCommandHandler();
+
+    /**
+     * 功能描述: <br>
+     * 〈Get the command factory for the protocol.〉
+     *
+     * @return > roberto.group.process.netty.practice.command.factory.CommandFactory
+     * @author HuangTaiHong
+     * @date 2019.01.08 17:31:20
+     */
+    CommandFactory getCommandFactory();
 }

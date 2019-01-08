@@ -9,9 +9,9 @@
  */
 package roberto.group.process.netty.practice.connection;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import roberto.group.process.netty.practice.connection.strategy.ConnectionSelectStrategy;
 import roberto.group.process.netty.practice.scanner.Scannable;
 
 import java.util.Collections;
@@ -26,37 +26,22 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @create 2019/1/3
  * @since 1.0.0
  */
+@Slf4j
 public class ConnectionPool implements Scannable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionPool.class);
+    /** whether async create connection done */
+    private volatile boolean asyncCreationDone = true;
 
-    /** 连接选择策略 **/
-    private ConnectionSelectStrategy strategy;
-
-    /** 用于保存连接 **/
-    private CopyOnWriteArrayList<Connection> connections = new CopyOnWriteArrayList<Connection>();
-
-    /** 用于记录最后一次访问该连接池时间 **/
+    /** timestamp to record the last time this pool be accessed */
     private volatile long lastAccessTimestamp;
 
-    /** 用于标记异步创建连接是否完成 **/
-    private volatile boolean asyncCreationDone = true;
+    /** connetion select strategy **/
+    private ConnectionSelectStrategy strategy;
+
+    /** used to save the connection **/
+    private CopyOnWriteArrayList<Connection> connections = new CopyOnWriteArrayList<>();
 
     public ConnectionPool(ConnectionSelectStrategy strategy) {
         this.strategy = strategy;
-    }
-
-    public Connection get() {
-        markAccess();
-        if (CollectionUtils.isEmpty(connections)) {
-            return this.strategy.select(Collections.unmodifiableList(this.connections));
-        } else {
-            return null;
-        }
-    }
-
-    public List<Connection> getAll() {
-        markAccess();
-        return Collections.unmodifiableList(this.connections);
     }
 
     public int size() {
@@ -69,34 +54,24 @@ public class ConnectionPool implements Scannable {
 
     public void add(Connection connection) {
         markAccess();
-        if (null == connection) {
+        if (connection == null) {
             return;
-        }
-        boolean res = this.connections.addIfAbsent(connection);
-        if (res) {
-            connection.increaseRef();
+        } else {
+            boolean ifAbsent = this.connections.addIfAbsent(connection);
+            if (ifAbsent) {
+                connection.increaseRef();
+            }
         }
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈移除并尝试关闭连接 - 是否关闭取决于连接被引用次数〉
-     *
-     * @param connection
-     * @author HuangTaiHong
-     * @date 2019.01.03 10:27:17
-     */
-    public void removeAndTryClose(Connection connection) {
-        if (null == connection) {
-            return;
-        }
-        boolean res = this.connections.remove(connection);
-        if (res) {
-            connection.decreaseRef();
-        }
-        if (connection.noRef()) {
-            connection.close();
-        }
+    public Connection get() {
+        markAccess();
+        return CollectionUtils.isEmpty(connections) ? null : this.strategy.select(Collections.unmodifiableList(this.connections));
+    }
+
+    public List<Connection> getAll() {
+        markAccess();
+        return Collections.unmodifiableList(this.connections);
     }
 
     public boolean contains(Connection connection) {
@@ -123,11 +98,34 @@ public class ConnectionPool implements Scannable {
         return this.asyncCreationDone;
     }
 
+    public void removeAndTryClose(Connection connection) {
+        if (connection == null) {
+            return;
+        } else {
+            boolean exist = this.connections.remove(connection);
+            if (exist) {
+                connection.decreaseRef();
+            }
+
+            if (connection.noReference()) {
+                connection.close();
+            }
+        }
+    }
+
+    public void removeAllAndTryClose() {
+        for (Connection connection : this.connections) {
+            removeAndTryClose(connection);
+        }
+        this.connections.clear();
+    }
+
+    @Override
     public void scan() {
         if (CollectionUtils.isNotEmpty(this.connections)) {
             for (Connection connection : connections) {
                 if (!connection.isFine()) {
-                    LOGGER.warn("Remove bad connection when scanning connections of ConnectionPool - {}:{}", connection.getRemoteIP(), connection.getRemotePort());
+                    log.warn("Remove bad connection when scanning connections of ConnectionPool - {}:{}", connection.getRemoteIP(), connection.getRemotePort());
                     connection.close();
                     this.removeAndTryClose(connection);
                 }

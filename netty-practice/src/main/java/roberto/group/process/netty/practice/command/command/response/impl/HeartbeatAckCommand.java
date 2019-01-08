@@ -25,6 +25,11 @@ public class HeartbeatAckCommand extends ResponseCommand {
     /** For serialization */
     private static final long serialVersionUID = 2584912495844320855L;
 
+    public HeartbeatAckCommand() {
+        super(RemoteCommandCode.HEARTBEAT);
+        this.setResponseStatus(ResponseStatusEnum.SUCCESS);
+    }
+
     public HeartbeatAckCommand(int id) {
         super(RemoteCommandCode.HEARTBEAT);
         this.setId(id);

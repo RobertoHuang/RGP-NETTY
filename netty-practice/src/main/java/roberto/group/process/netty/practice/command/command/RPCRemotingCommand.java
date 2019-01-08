@@ -74,14 +74,17 @@ public abstract class RPCRemotingCommand implements RemotingCommand {
     /** The class of content */
     @Getter
     private byte[] clazz;
+    @Getter
     private short clazzLength = 0;
     /** Header is used for transparent transmission */
     @Getter
     private byte[] header;
+    @Getter
     private short headerLength = 0;
     /** The bytes format of the content of the command */
     @Getter
     private byte[] content;
+    @Getter
     private int contentLength = 0;
 
     @Getter
@@ -113,6 +116,13 @@ public abstract class RPCRemotingCommand implements RemotingCommand {
         if (clazz != null) {
             this.clazz = clazz;
             this.clazzLength = (short) clazz.length;
+        }
+    }
+
+    public void setHeader(byte[] header) {
+        if (header != null) {
+            this.header = header;
+            this.headerLength = (short) header.length;
         }
     }
 

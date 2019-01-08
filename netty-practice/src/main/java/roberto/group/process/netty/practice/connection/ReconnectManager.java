@@ -11,6 +11,7 @@ package roberto.group.process.netty.practice.connection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import roberto.group.process.netty.practice.connection.manager.ConnectionManager;
 import roberto.group.process.netty.practice.exception.RemotingException;
 
 import java.util.List;
@@ -70,11 +71,9 @@ public class ReconnectManager {
         canceledTasks.remove(url);
     }
 
-
     private void doReconnectTask(ReconnectTask task) throws InterruptedException, RemotingException {
         connectionManager.createConnectionAndHealIfNeed(task.connectionURL);
     }
-
 
     /**
      * 功能描述: <br>
@@ -105,7 +104,6 @@ public class ReconnectManager {
         this.reconnectTasks.clear();
         this.canceledTasks.clear();
     }
-
 
     /**
      * 〈一句话功能简述〉

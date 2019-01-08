@@ -52,7 +52,6 @@ public class ConfigManager {
     }
 
 
-
     public static boolean conn_reconnect_switch() {
         return getBool(ConfigsSupport.CONN_RECONNECT_SWITCH, ConfigsSupport.CONN_RECONNECT_SWITCH_DEFAULT);
     }
@@ -84,8 +83,35 @@ public class ConfigManager {
         return getBool(ConfigsSupport.TCP_IDLE_SWITCH, ConfigsSupport.TCP_IDLE_SWITCH_DEFAULT);
     }
 
+    public static int tcp_client_idle() {
+        return getInt(ConfigsSupport.TCP_CLIENT_IDLE, ConfigsSupport.TCP_CLIENT_IDLE_DEFAULT);
+    }
+
     public static int tcp_server_idle() {
         return getInt(ConfigsSupport.TCP_SERVER_IDLE, ConfigsSupport.TCP_SERVER_IDLE_DEFAULT);
+    }
+
+    public static int tcp_idle_maxtimes() {
+        return getInt(ConfigsSupport.TCP_IDLE_MAXTIMES, ConfigsSupport.TCP_IDLE_MAXTIMES_DEFAULT);
+    }
+
+    /************************************************************
+     *            properties for connection manager             *
+     ***********************************************************/
+    public static int conn_create_tp_min_size() {
+        return getInt(ConfigsSupport.CONN_CREATE_TP_MIN_SIZE, ConfigsSupport.CONN_CREATE_TP_MIN_SIZE_DEFAULT);
+    }
+
+    public static int conn_create_tp_max_size() {
+        return getInt(ConfigsSupport.CONN_CREATE_TP_MAX_SIZE, ConfigsSupport.CONN_CREATE_TP_MAX_SIZE_DEFAULT);
+    }
+
+    public static int conn_create_tp_queue_size() {
+        return getInt(ConfigsSupport.CONN_CREATE_TP_QUEUE_SIZE, ConfigsSupport.CONN_CREATE_TP_QUEUE_SIZE_DEFAULT);
+    }
+
+    public static int conn_create_tp_keepalive() {
+        return getInt(ConfigsSupport.CONN_CREATE_TP_KEEPALIVE_TIME, ConfigsSupport.CONN_CREATE_TP_KEEPALIVE_TIME_DEFAULT);
     }
 
     /************************************************************

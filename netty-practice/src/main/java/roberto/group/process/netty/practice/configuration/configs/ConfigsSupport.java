@@ -90,29 +90,56 @@ public class ConfigsSupport {
     public static final String TCP_IDLE_SWITCH = "bolt.tcp.heartbeat.switch";
     public static final String TCP_IDLE_SWITCH_DEFAULT = "true";
 
+    /** TCP idle interval for client */
+    public static final String TCP_CLIENT_IDLE = "bolt.tcp.heartbeat.interval";
+    public static final String TCP_CLIENT_IDLE_DEFAULT = "15000";
+
     /** TCP idle interval for server */
     public static final String TCP_SERVER_IDLE = "bolt.tcp.server.idle.interval";
     public static final String TCP_SERVER_IDLE_DEFAULT = "90000";
 
+    /** TCP idle triggered max times if no response */
+    public static final String TCP_IDLE_MAXTIMES = "bolt.tcp.heartbeat.maxtimes";
+    public static final String TCP_IDLE_MAXTIMES_DEFAULT = "3";
 
     /************************************************************
-     *           configs for processor manager START            *
+     *  configs and default values for connection manager START *
+     ***********************************************************/
+    /** Thread pool min size for the connection manager executor */
+    public static final String CONN_CREATE_TP_MIN_SIZE = "bolt.conn.create.tp.min";
+    public static final String CONN_CREATE_TP_MIN_SIZE_DEFAULT = "3";
+
+    /** Thread pool max size for the connection manager executor */
+    public static final String CONN_CREATE_TP_MAX_SIZE = "bolt.conn.create.tp.max";
+    public static final String CONN_CREATE_TP_MAX_SIZE_DEFAULT = "8";
+
+    /** Thread pool queue size for the connection manager executor */
+    public static final String CONN_CREATE_TP_QUEUE_SIZE = "bolt.conn.create.tp.queue";
+    public static final String CONN_CREATE_TP_QUEUE_SIZE_DEFAULT = "50";
+
+    /** Thread pool keep alive time for the connection manager executor */
+    public static final String CONN_CREATE_TP_KEEPALIVE_TIME = "bolt.conn.create.tp.keepalive";
+    public static final String CONN_CREATE_TP_KEEPALIVE_TIME_DEFAULT = "60";
+
+
+    /************************************************************
+     *  configs and default values for processor manager START  *
      ***********************************************************/
     /** Thread pool min size for the default executor. **/
-    public static final String TP_MIN_SIZE                           = "bolt.tp.min";
-    public static final String TP_MIN_SIZE_DEFAULT                   = "20";
+    public static final String TP_MIN_SIZE = "bolt.tp.min";
+    public static final String TP_MIN_SIZE_DEFAULT = "20";
 
     /** Thread pool max size for the default executor. **/
-    public static final String TP_MAX_SIZE                           = "bolt.tp.max";
-    public static final String TP_MAX_SIZE_DEFAULT                   = "400";
+    public static final String TP_MAX_SIZE = "bolt.tp.max";
+    public static final String TP_MAX_SIZE_DEFAULT = "400";
 
     /** Thread pool queue size for the default executor. **/
-    public static final String TP_QUEUE_SIZE                         = "bolt.tp.queue";
-    public static final String TP_QUEUE_SIZE_DEFAULT                 = "600";
+    public static final String TP_QUEUE_SIZE = "bolt.tp.queue";
+    public static final String TP_QUEUE_SIZE_DEFAULT = "600";
 
     /** Thread pool keep alive time for the default executor **/
-    public static final String TP_KEEPALIVE_TIME                     = "bolt.tp.keepalive";
-    public static final String TP_KEEPALIVE_TIME_DEFAULT             = "60";
+    public static final String TP_KEEPALIVE_TIME = "bolt.tp.keepalive";
+    public static final String TP_KEEPALIVE_TIME_DEFAULT = "60";
 
     /** 默认字符编码 */
     public static final String DEFAULT_CHARSET = "UTF-8";

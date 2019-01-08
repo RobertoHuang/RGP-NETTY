@@ -10,6 +10,7 @@
 package roberto.group.process.netty.practice.connection;
 
 import lombok.Getter;
+import lombok.Setter;
 import roberto.group.process.netty.practice.configuration.configs.ConfigsSupport;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 
@@ -30,28 +31,38 @@ public class ConnectionURL {
     /** origin url */
     private String originUrl;
 
+    @Getter
     /** ip, can be number format or hostname format */
     private String ip;
 
+    @Getter
     /** port, should be integer between (0, 65535] */
     private int port;
 
-    /** unique key of this url */
     @Getter
+    /** unique key of this url */
     private String uniqueKey;
 
+    @Getter
+    @Setter
     /** URL args: protocol */
     private byte protocol;
 
+    @Getter
+    @Setter
     /** URL args: version */
     private byte version;
 
+    @Getter
+    @Setter
     /** URL agrs: whether need warm up connection */
     private boolean connectionWarmup;
 
+    @Getter
     /** URL agrs: connection number */
     private int connectionNumber;
 
+    @Getter
     /** URL args: timeout value when do connect */
     private int connectTimeout;
 
@@ -63,6 +74,13 @@ public class ConnectionURL {
 
     protected ConnectionURL(String originUrl) {
         this.originUrl = originUrl;
+    }
+
+    public ConnectionURL(String ip, int port) {
+        this(ip + RemotingAddressParser.COLON + port);
+        this.ip = ip;
+        this.port = port;
+        this.uniqueKey = this.originUrl;
     }
 
     public ConnectionURL(String originUrl, String ip, int port) {
@@ -77,16 +95,10 @@ public class ConnectionURL {
         this.properties = properties;
     }
 
-    public void setProtocol(byte protocol) {
-        this.protocol = protocol;
-    }
-
-    public void setVersion(byte version) {
-        this.version = version;
-    }
-
-    public void setConnWarmup(boolean connectionWarmup) {
-        this.connectionWarmup = connectionWarmup;
+    public ConnectionURL(String originUrl, String ip, int port, String uniqueKey, Properties properties) {
+        this(originUrl, ip, port);
+        this.uniqueKey = uniqueKey;
+        this.properties = properties;
     }
 
     public void setConnectionNumber(int connectionNumber) {
@@ -108,5 +120,38 @@ public class ConnectionURL {
             return null;
         }
         return properties.getProperty(key);
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ConnectionURL connectionURL = (ConnectionURL) obj;
+        if (this.getOriginUrl().equals(connectionURL.getOriginUrl())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        final int prime = 31;
+        return prime * result + ((this.getOriginUrl() == null) ? 0 : this.getOriginUrl().hashCode());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Origin url [" + this.originUrl + "], Unique key [" + this.uniqueKey + "].");
+        return stringBuilder.toString();
     }
 }
