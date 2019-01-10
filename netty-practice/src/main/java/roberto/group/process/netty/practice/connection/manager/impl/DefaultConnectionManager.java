@@ -15,15 +15,15 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
-import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
+import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionEventListener;
+import roberto.group.process.netty.practice.connection.ConnectionPool;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.connection.factory.ConnectionFactory;
 import roberto.group.process.netty.practice.connection.manager.ConnectionManager;
 import roberto.group.process.netty.practice.connection.manager.HeartbeatStatusManager;
-import roberto.group.process.netty.practice.connection.ConnectionPool;
 import roberto.group.process.netty.practice.connection.strategy.ConnectionSelectStrategy;
 import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
 import roberto.group.process.netty.practice.exception.RemotingException;
@@ -86,6 +86,8 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
 
     /** heal connection tasks **/
     protected ConcurrentHashMap<String, FutureTask<Integer>> healTasks;
+
+    @Getter
     /** connection connectionPool initialize tasks **/
     protected ConcurrentHashMap<String, RunStateRecordedFutureTask<ConnectionPool>> connectionTasks;
 
@@ -341,7 +343,7 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
 
     @Override
     public void scan() {
-        if (null != this.connectionTasks && !this.connectionTasks.isEmpty()) {
+        if (MapUtils.isNotEmpty(connectionTasks)) {
             Iterator<String> iterator = this.connectionTasks.keySet().iterator();
             iterator.forEachRemaining(poolKey -> {
                 ConnectionPool connectionPool = this.getConnectionPool(this.connectionTasks.get(poolKey));

@@ -7,7 +7,9 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.configuration.configs;
+package roberto.group.process.netty.practice.configuration.manager;
+
+import roberto.group.process.netty.practice.configuration.support.RPCConfigsSupport;
 
 /**
  * 〈一句话功能简述〉<br> 

@@ -10,8 +10,8 @@
 package roberto.group.process.netty.practice.remote.help.impl;
 
 import org.apache.commons.lang3.StringUtils;
-import roberto.group.process.netty.practice.configuration.configs.ConfigsSupport;
-import roberto.group.process.netty.practice.configuration.configs.RPCConfigsSupport;
+import roberto.group.process.netty.practice.configuration.support.ConfigsSupport;
+import roberto.group.process.netty.practice.configuration.support.RPCConfigsSupport;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;

@@ -78,7 +78,7 @@ public class RPCCommandEncoder implements CommandEncoder {
                     out.writeShort(response.getResponseStatus().getValue());
                 }
 
-                /** classLen: length of request or response class name **/
+                /** classLen: length of class **/
                 out.writeShort(remotingCommand.getClazzLength());
                 /** headerLen: length of header **/
                 out.writeShort(remotingCommand.getHeaderLength());
@@ -99,18 +99,16 @@ public class RPCCommandEncoder implements CommandEncoder {
                     out.writeBytes(remotingCommand.getContent());
                 }
 
-                if (remotingCommand.getProtocolSwitch().isOn(ProtocolSwitch.CRC_SWITCH_INDEX)) {
+                if (defaultVersion == RPCProtocol.PROTOCOL_VERSION_2 && remotingCommand.getProtocolSwitch().isOn(ProtocolSwitch.CRC_SWITCH_INDEX)) {
                     // compute the crc32 and write to out
                     byte[] frame = new byte[out.readableBytes()];
-                    out.getBytes(index, frame);
-                    out.writeInt(CRCUtil.crc32(frame));
+                    out.getBytes(index, frame).writeInt(CRCUtil.crc32(frame));
                 }
             } else {
-                String warnMsg = "message type [" + message.getClass() + "] is not subclass of RPCRemotingCommand";
-                log.warn(warnMsg);
+                log.warn("message type [{}] is not subclass of RPCRemotingCommand", message.getClass());
             }
         } catch (Exception e) {
-            log.error("Exception caught!", e);
+            log.error("Exception caught when command encode!", e);
             throw e;
         }
     }

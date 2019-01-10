@@ -53,6 +53,7 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
     @Setter
     private ConnectionManager connectionManager;
 
+    @Setter
     private ReconnectManager reconnectManager;
 
     private ConnectionEventListener eventListener;

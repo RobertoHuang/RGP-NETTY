@@ -35,6 +35,13 @@ public class InvokeContext {
     /** invoke context keys of bolt client and server side **/
     public final static String BOLT_INVOKE_REQUEST_ID = "bolt.invoke.request.id";
 
+    /** invoke context keys of client side **/
+    public final static String CLIENT_LOCAL_IP = "bolt.client.local.ip";
+    public final static String CLIENT_LOCAL_PORT = "bolt.client.local.port";
+    public final static String CLIENT_REMOTE_IP = "bolt.client.remote.ip";
+    public final static String CLIENT_REMOTE_PORT = "bolt.client.remote.port";
+    public final static String CLIENT_CONN_CREATETIME = "bolt.client.conn.createtime";
+
     /** invoke context keys of server side **/
     public final static String SERVER_LOCAL_IP = "bolt.server.local.ip";
     public final static String SERVER_LOCAL_PORT = "bolt.server.local.port";

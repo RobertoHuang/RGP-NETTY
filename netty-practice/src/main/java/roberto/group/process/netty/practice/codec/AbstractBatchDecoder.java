@@ -2,13 +2,14 @@
  * FileName: AbstractBatchDecoder
  * Author:   HuangTaiHong
  * Date:     2019/1/2 14:41
- * Description: 抽象消息解码器-支持批处理
+ * Description: Abstract Message Decoder - Support Batch Processing
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
 package roberto.group.process.netty.practice.codec;
 
+import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.Unpooled;
@@ -23,23 +24,7 @@ import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈抽象消息解码器-支持批处理〉
- * <pre>
- *   if (msg instanceof List) {
- *       processorManager.getDefaultExecutor().execute(new Runnable() {
- *           @Override
- *           public void run() {
- *               // batch submit to an executor
- *               for (Object m : (List<?>) msg) {
- *                   RpcCommandHandler.this.process(ctx, m);
- *               }
- *           }
- *       });
- *   } else {
- *       process(ctx, msg);
- *   }
- * </pre>
- *
+ * 〈Abstract Message Decoder - Support Batch Processing〉
  *
  * 1.如果当前读取的数据不足以拼接成一个完整的业务数据包，那就保留该数据继续从TCP缓冲区中读取，直到得到一个完整的数据包
  *
@@ -50,82 +35,50 @@ import java.util.List;
  * @since 1.0.0
  */
 public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter {
-    /**
-     * 〈一句话功能简述〉
-     * 〈消息累加器〉
-     *
-     * @author HuangTaiHong
-     * @create 2019.01.02
-     * @since 1.0.0
-     */
-    public interface Cumulator {
-        /**
-         * 功能描述: <br>
-         * 〈累加消息〉
-         *
-         * @param alloc
-         * @param cumulation
-         * @param in
-         * @return > io.netty.buffer.ByteBuf
-         * @author HuangTaiHong
-         * @date 2019.01.02 14:44:46
-         */
-        ByteBuf cumulate(ByteBufAllocator alloc, ByteBuf cumulation, ByteBuf in);
-    }
-
     /** 定义消息累加器 每次都将读取到的数据通过内存拷贝的方式拼接到一个大的字节容器中 **/
     public static final Cumulator MERGE_CUMULATOR = new Cumulator() {
-        public ByteBuf cumulate(ByteBufAllocator alloc, ByteBuf cumulation, ByteBuf in) {
-            ByteBuf buffer;
-            if (cumulation.writerIndex() > cumulation.maxCapacity() - in.readableBytes() || cumulation.refCnt() > 1) {
-                buffer = expandCumulation(alloc, cumulation, in.readableBytes());
-            } else {
-                buffer = cumulation;
+        @Override
+        ByteBuf cumulate(ByteBufAllocator allocator, ByteBuf cumulation, ByteBuf in) {
+            try {
+                // if the accumulator needs to be expanded
+                boolean needExpand = cumulation.writerIndex() > cumulation.maxCapacity() - in.readableBytes() || cumulation.refCnt() > 1;
+
+                return (needExpand ? expandCumulation(allocator, cumulation, in.readableBytes()) : cumulation).writeBytes(in);
+            } finally {
+                in.release();
             }
-            buffer.writeBytes(in);
-            in.release();
-            return buffer;
         }
     };
 
-    /**
-     * 功能描述: <br>
-     * 〈累加器扩容操作〉
-     *
-     * @param alloc
-     * @param cumulation
-     * @param readable
-     * @return > io.netty.buffer.ByteBuf
-     * @author HuangTaiHong
-     * @date 2019.01.02 14:47:19
-     */
-    static ByteBuf expandCumulation(ByteBufAllocator alloc, ByteBuf cumulation, int readable) {
-        ByteBuf oldCumulation = cumulation;
-        cumulation = alloc.buffer(oldCumulation.readableBytes() + readable);
-        cumulation.writeBytes(oldCumulation);
-        oldCumulation.release();
-        return cumulation;
-    }
-
-    ByteBuf cumulation;
-    private Cumulator cumulator = MERGE_CUMULATOR;
+    private boolean first;
+    private ByteBuf cumulation;
     private boolean singleDecode;
     private boolean decodeWasNull;
-    private boolean first;
-    private int discardAfterReads = 16;
-    private int numReads;
+    private Cumulator cumulator = MERGE_CUMULATOR;
 
-    public void setSingleDecode(boolean singleDecode) {
-        this.singleDecode = singleDecode;
+    /** Bytebuf cleanup properties **/
+    private int numReads;
+    private int discardAfterReads = 16;
+
+    protected ByteBuf internalBuffer() {
+        if (cumulation != null) {
+            return cumulation;
+        } else {
+            return Unpooled.EMPTY_BUFFER;
+        }
     }
 
     public boolean isSingleDecode() {
         return singleDecode;
     }
 
+    public void setSingleDecode(boolean singleDecode) {
+        this.singleDecode = singleDecode;
+    }
+
     public void setCumulator(Cumulator cumulator) {
         if (cumulator == null) {
-            throw new NullPointerException("cumulator");
+            throw new NullPointerException("cumulator must no be null.");
         }
         this.cumulator = cumulator;
     }
@@ -137,35 +90,32 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
         this.discardAfterReads = discardAfterReads;
     }
 
-    protected int actualReadableBytes() {
-        return internalBuffer().readableBytes();
-    }
-
-    protected ByteBuf internalBuffer() {
-        if (cumulation != null) {
-            return cumulation;
-        } else {
-            return Unpooled.EMPTY_BUFFER;
-        }
-    }
-
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        ByteBuf buf = internalBuffer();
-        int readable = buf.readableBytes();
-        if (readable > 0) {
-            ByteBuf bytes = buf.readBytes(readable);
-            buf.release();
-            ctx.fireChannelRead(bytes);
-        } else {
-            buf.release();
+        ByteBuf byteBuf = internalBuffer();
+        int readable = byteBuf.readableBytes();
+        if (readable < 0) {
+            // fireChannelRead if there has data in the current buffer
+            ctx.fireChannelRead(byteBuf.readBytes(readable));
         }
-        cumulation = null;
+        // clean up resources
         numReads = 0;
+        byteBuf.release();
+        cumulation = null;
         ctx.fireChannelReadComplete();
+        // call callback function - provide extension
         handlerRemovedProcess(ctx);
     }
 
+    /**
+     * 功能描述: <br>
+     * 〈Gets called after the AbstractBatchDecoder was removed from the actual context and it doesn't handle events anymore〉
+     *
+     * @param ctx
+     * @throws Exception
+     * @author HuangTaiHong
+     * @date 2019.01.09 11:23:24
+     */
     protected void handlerRemovedProcess(ChannelHandlerContext ctx) throws Exception {
 
     }
@@ -175,7 +125,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
         if (msg instanceof ByteBuf) {
             RecyclableArrayList out = RecyclableArrayList.newInstance();
             try {
-                // 累加数据
+                // cumulated
                 ByteBuf data = (ByteBuf) msg;
                 first = cumulation == null;
                 if (first) {
@@ -209,11 +159,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
                 } else if (size == 1) {
                     ctx.fireChannelRead(out.get(0));
                 } else {
-                    ArrayList<Object> ret = new ArrayList<Object>(size);
-                    for (int i = 0; i < size; i++) {
-                        ret.add(out.get(i));
-                    }
-                    ctx.fireChannelRead(ret);
+                    ArrayList<Object> result = Lists.newArrayList(out);
+                    ctx.fireChannelRead(result);
                 }
                 out.recycle();
             }
@@ -229,6 +176,9 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
         if (decodeWasNull) {
             decodeWasNull = false;
             if (!ctx.channel().config().isAutoRead()) {
+                // 如果一次数据读取完毕之后(可能接收端一边收，发送端一边发，这里的读取完毕指的是接收端在某个时间不再接受到数据为止)
+                // 发现仍然没有拆到一个完整的用户数据包，即使该channel的设置为非自动读取也会触发一次读取操作 ctx.read()
+                // 该操作会重新向selector注册op_read事件，以便于下一次能读到数据之后拼接成一个完整的数据包
                 ctx.read();
             }
         }
@@ -262,11 +212,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
                     ctx.fireChannelRead(out.get(0));
                     ctx.fireChannelReadComplete();
                 } else {
-                    ArrayList<Object> ret = new ArrayList<Object>(size);
-                    for (int i = 0; i < size; i++) {
-                        ret.add(out.get(i));
-                    }
-                    ctx.fireChannelRead(ret);
+                    ArrayList<Object> result = Lists.newArrayList(out);
+                    ctx.fireChannelRead(result);
                     ctx.fireChannelReadComplete();
                 }
                 ctx.fireChannelInactive();
@@ -276,10 +223,9 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
         }
     }
 
-
     /**
      * 功能描述: <br>
-     * 〈尝试将字节容器的数据拆分成业务数据包塞到业务数据容器out中〉
+     * 〈Called once data should be decoded from the given ByteBuf〉
      *
      * @param ctx
      * @param in
@@ -298,6 +244,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
                 if (ctx.isRemoved()) {
                     break;
                 }
+
                 if (outSize == out.size()) {
                     // 拆包器未读取任何数据
                     if (oldInputLength == in.readableBytes()) {
@@ -313,7 +260,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
                     throw new DecoderException(StringUtil.simpleClassName(getClass()) + ".decode() did not read anything but decoded a message.");
                 }
 
-                // 是否只解码一次
+                // 是否每次只解码一条消息
                 if (isSingleDecode()) {
                     break;
                 }
@@ -357,4 +304,48 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     protected abstract void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception;
+
+    /**
+     * 〈一句话功能简述〉
+     * 〈Cumulate ByteBuf〉
+     *
+     * @author HuangTaiHong
+     * @create 2019.01.02
+     * @since 1.0.0
+     */
+    public static abstract class Cumulator {
+        /**
+         * 功能描述: <br>
+         * 〈Cumulate the given ByteBuf and return the ByteBuf that holds the cumulated bytes〉
+         *
+         * The implementation is responsible to correctly handle the life-cycle of the given ByteBuf and so call ByteBuf.release() if a ByteBuf is fully consumed.
+         *
+         * @param allocator
+         * @param cumulation
+         * @param in
+         * @return > io.netty.buffer.ByteBuf
+         * @author HuangTaiHong
+         * @date 2019.01.02 14:44:46
+         */
+        abstract ByteBuf cumulate(ByteBufAllocator allocator, ByteBuf cumulation, ByteBuf in);
+
+        /**
+         * 功能描述: <br>
+         * 〈expand cumulation〉
+         *
+         * @param allocator
+         * @param cumulation
+         * @param readable
+         * @return > io.netty.buffer.ByteBuf
+         * @author HuangTaiHong
+         * @date 2019.01.09 11:01:11
+         */
+        protected ByteBuf expandCumulation(ByteBufAllocator allocator, ByteBuf cumulation, int readable) {
+            try {
+                return allocator.buffer(cumulation.readableBytes() + readable).writeBytes(cumulation);
+            } finally {
+                cumulation.release();
+            }
+        }
+    }
 }

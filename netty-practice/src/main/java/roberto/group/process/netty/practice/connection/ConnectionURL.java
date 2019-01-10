@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.connection;
 
 import lombok.Getter;
 import lombok.Setter;
-import roberto.group.process.netty.practice.configuration.configs.ConfigsSupport;
+import roberto.group.process.netty.practice.configuration.support.ConfigsSupport;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 
 import java.lang.ref.SoftReference;

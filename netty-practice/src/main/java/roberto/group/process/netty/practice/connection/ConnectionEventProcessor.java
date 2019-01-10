@@ -22,10 +22,10 @@ public interface ConnectionEventProcessor {
      * 功能描述: <br>
      * 〈处理连接事件〉
      *
-     * @param remoteAddr
-     * @param conn
+     * @param remoteAddress
+     * @param connection
      * @author HuangTaiHong
      * @date 2019.01.03 14:42:48
      */
-    void onEvent(String remoteAddr, Connection conn);
+    void onEvent(String remoteAddress, Connection connection);
 }

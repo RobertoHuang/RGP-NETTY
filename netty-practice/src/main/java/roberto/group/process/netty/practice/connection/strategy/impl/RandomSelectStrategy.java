@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import roberto.group.process.netty.practice.configuration.configs.ConfigsSupport;
+import roberto.group.process.netty.practice.configuration.support.ConfigsSupport;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.strategy.ConnectionSelectStrategy;

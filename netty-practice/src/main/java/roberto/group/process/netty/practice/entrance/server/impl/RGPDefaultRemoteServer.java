@@ -28,8 +28,9 @@ import roberto.group.process.netty.practice.codec.ProtocolCodeBasedEncoder;
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
 import roberto.group.process.netty.practice.command.factory.impl.RPCCommandFactory;
 import roberto.group.process.netty.practice.command.processor.custom.UserProcessor;
+import roberto.group.process.netty.practice.command.processor.custom.UserProcessorRegisterHelper;
 import roberto.group.process.netty.practice.command.processor.processor.RemotingProcessor;
-import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
+import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionEventListener;
@@ -75,7 +76,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
     private ServerBootstrap serverBootstrap;
 
     /** boss event loop group, boss group should not be daemon, need shutdown manually **/
-    private final EventLoopGroup bossGroup = NettyEventLoopUtil.newEventLoopGroup(1, new NamedThreadFactory("rgp-netty-server-boss", false));
+    private final EventLoopGroup bossGroup = NettyEventLoopUtil.newEventLoopGroup(1, new NamedThreadFactory("bolt-netty-server-boss", false));
 
     /** worker event loop group. Reuse I/O worker threads between rpc servers. **/
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2, new NamedThreadFactory("bolt-netty-server-worker", true));
@@ -96,7 +97,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
     private ConnectionEventListener connectionEventListener = new ConnectionEventListener();
 
     /** user processors of rpc server */
-    private ConcurrentHashMap<String, UserProcessor<?>> customProcessors = new ConcurrentHashMap(4);
+    private ConcurrentHashMap<String, UserProcessor<?>> userProcessors = new ConcurrentHashMap(4);
 
     static {
         if (workerGroup instanceof NioEventLoopGroup) {
@@ -141,10 +142,11 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
             this.addressParser = new RPCAddressParser();
         }
 
+        /** init connection event handler. init connection manager if need **/
         if (this.switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
             this.connectionEventHandler = new RPCConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
-            this.connectionEventHandler.setConnectionManager(new DefaultConnectionManager(new RandomSelectStrategy()));
+            this.connectionEventHandler.setConnectionManager(this.connectionManager = new DefaultConnectionManager(new RandomSelectStrategy()));
         } else {
             this.connectionEventHandler = new ConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
@@ -181,7 +183,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
                     pipeline.addLast("acceptorIdleStateTrigger", new AcceptorIdleStateTrigger());
                 }
                 pipeline.addLast("connectionEventHandler", connectionEventHandler);
-                pipeline.addLast("handler", new RPCBusinessEventHandler(true, RGPDefaultRemoteServer.this.customProcessors));
+                pipeline.addLast("handler", new RPCBusinessEventHandler(true, RGPDefaultRemoteServer.this.userProcessors));
                 this.createConnection(socketChannel);
             }
 
@@ -227,8 +229,8 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
     }
 
     @Override
-    public void registerCustomProcessor(UserProcessor<?> processor) {
-
+    public void registerUserProcessor(UserProcessor<?> processor) {
+        UserProcessorRegisterHelper.registerUserProcessor(processor, this.userProcessors);
     }
 
     @Override

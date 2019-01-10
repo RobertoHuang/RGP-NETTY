@@ -2,7 +2,7 @@
  * FileName: ProtocolCodeBasedEncoder
  * Author:   HuangTaiHong
  * Date:     2019/1/2 19:46
- * Description: 基础编码器实现类
+ * Description: Protocol code based newEncoder, the main newEncoder for a certain protocol, which is lead by one or multi bytes (magic code).
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈基础编码器实现类〉
+ * 〈Protocol code based newEncoder, the main newEncoder for a certain protocol, which is lead by one or multi bytes (magic code).〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -34,19 +34,13 @@ public class ProtocolCodeBasedEncoder extends MessageToByteEncoder<Serializable>
     protected ProtocolCode defaultProtocolCode;
 
     public ProtocolCodeBasedEncoder(ProtocolCode defaultProtocolCode) {
-        super();
         this.defaultProtocolCode = defaultProtocolCode;
     }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Serializable msg, ByteBuf out) throws Exception {
-        ProtocolCode protocolCode;
-        Attribute<ProtocolCode> att = ctx.channel().attr(Connection.PROTOCOL);
-        if (att == null || att.get() == null) {
-            protocolCode = this.defaultProtocolCode;
-        } else {
-            protocolCode = att.get();
-        }
+        Attribute<ProtocolCode> attr = ctx.channel().attr(Connection.PROTOCOL);
+        ProtocolCode protocolCode = (attr == null || attr.get() == null) ? defaultProtocolCode : attr.get();
         Protocol protocol = ProtocolManager.getProtocol(protocolCode);
         protocol.getEncoder().encode(ctx, msg, out);
     }

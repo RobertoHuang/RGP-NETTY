@@ -14,7 +14,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
 import roberto.group.process.netty.practice.command.processor.processor.RemotingProcessor;
-import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
+import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 
 import java.util.concurrent.ArrayBlockingQueue;

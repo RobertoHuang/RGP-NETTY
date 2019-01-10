@@ -23,7 +23,7 @@ package roberto.group.process.netty.practice.configuration.container;
 public interface ConfigContainer {
     /**
      * 功能描述: <br>
-     * 〈是否包含某配置项〉
+     * 〈check whether a config item of a certain config type exist.〉
      *
      * @param configType
      * @param configItem
@@ -35,9 +35,9 @@ public interface ConfigContainer {
 
     /**
      * 功能描述: <br>
-     * 〈获取指定类型配置项〉
+     * 〈try to get config value using config type and config item.〉
      *
-     * @param <T>        the type parameter
+     * @param <T>
      * @param configType
      * @param configItem
      * @return > T
@@ -46,10 +46,11 @@ public interface ConfigContainer {
      */
     <T> T get(ConfigTypeEnum configType, ConfigItemEnum configItem);
 
-
     /**
      * 功能描述: <br>
-     * 〈设置指定类型配置项〉
+     * 〈init a config item with certain config type, and the value can be any type.〉
+     *
+     *  Notice: the value can be overwrite if you set more than once.
      *
      * @param configType
      * @param configItem

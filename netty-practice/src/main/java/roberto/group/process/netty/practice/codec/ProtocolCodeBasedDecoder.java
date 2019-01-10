@@ -2,7 +2,7 @@
  * FileName: ProtocolCodeBasedDecoder
  * Author:   HuangTaiHong
  * Date:     2019/1/2 19:07
- * Description: 基础解码器实现类
+ * Description: Protocol code based decoder, the main decoder for a certain protocol, which is lead by one or multi bytes (magic code).
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -21,33 +21,35 @@ import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈基础解码器实现类〉
+ * 〈Protocol code based decoder, the main decoder for a certain protocol, which is lead by one or multi bytes (magic code).〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
  * @since 1.0.0
  */
 public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
-    /** 协议码占用长度 **/
+    /** the length of protocol code */
     protected int protocolCodeLength;
-    /** 默认协议版本号长度 **/
+    /** by default, suggest design a single byte for protocol version. */
     public static final int DEFAULT_PROTOCOL_VERSION_LENGTH = 1;
-    /** 非法协议版本号长度 **/
+    /** protocol version should be a positive number, we use -1 to represent illegal */
     public static final int DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH = -1;
 
     public ProtocolCodeBasedDecoder(int protocolCodeLength) {
-        super();
         this.protocolCodeLength = protocolCodeLength;
     }
 
+    @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         in.markReaderIndex();
         ProtocolCode protocolCode = decodeProtocolCode(in);
         if (null != protocolCode) {
             byte protocolVersion = decodeProtocolVersion(in);
             if (ctx.channel().attr(Connection.PROTOCOL).get() == null) {
+                // 为连接设置协议码信息
                 ctx.channel().attr(Connection.PROTOCOL).set(protocolCode);
-                if (DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH != protocolVersion) {
+                if (protocolVersion != DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH) {
+                    // 为连接设置协议版本号信息
                     ctx.channel().attr(Connection.VERSION).set(protocolVersion);
                 }
             }
@@ -63,7 +65,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
 
     /**
      * 功能描述: <br>
-     * 〈解析协议码〉
+     * 〈decode the protocol code〉
      *
      * @param in
      * @return > roberto.group.process.netty.practice.protocol.ProtocolCode
@@ -81,7 +83,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
 
     /**
      * 功能描述: <br>
-     * 〈解析协议版本号〉
+     * 〈decode the protocol version〉
      *
      * @param in
      * @return > byte

@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
 import roberto.group.process.netty.practice.command.command.response.ResponseCommand;
-import roberto.group.process.netty.practice.configuration.configs.ConfigsSupport;
+import roberto.group.process.netty.practice.configuration.support.ConfigsSupport;
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
 import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;

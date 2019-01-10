@@ -22,12 +22,14 @@ import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.connection.manager.impl.DefaultConnectionManager;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.exception.SerializationException;
+import roberto.group.process.netty.practice.protocol.ProtocolManager;
+import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
+import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
 import roberto.group.process.netty.practice.remote.invoke.callback.impl.RPCInvokeCallbackListener;
 import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
 import roberto.group.process.netty.practice.remote.invoke.future.impl.DefaultInvokeFuture;
-import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.utils.RemotingUtil;
 
 /**
@@ -35,8 +37,8 @@ import roberto.group.process.netty.practice.utils.RemotingUtil;
  * 〈RPC remoting capability.〉
  *
  * 将客户端的请求地址 -> Connection对象
- *      1. 客户端根据请求地址获取Connection对象
- *      2. 服务端根据请求地址获取Connection对象
+ * 1. 客户端根据请求地址获取Connection对象
+ * 2. 服务端根据请求地址获取Connection对象
  *
  * 将客户端的请求实体 -> RemotingCommand
  *
@@ -46,6 +48,11 @@ import roberto.group.process.netty.practice.utils.RemotingUtil;
  */
 @Slf4j
 public abstract class RPCRemoting extends Remoting {
+    static {
+        // init protocol
+        ProtocolManager.registerProtocol(new RPCProtocol(), RPCProtocol.PROTOCOL_CODE);
+    }
+
     /** address parser to get custom args */
     protected RemotingAddressParser addressParser;
 

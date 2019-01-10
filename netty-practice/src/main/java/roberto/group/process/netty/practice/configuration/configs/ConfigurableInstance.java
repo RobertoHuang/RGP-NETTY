@@ -2,7 +2,7 @@
  * FileName: ConfigurableInstance
  * Author:   HuangTaiHong
  * Date:     2019/1/2 9:58
- * Description: 定义配置接口
+ * Description: define an interface which can be used to implement configurable apis.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -14,16 +14,16 @@ import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSw
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈定义配置接口〉
+ * 〈define an interface which can be used to implement configurable apis.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
  * @since 1.0.0
  */
-public interface ConfigurableInstance extends NettyConfigure{
+public interface ConfigurableInstance extends CustomNettyConfigure {
     /**
      * 功能描述: <br>
-     * 〈获取配置容器〉
+     * 〈get the config container for current instance〉
      *
      * @return > roberto.group.process.netty.practice.configuration.container.ConfigContainer
      * @author HuangTaiHong
@@ -33,7 +33,7 @@ public interface ConfigurableInstance extends NettyConfigure{
 
     /**
      * 功能描述: <br>
-     * 〈获取配置开关〉
+     * 〈get the global switch for current instance〉
      *
      * @return > roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch
      * @author HuangTaiHong

@@ -26,7 +26,7 @@ import roberto.group.process.netty.practice.command.processor.processor.Remoting
 import roberto.group.process.netty.practice.command.processor.processor.impl.RPCHeartBeatProcessor;
 import roberto.group.process.netty.practice.command.processor.processor.impl.RPCRequestProcessor;
 import roberto.group.process.netty.practice.command.processor.processor.impl.RPCResponseProcessor;
-import roberto.group.process.netty.practice.configuration.configs.RPCConfigManager;
+import roberto.group.process.netty.practice.configuration.manager.RPCConfigManager;
 import roberto.group.process.netty.practice.remote.remote.RemotingContext;
 
 import java.util.List;

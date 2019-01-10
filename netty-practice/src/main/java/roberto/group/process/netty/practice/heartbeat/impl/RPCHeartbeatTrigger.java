@@ -16,7 +16,7 @@ import roberto.group.process.netty.practice.command.command.request.impl.Heartbe
 import roberto.group.process.netty.practice.command.command.response.ResponseCommand;
 import roberto.group.process.netty.practice.command.command.response.ResponseStatusEnum;
 import roberto.group.process.netty.practice.command.factory.CommandFactory;
-import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
+import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.heartbeat.HeartbeatTrigger;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallbackListener;

@@ -2,7 +2,7 @@
  * FileName: DefaultInvokeFuture
  * Author:   HuangTaiHong
  * Date:     2019/1/2 11:11
- * Description: 异步执行器默认实现
+ * Description: The default implementation of InvokeFuture.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈异步执行器默认实现〉
+ * 〈The default implementation of InvokeFuture.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

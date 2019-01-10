@@ -165,6 +165,10 @@ public class Connection {
         return attributes.get(key);
     }
 
+    public void setAttribute(String key, Object value) {
+        attributes.put(key, value);
+    }
+
     public Object setAttributeIfAbsent(String key, Object value) {
         return attributes.putIfAbsent(key, value);
     }
@@ -179,6 +183,10 @@ public class Connection {
 
     public void removePoolKey(String poolKey) {
         poolKeys.remove(poolKey);
+    }
+
+    public boolean isInvokeFutureMapFinish() {
+        return invokeFutureMap.isEmpty();
     }
 
     public InvokeFuture getInvokeFuture(int id) {

@@ -99,6 +99,6 @@ public class DefaultBizContext implements BizContext {
 
     @Override
     public InvokeContext getInvokeContext() {
-        return null;
+        return this.remotingContext.getInvokeContext();
     }
 }

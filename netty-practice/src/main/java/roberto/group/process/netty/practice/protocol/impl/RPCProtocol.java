@@ -39,8 +39,8 @@ public class RPCProtocol implements Protocol {
     /** version 2, is the protocol version for RPCProtocolV2 */
     public static final byte PROTOCOL_VERSION_2  = (byte) 2;
 
-    private static final int REQUEST_HEADER_LEN  = 22 + 2;
-    private static final int RESPONSE_HEADER_LEN = 20 + 2;
+    private static final int REQUEST_HEADER_LEN  = 24;
+    private static final int RESPONSE_HEADER_LEN = 22;
 
     private CommandEncoder   encoder;
     private CommandDecoder   decoder;

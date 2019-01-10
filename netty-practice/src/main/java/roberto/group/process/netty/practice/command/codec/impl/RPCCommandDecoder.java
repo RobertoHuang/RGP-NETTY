@@ -39,12 +39,18 @@ import java.util.List;
  */
 @Slf4j
 public class RPCCommandDecoder implements CommandDecoder {
-    private int lessLen = RPCProtocol.getResponseHeaderLength() < RPCProtocol.getRequestHeaderLength() ? RPCProtocol.getResponseHeaderLength() : RPCProtocol.getRequestHeaderLength();
+    private int lessLength;
+
+    public RPCCommandDecoder() {
+        int requestLength = RPCProtocol.getRequestHeaderLength();
+        int responseLength = RPCProtocol.getResponseHeaderLength();
+        this.lessLength = responseLength < requestLength ? responseLength : requestLength;
+    }
 
     @Override
     public void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         // the less length between response header and request header
-        if (in.readableBytes() >= lessLen) {
+        if (in.readableBytes() >= lessLength) {
             in.markReaderIndex();
             byte protocol = in.readByte();
             in.resetReaderIndex();
@@ -59,158 +65,9 @@ public class RPCCommandDecoder implements CommandDecoder {
                     /** type: request/response/request oneway **/
                     byte type = in.readByte();
                     if (type == RPCCommandType.REQUEST || type == RPCCommandType.REQUEST_ONEWAY) {
-                        // decode request
-                        if (in.readableBytes() >= RPCProtocol.getRequestHeaderLength() - 3) {
-                            /** remotingCommandCode: code for remoting command **/
-                            short commandCode = in.readShort();
-                            /** version: version for remoting command **/
-                            byte version2 = in.readByte();
-                            /** requestId: id of request **/
-                            int requestId = in.readInt();
-                            /** codec: code for codec **/
-                            byte serializer = in.readByte();
-                            /** switch: function switch **/
-                            byte protocolSwitchValue = in.readByte();
-                            /** (request) timeout: request timeout. **/
-                            int timeout = in.readInt();
-                            /** classLen: length of request or response class name **/
-                            short classLen = in.readShort();
-                            /** headerLen: length of header **/
-                            short headerLen = in.readShort();
-                            /** cotentLen: length of content **/
-                            int contentLen = in.readInt();
-
-                            byte[] clazz = null;
-                            byte[] header = null;
-                            byte[] content = null;
-
-                            // decide the at-least bytes length for each version
-                            int lengthAtLeastForV1 = classLen + headerLen + contentLen;
-                            boolean crcSwitchOn = ProtocolSwitch.isOn(ProtocolSwitch.CRC_SWITCH_INDEX, protocolSwitchValue);
-                            int lengthAtLeastForV2 = crcSwitchOn ? lengthAtLeastForV1 + 4 : lengthAtLeastForV1;
-                            // continue read ensure that the number of readable bytes is greater than lengthAtLeast
-                            if ((version == RPCProtocol.PROTOCOL_VERSION_1 && in.readableBytes() >= lengthAtLeastForV1) || (version == RPCProtocol.PROTOCOL_VERSION_2 && in.readableBytes() >= lengthAtLeastForV2)) {
-                                if (classLen > 0) {
-                                    /** className **/
-                                    clazz = new byte[classLen];
-                                    in.readBytes(clazz);
-                                }
-
-                                if (headerLen > 0) {
-                                    /** header **/
-                                    header = new byte[headerLen];
-                                    in.readBytes(header);
-                                }
-
-                                if (contentLen > 0) {
-                                    /** content **/
-                                    content = new byte[contentLen];
-                                    in.readBytes(content);
-                                }
-
-                                if (version == RPCProtocol.PROTOCOL_VERSION_2 && crcSwitchOn) {
-                                    checkCRC(in, startIndex);
-                                }
-                            } else {
-                                // not enough data
-                                in.resetReaderIndex();
-                                return;
-                            }
-
-                            RequestCommand command;
-                            if (commandCode == RemoteCommandCode.HEARTBEAT.value()) {
-                                command = new HeartbeatCommand();
-                            } else {
-                                command = createRequestCommand(commandCode);
-                            }
-                            command.setType(type);
-                            command.setVersion(version2);
-                            command.setId(requestId);
-                            command.setSerializer(serializer);
-                            command.setProtocolSwitch(ProtocolSwitch.create(protocolSwitchValue));
-                            command.setTimeout(timeout);
-                            command.setClazz(clazz);
-                            command.setHeader(header);
-                            command.setContent(content);
-                            out.add(command);
-                        } else {
-                            in.resetReaderIndex();
-                        }
+                        decodeRequest(in, out, startIndex, version, type);
                     } else if (type == RPCCommandType.RESPONSE) {
-                        // decode response
-                        if (in.readableBytes() >= RPCProtocol.getResponseHeaderLength() - 3) {
-                            /** remotingCommandCode: code for remoting command **/
-                            short commandCode = in.readShort();
-                            /** version: version for remoting command **/
-                            byte version2 = in.readByte();
-                            /** requestId: id of request **/
-                            int requestId = in.readInt();
-                            /** codec: code for codec **/
-                            byte serializer = in.readByte();
-                            /** switch: function switch **/
-                            byte protocolSwitchValue = in.readByte();
-                            /** (resp) respStatus: response status **/
-                            short status = in.readShort();
-                            /** classLen: length of request or response class name **/
-                            short classLen = in.readShort();
-                            /** headerLen: length of header **/
-                            short headerLen = in.readShort();
-                            /** cotentLen: length of content **/
-                            int contentLen = in.readInt();
-                            byte[] clazz = null;
-                            byte[] header = null;
-                            byte[] content = null;
-
-                            // decide the at-least bytes length for each version
-                            int lengthAtLeastForV1 = classLen + headerLen + contentLen;
-                            boolean crcSwitchOn = ProtocolSwitch.isOn(ProtocolSwitch.CRC_SWITCH_INDEX, protocolSwitchValue);
-                            int lengthAtLeastForV2 = crcSwitchOn ? lengthAtLeastForV1 + 4 : lengthAtLeastForV1;
-                            // continue read
-                            if ((version == RPCProtocol.PROTOCOL_VERSION_1 && in.readableBytes() >= lengthAtLeastForV1) || (version == RPCProtocol.PROTOCOL_VERSION_2 && in.readableBytes() >= lengthAtLeastForV2)) {
-                                if (classLen > 0) {
-                                    /** className **/
-                                    clazz = new byte[classLen];
-                                    in.readBytes(clazz);
-                                }
-                                if (headerLen > 0) {
-                                    /** header **/
-                                    header = new byte[headerLen];
-                                    in.readBytes(header);
-                                }
-                                if (contentLen > 0) {
-                                    /** content **/
-                                    content = new byte[contentLen];
-                                    in.readBytes(content);
-                                }
-                                if (version == RPCProtocol.PROTOCOL_VERSION_2 && crcSwitchOn) {
-                                    checkCRC(in, startIndex);
-                                }
-                            } else {
-                                // not enough data
-                                in.resetReaderIndex();
-                                return;
-                            }
-                            ResponseCommand command;
-                            if (commandCode == RemoteCommandCode.HEARTBEAT.value()) {
-                                command = new HeartbeatAckCommand();
-                            } else {
-                                command = createResponseCommand(commandCode);
-                            }
-                            command.setType(type);
-                            command.setVersion(version2);
-                            command.setId(requestId);
-                            command.setSerializer(serializer);
-                            command.setProtocolSwitch(ProtocolSwitch.create(protocolSwitchValue));
-                            command.setResponseStatus(ResponseStatusEnum.valueOf(status));
-                            command.setClazz(clazz);
-                            command.setHeader(header);
-                            command.setContent(content);
-                            command.setResponseTimeMillis(System.currentTimeMillis());
-                            command.setResponseHost((InetSocketAddress) ctx.channel().remoteAddress());
-                            out.add(command);
-                        } else {
-                            in.resetReaderIndex();
-                        }
+                        decodeResponse(ctx, in, out, startIndex, version, type);
                     } else {
                         String errorMsg = "Unknown command type: " + type;
                         log.error(errorMsg);
@@ -218,10 +75,169 @@ public class RPCCommandDecoder implements CommandDecoder {
                     }
                 }
             } else {
-                String emsg = "Unknown protocol: " + protocol;
-                log.error(emsg);
-                throw new RuntimeException(emsg);
+                String errorMsg = "Unknown protocol: " + protocol;
+                log.error(errorMsg);
+                throw new RuntimeException(errorMsg);
             }
+        }
+    }
+
+    @SuppressWarnings({"all"})
+    private void decodeRequest(ByteBuf in, List<Object> out, int startIndex, byte version, byte type) {
+        // decode request
+        if (in.readableBytes() >= RPCProtocol.getRequestHeaderLength() - 3) {
+            /** remotingCommandCode: code for remoting command **/
+            short commandCode = in.readShort();
+            /** version: version for remoting command **/
+            byte version2 = in.readByte();
+            /** requestId: id of request **/
+            int requestId = in.readInt();
+            /** codec: code for codec **/
+            byte serializer = in.readByte();
+            /** switch: function switch **/
+            byte protocolSwitchValue = in.readByte();
+            /** (request) timeout: request timeout. **/
+            int timeout = in.readInt();
+            /** classLen: length of request or response class name **/
+            short classLen = in.readShort();
+            /** headerLen: length of header **/
+            short headerLen = in.readShort();
+            /** cotentLen: length of content **/
+            int contentLen = in.readInt();
+
+            byte[] clazz = null;
+            byte[] header = null;
+            byte[] content = null;
+
+            // decide the at-least bytes length for each version
+            int lengthAtLeastForV1 = classLen + headerLen + contentLen;
+            boolean crcSwitchOn = ProtocolSwitch.isOn(ProtocolSwitch.CRC_SWITCH_INDEX, protocolSwitchValue);
+            int lengthAtLeastForV2 = crcSwitchOn ? lengthAtLeastForV1 + 4 : lengthAtLeastForV1;
+            // continue read ensure that the number of readable bytes is greater than lengthAtLeast
+            if ((version == RPCProtocol.PROTOCOL_VERSION_1 && in.readableBytes() >= lengthAtLeastForV1) || (version == RPCProtocol.PROTOCOL_VERSION_2 && in.readableBytes() >= lengthAtLeastForV2)) {
+                if (classLen > 0) {
+                    /** className **/
+                    clazz = new byte[classLen];
+                    in.readBytes(clazz);
+                }
+
+                if (headerLen > 0) {
+                    /** header **/
+                    header = new byte[headerLen];
+                    in.readBytes(header);
+                }
+
+                if (contentLen > 0) {
+                    /** content **/
+                    content = new byte[contentLen];
+                    in.readBytes(content);
+                }
+
+                if (version == RPCProtocol.PROTOCOL_VERSION_2 && crcSwitchOn) {
+                    checkCRC(in, startIndex);
+                }
+            } else {
+                // not enough data
+                in.resetReaderIndex();
+                return;
+            }
+
+            RequestCommand command;
+            if (commandCode == RemoteCommandCode.HEARTBEAT.value()) {
+                command = new HeartbeatCommand();
+            } else {
+                command = createRequestCommand(commandCode);
+            }
+            command.setType(type);
+            command.setVersion(version2);
+            command.setId(requestId);
+            command.setSerializer(serializer);
+            command.setProtocolSwitch(ProtocolSwitch.create(protocolSwitchValue));
+            command.setTimeout(timeout);
+            command.setClazz(clazz);
+            command.setHeader(header);
+            command.setContent(content);
+            out.add(command);
+        } else {
+            in.resetReaderIndex();
+        }
+    }
+
+    @SuppressWarnings({"all"})
+    private void decodeResponse(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, int startIndex, byte version, byte type) {
+        // decode response
+        if (in.readableBytes() >= RPCProtocol.getResponseHeaderLength() - 3) {
+            /** remotingCommandCode: code for remoting command **/
+            short commandCode = in.readShort();
+            /** version: version for remoting command **/
+            byte version2 = in.readByte();
+            /** requestId: id of request **/
+            int requestId = in.readInt();
+            /** codec: code for codec **/
+            byte serializer = in.readByte();
+            /** switch: function switch **/
+            byte protocolSwitchValue = in.readByte();
+            /** (resp) respStatus: response status **/
+            short status = in.readShort();
+            /** classLen: length of request or response class name **/
+            short classLen = in.readShort();
+            /** headerLen: length of header **/
+            short headerLen = in.readShort();
+            /** cotentLen: length of content **/
+            int contentLen = in.readInt();
+            byte[] clazz = null;
+            byte[] header = null;
+            byte[] content = null;
+
+            // decide the at-least bytes length for each version
+            int lengthAtLeastForV1 = classLen + headerLen + contentLen;
+            boolean crcSwitchOn = ProtocolSwitch.isOn(ProtocolSwitch.CRC_SWITCH_INDEX, protocolSwitchValue);
+            int lengthAtLeastForV2 = crcSwitchOn ? lengthAtLeastForV1 + 4 : lengthAtLeastForV1;
+            // continue read
+            if ((version == RPCProtocol.PROTOCOL_VERSION_1 && in.readableBytes() >= lengthAtLeastForV1) || (version == RPCProtocol.PROTOCOL_VERSION_2 && in.readableBytes() >= lengthAtLeastForV2)) {
+                if (classLen > 0) {
+                    /** className **/
+                    clazz = new byte[classLen];
+                    in.readBytes(clazz);
+                }
+                if (headerLen > 0) {
+                    /** header **/
+                    header = new byte[headerLen];
+                    in.readBytes(header);
+                }
+                if (contentLen > 0) {
+                    /** content **/
+                    content = new byte[contentLen];
+                    in.readBytes(content);
+                }
+                if (version == RPCProtocol.PROTOCOL_VERSION_2 && crcSwitchOn) {
+                    checkCRC(in, startIndex);
+                }
+            } else {
+                // not enough data
+                in.resetReaderIndex();
+                return;
+            }
+            ResponseCommand command;
+            if (commandCode == RemoteCommandCode.HEARTBEAT.value()) {
+                command = new HeartbeatAckCommand();
+            } else {
+                command = createResponseCommand(commandCode);
+            }
+            command.setType(type);
+            command.setVersion(version2);
+            command.setId(requestId);
+            command.setSerializer(serializer);
+            command.setProtocolSwitch(ProtocolSwitch.create(protocolSwitchValue));
+            command.setResponseStatus(ResponseStatusEnum.valueOf(status));
+            command.setClazz(clazz);
+            command.setHeader(header);
+            command.setContent(content);
+            command.setResponseTimeMillis(System.currentTimeMillis());
+            command.setResponseHost((InetSocketAddress) ctx.channel().remoteAddress());
+            out.add(command);
+        } else {
+            in.resetReaderIndex();
         }
     }
 

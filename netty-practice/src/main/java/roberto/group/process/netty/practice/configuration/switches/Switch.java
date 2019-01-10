@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.configuration.switches;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈开关接口〉
+ * 〈switch interface〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29
@@ -20,7 +20,7 @@ package roberto.group.process.netty.practice.configuration.switches;
 public interface Switch {
     /**
      * 功能描述: <br>
-     * 〈打开开关〉
+     * 〈api for user to turn on a feature〉
      *
      * @param index
      * @author HuangTaiHong
@@ -30,7 +30,7 @@ public interface Switch {
 
     /**
      * 功能描述: <br>
-     * 〈关闭开关〉
+     * 〈api for user to turn off a feature〉
      *
      * @param index
      * @author HuangTaiHong
@@ -40,7 +40,7 @@ public interface Switch {
 
     /**
      * 功能描述: <br>
-     * 〈是否打开状态〉
+     * 〈check switch whether on〉
      *
      * @param index
      * @return > boolean

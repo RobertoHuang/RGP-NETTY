@@ -83,7 +83,7 @@ public interface RemotingServer {
      * @author HuangTaiHong
      * @date 2018.12.29 15:29:25
      */
-    void registerCustomProcessor(UserProcessor<?> processor);
+    void registerUserProcessor(UserProcessor<?> processor);
 
     /**
      * 功能描述: <br>

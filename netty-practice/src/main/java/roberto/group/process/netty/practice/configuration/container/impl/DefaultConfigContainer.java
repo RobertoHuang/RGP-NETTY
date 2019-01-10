@@ -2,7 +2,7 @@
  * FileName: DefaultConfigContainer
  * Author:   HuangTaiHong
  * Date:     2018/12/29 17:31
- * Description: 默认配置容器类
+ * Description: default implementation for config container
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈默认配置容器类〉
+ * 〈default implementation for config container〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29
@@ -29,7 +29,7 @@ import java.util.Map;
 public class DefaultConfigContainer implements ConfigContainer {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConfigContainer.class);
 
-    /** 用户保存用户自定义配置 **/
+    /** use a hash map to store the user configs with different config types and config items. **/
     private Map<ConfigTypeEnum, Map<ConfigItemEnum, Object>> userConfigs = new HashMap<ConfigTypeEnum, Map<ConfigItemEnum, Object>>();
 
     public boolean contains(ConfigTypeEnum configType, ConfigItemEnum configItem) {
@@ -59,31 +59,12 @@ public class DefaultConfigContainer implements ConfigContainer {
         }
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈校验配置项是否合法〉
-     *
-     * @param configType
-     * @param configItem
-     * @author HuangTaiHong
-     * @date 2018.12.29 17:36:23
-     */
     private void validate(ConfigTypeEnum configType, ConfigItemEnum configItem) {
         if (null == configType || null == configItem) {
             throw new IllegalArgumentException(String.format("ConfigType {%s}, ConfigItem {%s} should not be null!", configType, configItem));
         }
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈校验配置项是否合法〉
-     *
-     * @param configType
-     * @param configItem
-     * @param value
-     * @author HuangTaiHong
-     * @date 2018.12.29 17:36:23
-     */
     private void validate(ConfigTypeEnum configType, ConfigItemEnum configItem, Object value) {
         if (null == configType || null == configItem || null == value) {
             throw new IllegalArgumentException(String.format("ConfigType {%s}, ConfigItem {%s}, value {%s} should not be null!", configType, configItem, value == null ? null : value.toString()));

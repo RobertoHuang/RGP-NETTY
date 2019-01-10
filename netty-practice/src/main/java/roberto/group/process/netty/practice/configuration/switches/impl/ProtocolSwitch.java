@@ -34,6 +34,7 @@ public class ProtocolSwitch implements Switch {
     public static final boolean CRC_SWITCH_DEFAULT_VALUE = true;
 
     @Setter
+    /** protocol switches */
     private BitSet bitSet = new BitSet();
 
     public static ProtocolSwitch create(int value) {
@@ -70,6 +71,4 @@ public class ProtocolSwitch implements Switch {
     public static boolean isOn(int switchIndex, int value) {
         return BitSetConvertUtils.toBitSet(value).get(switchIndex);
     }
-
-
 }

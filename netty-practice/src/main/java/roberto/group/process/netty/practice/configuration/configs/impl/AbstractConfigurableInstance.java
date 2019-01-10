@@ -2,14 +2,14 @@
  * FileName: AbstractConfigurableInstance
  * Author:   HuangTaiHong
  * Date:     2019/1/2 10:04
- * Description: 抽象动态配置实现类
+ * Description: common implementation for a configurable instance
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
 package roberto.group.process.netty.practice.configuration.configs.impl;
 
-import roberto.group.process.netty.practice.configuration.configs.ConfigManager;
+import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.configuration.configs.ConfigurableInstance;
 import roberto.group.process.netty.practice.configuration.container.ConfigContainer;
 import roberto.group.process.netty.practice.configuration.container.ConfigItemEnum;
@@ -19,7 +19,7 @@ import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSw
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈抽象动态配置实现类〉
+ * 〈common implementation for a configurable instance〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
