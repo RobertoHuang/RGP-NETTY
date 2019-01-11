@@ -23,8 +23,10 @@ import io.netty.channel.WriteBufferWaterMark;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
-import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
+import roberto.group.process.netty.practice.codec.ProtocolCodeBasedDecoder;
+import roberto.group.process.netty.practice.codec.ProtocolCodeBasedEncoder;
 import roberto.group.process.netty.practice.configuration.configs.ConfigurableInstance;
+import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
@@ -49,24 +51,16 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public abstract class AbstractConnectionFactory implements ConnectionFactory {
     protected Bootstrap bootstrap;
-    private final ChannelHandler encoder;
-    private final ChannelHandler decoder;
     private final ChannelHandler heartbeatHandler;
     private final ChannelHandler businessHandler;
     private final ConfigurableInstance configurableInstance;
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() + 1, new NamedThreadFactory("bolt-netty-client-worker", true));
 
-    public AbstractConnectionFactory(ChannelHandler encoder, ChannelHandler decoder, ChannelHandler heartbeatHandler, ChannelHandler businessHandler, ConfigurableInstance configurableInstance) {
-        if (encoder == null || decoder == null) {
-            throw new IllegalArgumentException("encoder or decoder must no be null.");
-        }
-
+    public AbstractConnectionFactory(ChannelHandler heartbeatHandler, ChannelHandler businessHandler, ConfigurableInstance configurableInstance) {
         if (businessHandler == null) {
             throw new IllegalArgumentException("businessHandler must no be null.");
         }
 
-        this.encoder = encoder;
-        this.decoder = decoder;
         this.heartbeatHandler = heartbeatHandler;
         this.businessHandler = businessHandler;
         this.configurableInstance = configurableInstance;
@@ -94,8 +88,8 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
             @Override
             protected void initChannel(SocketChannel channel) {
                 ChannelPipeline pipeline = channel.pipeline();
-                pipeline.addLast("decoder", AbstractConnectionFactory.this.decoder);
-                pipeline.addLast("encoder", AbstractConnectionFactory.this.encoder);
+                pipeline.addLast("decoder", new ProtocolCodeBasedDecoder(RPCProtocol.DEFAULT_PROTOCOL_CODE_LENGTH));
+                pipeline.addLast("encoder", new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RPCProtocol.PROTOCOL_CODE)));
                 boolean idleSwitch = ConfigManager.tcp_idle_switch();
                 if (idleSwitch) {
                     pipeline.addLast("idleStateHandler", new IdleStateHandler(ConfigManager.tcp_client_idle(), ConfigManager.tcp_client_idle(), 0, TimeUnit.MILLISECONDS));

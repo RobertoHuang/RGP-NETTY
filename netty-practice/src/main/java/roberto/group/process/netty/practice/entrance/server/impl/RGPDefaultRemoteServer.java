@@ -39,6 +39,7 @@ import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
 import roberto.group.process.netty.practice.connection.manager.impl.DefaultConnectionManager;
 import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
+import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.handler.AcceptorIdleStateTrigger;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
 import roberto.group.process.netty.practice.handler.RPCBusinessEventHandler;
@@ -48,7 +49,10 @@ import roberto.group.process.netty.practice.protocol.ProtocolManager;
 import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.remote.help.impl.RPCAddressParser;
+import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
+import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.remote.RPCRemoting;
+import roberto.group.process.netty.practice.remote.remote.RPCResponseFuture;
 import roberto.group.process.netty.practice.remote.remote.server.RPCServerRemoting;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 import roberto.group.process.netty.practice.utils.NettyEventLoopUtil;
@@ -269,6 +273,126 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
         } else {
             log.warn("[server side] bolt netty low water mark is {} bytes, high water mark is {} bytes", lowWaterMark, highWaterMark);
             this.serverBootstrap.childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(lowWaterMark, highWaterMark));
+        }
+    }
+
+    /*********************************************网络通信相关方法开始*********************************************/
+    public void oneway(final String address, final Object request) throws RemotingException, InterruptedException {
+        check();
+        this.remoting.oneway(address, request, null);
+    }
+
+    public void oneway(final String address, final Object request, final InvokeContext invokeContext) throws RemotingException, InterruptedException {
+        check();
+        this.remoting.oneway(address, request, invokeContext);
+    }
+
+    public void oneway(final ConnectionURL connectionURL, final Object request) throws RemotingException, InterruptedException {
+        check();
+        this.remoting.oneway(connectionURL, request, null);
+    }
+
+    public void oneway(final ConnectionURL connectionURL, final Object request, final InvokeContext invokeContext) throws RemotingException, InterruptedException {
+        check();
+        this.remoting.oneway(connectionURL, request, invokeContext);
+    }
+
+    public void oneway(final Connection connection, final Object request) throws RemotingException {
+        this.remoting.oneway(connection, request, null);
+    }
+
+    public void oneway(final Connection connection, final Object request, final InvokeContext invokeContext) throws RemotingException {
+        this.remoting.oneway(connection, request, invokeContext);
+    }
+
+    public Object invokeSync(final String address, final Object request, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        return this.remoting.invokeSync(address, request, null, timeoutMillis);
+    }
+
+    public Object invokeSync(final String addr, final Object request, final InvokeContext invokeContext, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        return this.remoting.invokeSync(addr, request, invokeContext, timeoutMillis);
+    }
+
+    public Object invokeSync(ConnectionURL connectionURL, Object request, int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        return this.remoting.invokeSync(connectionURL, request, null, timeoutMillis);
+    }
+
+    public Object invokeSync(final ConnectionURL connectionURL, final Object request, final InvokeContext invokeContext, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        return this.remoting.invokeSync(connectionURL, request, invokeContext, timeoutMillis);
+    }
+
+    public Object invokeSync(final Connection connection, final Object request, final int timeoutMillis) throws RemotingException, InterruptedException {
+        return this.remoting.invokeSync(connection, request, null, timeoutMillis);
+    }
+
+    public Object invokeSync(final Connection connection, final Object request, final InvokeContext invokeContext, final int timeoutMillis) throws RemotingException, InterruptedException {
+        return this.remoting.invokeSync(connection, request, invokeContext, timeoutMillis);
+    }
+
+    public RPCResponseFuture invokeWithFuture(final String address, final Object request, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        return this.remoting.invokeWithFuture(address, request, null, timeoutMillis);
+    }
+
+    public RPCResponseFuture invokeWithFuture(final String address, final Object request, final InvokeContext invokeContext, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        return this.remoting.invokeWithFuture(address, request, invokeContext, timeoutMillis);
+    }
+
+    public RPCResponseFuture invokeWithFuture(final ConnectionURL connectionURL, final Object request, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        return this.remoting.invokeWithFuture(connectionURL, request, null, timeoutMillis);
+    }
+
+    public RPCResponseFuture invokeWithFuture(final ConnectionURL connectionURL, final Object request, final InvokeContext invokeContext, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        return this.remoting.invokeWithFuture(connectionURL, request, invokeContext, timeoutMillis);
+    }
+
+    public RPCResponseFuture invokeWithFuture(final Connection connection, final Object request, final int timeoutMillis) throws RemotingException {
+        return this.remoting.invokeWithFuture(connection, request, null, timeoutMillis);
+    }
+
+    public RPCResponseFuture invokeWithFuture(final Connection connection, final Object request, final InvokeContext invokeContext, final int timeoutMillis) throws RemotingException {
+        return this.remoting.invokeWithFuture(connection, request, invokeContext, timeoutMillis);
+    }
+
+    public void invokeWithCallback(final String address, final Object request, final InvokeCallback invokeCallback, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        this.remoting.invokeWithCallback(address, request, null, invokeCallback, timeoutMillis);
+    }
+
+    public void invokeWithCallback(final String address, final Object request, final InvokeContext invokeContext, final InvokeCallback invokeCallback, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        this.remoting.invokeWithCallback(address, request, invokeContext, invokeCallback, timeoutMillis);
+    }
+
+    public void invokeWithCallback(final ConnectionURL connectionURL, final Object request, final InvokeCallback invokeCallback, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        this.remoting.invokeWithCallback(connectionURL, request, null, invokeCallback, timeoutMillis);
+    }
+
+    public void invokeWithCallback(final ConnectionURL connectionURL, final Object request, final InvokeContext invokeContext, final InvokeCallback invokeCallback, final int timeoutMillis) throws RemotingException, InterruptedException {
+        check();
+        this.remoting.invokeWithCallback(connectionURL, request, invokeContext, invokeCallback, timeoutMillis);
+    }
+
+    public void invokeWithCallback(final Connection connection, final Object request, final InvokeCallback invokeCallback, final int timeoutMillis) throws RemotingException {
+        this.remoting.invokeWithCallback(connection, request, null, invokeCallback, timeoutMillis);
+    }
+
+    public void invokeWithCallback(final Connection connection, final Object request, final InvokeContext invokeContext, final InvokeCallback invokeCallback, final int timeoutMillis) throws RemotingException {
+        this.remoting.invokeWithCallback(connection, request, invokeContext, invokeCallback, timeoutMillis);
+    }
+    /*********************************************网络通信相关方法结束*********************************************/
+
+    private void check() {
+        if (!this.switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
+            throw new UnsupportedOperationException("Please enable connection manage feature of RPC Server before call this method! See comments in constructor RGPDefaultRemoteServer(int port, boolean manageConnection) to find how to enable!");
         }
     }
 }
