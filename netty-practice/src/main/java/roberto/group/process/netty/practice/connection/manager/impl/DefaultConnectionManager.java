@@ -88,7 +88,7 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
     protected ConcurrentHashMap<String, FutureTask<Integer>> healTasks;
 
     @Getter
-    /** connection connectionPool initialize tasks **/
+    /** connection pool initialize tasks **/
     protected ConcurrentHashMap<String, RunStateRecordedFutureTask<ConnectionPool>> connectionTasks;
 
     @Getter
@@ -413,6 +413,7 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
         int timesOfResultNull = 0;
         ConnectionPool pool = null;
         int retry = DEFAULT_RETRY_TIMES;
+
         RunStateRecordedFutureTask<ConnectionPool> initialTask;
         for (int i = 0; (i < retry) && (pool == null); ++i) {
             initialTask = this.connectionTasks.get(poolKey);
