@@ -44,6 +44,7 @@ public class RPCResponseCommand extends ResponseCommand {
     private String responseClass;
 
     @Getter
+    @Setter
     private Object responseHeader;
 
     @Getter

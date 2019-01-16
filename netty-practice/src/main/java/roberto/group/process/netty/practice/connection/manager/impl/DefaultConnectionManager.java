@@ -474,6 +474,11 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
      * @date 2019.01.08 11:34:05
      */
     private void doCreate(final ConnectionURL connectionURL, final ConnectionPool connectionPool, final String taskName, final int syncCreateNumWhenNotWarmup) throws RemotingException {
+        int connThreshold = ConfigManager.conn_threshold();
+        if (connectionURL.getConnectionNumber() > connThreshold) {
+            connectionURL.setConnectionNumber(connThreshold);
+        }
+
         final int actualNum = connectionPool.size();
         final int expectNum = connectionURL.getConnectionNumber();
         if (actualNum < expectNum) {

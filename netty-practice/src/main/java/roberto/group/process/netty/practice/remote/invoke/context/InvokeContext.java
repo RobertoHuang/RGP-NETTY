@@ -29,8 +29,6 @@ public class InvokeContext {
 
     /** CRC认证开关 **/
     public final static String RGP_CRC_SWITCH = "bolt.invoke.crc.switch";
-    /** 用户自定义编解码器 **/
-    public final static String RGP_CUSTOM_SERIALIZER = "bolt.invoke.custom.serializer";
 
     /** invoke context keys of bolt client and server side **/
     public final static String BOLT_INVOKE_REQUEST_ID = "bolt.invoke.request.id";
@@ -50,6 +48,7 @@ public class InvokeContext {
 
     /** invoke context keys of bolt client and server side **/
     public final static String BOLT_PROCESS_WAIT_TIME = "bolt.invoke.wait.time";
+    public final static String BOLT_CUSTOM_SERIALIZER = "bolt.invoke.custom.serializer";
 
     private ConcurrentHashMap<String, Object> context = new ConcurrentHashMap(INITIAL_SIZE);
 

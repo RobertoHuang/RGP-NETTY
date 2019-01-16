@@ -72,8 +72,6 @@ public class RemotingContext {
         this.customProcessors = customProcessors;
     }
 
-
-
     public ChannelFuture writeAndFlush(RemotingCommand message) {
         return this.channelContext.writeAndFlush(message);
     }

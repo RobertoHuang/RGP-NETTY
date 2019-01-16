@@ -11,6 +11,7 @@ package roberto.group.process.netty.practice.connection;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.configuration.support.ConfigsSupport;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 
@@ -26,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @create 2019/1/3
  * @since 1.0.0
  */
+@Slf4j
 public class ConnectionURL {
     @Getter
     /** origin url */
@@ -69,7 +71,10 @@ public class ConnectionURL {
     /** URL agrs: all parsed args of each originUrl */
     private Properties properties;
 
-    /** 使用软引用对地址解析结果进行缓存 **/
+    /** for unit test only, indicate this object have already been GCed */
+    public static volatile boolean isCollected = false;
+
+    /** Use SoftReference to cache parsed urls. Key is the original url. */
     public static final ConcurrentHashMap<String, SoftReference<ConnectionURL>> PARSED_URLS = new ConcurrentHashMap();
 
     protected ConnectionURL(String originUrl) {
@@ -153,5 +158,15 @@ public class ConnectionURL {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Origin url [" + this.originUrl + "], Unique key [" + this.uniqueKey + "].");
         return stringBuilder.toString();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            isCollected = true;
+            PARSED_URLS.remove(this.getOriginUrl());
+        } catch (Exception e) {
+            log.error("Exception occurred when do finalize for Url [{}].", this.getOriginUrl(), e);
+        }
     }
 }

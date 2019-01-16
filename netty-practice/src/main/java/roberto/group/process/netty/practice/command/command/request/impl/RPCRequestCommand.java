@@ -156,7 +156,7 @@ public class RPCRequestCommand extends RequestCommand {
             } catch (DeserializationException e) {
                 throw e;
             } catch (Exception e) {
-                throw new DeserializationException("Exception caught when deserialize content of rpc request command!", e);
+                throw new DeserializationException("Exception caught when deserialize content of RPC request command!", e);
             }
         }
     }

@@ -128,7 +128,7 @@ public abstract class RPCRemoting extends Remoting {
         RPCRequestCommand command = this.getCommandFactory().createRequestCommand(request);
         if (null != invokeContext) {
             // set client custom serializer for request command if not null
-            Object clientCustomSerializer = invokeContext.get(InvokeContext.RGP_CUSTOM_SERIALIZER);
+            Object clientCustomSerializer = invokeContext.get(InvokeContext.BOLT_CUSTOM_SERIALIZER);
             if (null != clientCustomSerializer) {
                 try {
                     command.setSerializer((Byte) clientCustomSerializer);

@@ -65,6 +65,8 @@ public abstract class RPCRemotingCommand implements RemotingCommand {
 
     @Getter
     @Setter
+    /** Serializer, see the Configs.SERIALIZER_DEFAULT for the default serializer. **/
+    /** Notice: this can not be changed after initialized at runtime. **/
     private byte serializer = ConfigManager.serializer;
 
     @Getter

@@ -21,7 +21,7 @@ import java.util.List;
  * @create 2019/1/9
  * @since 1.0.0
  */
-public abstract class MultiInterestUserProcessor<T> implements UserProcessor<T> {
+public abstract class MultiInterestUserProcessor<T> extends AbstractUserProcessor<T> implements UserProcessor<T> {
     @Override
     public String interest() {
         return null;

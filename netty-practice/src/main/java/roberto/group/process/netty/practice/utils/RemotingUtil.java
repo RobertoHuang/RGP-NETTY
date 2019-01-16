@@ -12,6 +12,7 @@ package roberto.group.process.netty.practice.utils;
 import io.netty.channel.Channel;
 import org.apache.commons.lang3.StringUtils;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
@@ -87,6 +88,17 @@ public class RemotingUtil {
     public static String parseSocketAddressToString(SocketAddress socketAddress) {
         if (socketAddress != null) {
             return doParse(socketAddress.toString().trim());
+        }
+        return StringUtils.EMPTY;
+    }
+
+    public static String parseSocketAddressToHostIp(SocketAddress socketAddress) {
+        final InetSocketAddress inetSocketAddress = (InetSocketAddress) socketAddress;
+        if (inetSocketAddress != null) {
+            InetAddress inetAddress = inetSocketAddress.getAddress();
+            if (null != inetAddress) {
+                return inetAddress.getHostAddress();
+            }
         }
         return StringUtils.EMPTY;
     }
