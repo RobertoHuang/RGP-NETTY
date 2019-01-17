@@ -56,24 +56,21 @@ public class AsyncServerUserProcessor extends AsyncUserProcessor<RequestBody> {
     private AtomicInteger futureTimes = new AtomicInteger();
     private AtomicInteger callbackTimes = new AtomicInteger();
 
-    private String remoteAddr;
-    private CountDownLatch latch = new CountDownLatch(1);
+    private String remoteAddress;
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
 
     public AsyncServerUserProcessor() {
+        this.delayMs = 0;
         this.delaySwitch = false;
         this.isException = false;
-        this.delayMs = 0;
-        this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory("Request-process-pool"));
-        this.asyncExecutor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory(
-                "Another-aysnc-process-pool"));
+        this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("request-process-pool"));
+        this.asyncExecutor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("another-aysnc-process-pool"));
     }
 
     public AsyncServerUserProcessor(boolean isException, boolean isNull) {
         this();
-        this.isException = isException;
         this.isNull = isNull;
+        this.isException = isException;
     }
 
     public AsyncServerUserProcessor(long delay) {
@@ -81,13 +78,13 @@ public class AsyncServerUserProcessor extends AsyncUserProcessor<RequestBody> {
         if (delay < 0) {
             throw new IllegalArgumentException("delay time illegal!");
         }
-        this.delaySwitch = true;
         this.delayMs = delay;
+        this.delaySwitch = true;
     }
 
     public AsyncServerUserProcessor(long delay, int core, int max, int keepaliveSeconds, int workQueue) {
         this(delay);
-        this.executor = new ThreadPoolExecutor(core, max, keepaliveSeconds, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory("Request-process-pool"));
+        this.executor = new ThreadPoolExecutor(core, max, keepaliveSeconds, TimeUnit.SECONDS, new ArrayBlockingQueue<>(workQueue), new NamedThreadFactory("request-process-pool"));
     }
 
     @Override
@@ -108,9 +105,9 @@ public class AsyncServerUserProcessor extends AsyncUserProcessor<RequestBody> {
 
         public void run() {
             log.warn("Request received:" + request);
-            remoteAddr = bizCtx.getRemoteAddress();
-            latch.countDown();
-            log.warn("Server User processor say, remote address is [" + remoteAddr + "].");
+            remoteAddress = bizCtx.getRemoteAddress();
+            countDownLatch.countDown();
+            log.warn("Server User processor say, remote address is [" + remoteAddress + "].");
             Assert.assertEquals(RequestBody.class, request.getClass());
             processTimes(request);
             if (isException) {
@@ -132,6 +129,7 @@ public class AsyncServerUserProcessor extends AsyncUserProcessor<RequestBody> {
         }
     }
 
+    @SuppressWarnings("all")
     private void processTimes(RequestBody req) {
         this.invokeTimes.incrementAndGet();
         if (req.getMsg().equals(RequestBody.DEFAULT_ONEWAY_STR)) {
@@ -160,12 +158,11 @@ public class AsyncServerUserProcessor extends AsyncUserProcessor<RequestBody> {
     }
 
     public int getInvokeTimesEachCallType(RequestBody.InvokeType type) {
-        return new int[]{this.onewayTimes.get(), this.syncTimes.get(), this.futureTimes.get(),
-                this.callbackTimes.get()}[type.ordinal()];
+        return new int[]{this.onewayTimes.get(), this.syncTimes.get(), this.futureTimes.get(), this.callbackTimes.get()}[type.ordinal()];
     }
 
-    public String getRemoteAddr() throws InterruptedException {
-        latch.await(100, TimeUnit.MILLISECONDS);
-        return this.remoteAddr;
+    public String getRemoteAddress() throws InterruptedException {
+        countDownLatch.await(100, TimeUnit.MILLISECONDS);
+        return this.remoteAddress;
     }
 }

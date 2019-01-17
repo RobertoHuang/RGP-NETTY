@@ -1,13 +1,13 @@
 /**
- * FileName: BasicUsageDemo
+ * FileName: BasicUsageProtocolV1Test
  * Author:   HuangTaiHong
- * Date:     2019/1/11 9:39
- * Description: basic usage demo.
+ * Date:     2019/1/16 20:11
+ * Description: basic usage test for protocol v1.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.entrance;
+package roberto.group.process.netty.practice.protocol;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
@@ -25,8 +25,10 @@ import roberto.group.process.netty.practice.entrance.client.RGPDefaultRemoteClie
 import roberto.group.process.netty.practice.entrance.server.impl.RGPDefaultRemoteServer;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
+import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.remote.RPCResponseFuture;
 import roberto.group.process.netty.practice.utils.PortScanner;
+import roberto.group.process.netty.practice.utils.RemotingUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,46 +37,46 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
- * 〈一句话功能简述〉<br>
- * 〈basic usage demo.〉
+ * 〈一句话功能简述〉<br> 
+ * 〈basic usage test for protocol v1.〉
  *
  * @author HuangTaiHong
- * @create 2019/1/11
+ * @create 2019/1/16
  * @since 1.0.0
  */
 @Slf4j
 @SuppressWarnings("all")
-public class BasicUsageDemo {
-    private int invokeTimes = 5;
+public class BasicUsageProtocolV1Test {
+    int invokeTimes = 5;
 
     private RGPDefaultRemoteServer server;
     private RGPDefaultRemoteClient client;
 
     private String ip = "127.0.0.1";
     private int port = PortScanner.select();
-    private String address = "127.0.0.1:" + port;
+    private String address = "127.0.0.1:" + port + "?_PROTOCOL=1&_VERSION=1";
+
+    private CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
+    private CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
+
+    private DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
+    private DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
 
     private SimpleServerUserProcessor serverUserProcessor = new SimpleServerUserProcessor();
     private SimpleClientUserProcessor clientUserProcessor = new SimpleClientUserProcessor();
 
-    private CONNECTEventProcessor clientConnectProcessor = new CONNECTEventProcessor();
-    private DISCONNECTEventProcessor clientDisConnectProcessor = new DISCONNECTEventProcessor();
-
-    private CONNECTEventProcessor serverConnectProcessor = new CONNECTEventProcessor();
-    private DISCONNECTEventProcessor serverDisConnectProcessor = new DISCONNECTEventProcessor();
-
     @Before
     public void init() {
         server = new RGPDefaultRemoteServer(port, true);
-        server.registerUserProcessor(serverUserProcessor);
         server.addConnectionEventProcessor(ConnectionEventTypeEnum.CONNECT, serverConnectProcessor);
         server.addConnectionEventProcessor(ConnectionEventTypeEnum.CLOSE, serverDisConnectProcessor);
+        server.registerUserProcessor(serverUserProcessor);
         server.start();
 
         client = new RGPDefaultRemoteClient();
-        client.registerUserProcessor(clientUserProcessor);
         client.addConnectionEventProcessor(ConnectionEventTypeEnum.CONNECT, clientConnectProcessor);
         client.addConnectionEventProcessor(ConnectionEventTypeEnum.CLOSE, clientDisConnectProcessor);
+        client.registerUserProcessor(clientUserProcessor);
         client.init();
     }
 
@@ -90,15 +92,21 @@ public class BasicUsageDemo {
 
     @Test
     public void testOneway() throws InterruptedException {
-        RequestBody requestBody = new RequestBody(2, RequestBody.DEFAULT_ONEWAY_STR);
+        RequestBody requestBody = new RequestBody(1, RequestBody.DEFAULT_ONEWAY_STR);
         for (int i = 0; i < invokeTimes; i++) {
             try {
-                client.oneway(address, requestBody);
+                if (i % 2 == 0) {
+                    client.oneway(address, requestBody);
+                } else {
+                    InvokeContext invokeContext = new InvokeContext();
+                    invokeContext.putIfAbsent(InvokeContext.BOLT_CRC_SWITCH, false);
+                    client.oneway(address, requestBody, invokeContext);
+                }
                 Thread.sleep(100);
             } catch (RemotingException e) {
-                String errMsg = "RemotingException caught in oneway!";
-                log.error(errMsg, e);
-                Assert.fail(errMsg);
+                String errorMessage = "RemotingException caught in oneway!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             }
         }
         Assert.assertTrue(serverConnectProcessor.isConnected());
@@ -111,20 +119,26 @@ public class BasicUsageDemo {
         RequestBody requestBody = new RequestBody(1, RequestBody.DEFAULT_SYNC_STR);
         for (int i = 0; i < invokeTimes; i++) {
             try {
-                String result = (String) client.invokeSync(address, requestBody, 3000);
+                String result;
+                if (i % 2 == 0) {
+                    result = (String) client.invokeSync(address, requestBody, 3000);
+                } else {
+                    InvokeContext invokeContext = new InvokeContext();
+                    invokeContext.putIfAbsent(InvokeContext.BOLT_CRC_SWITCH, false);
+                    result = (String) client.invokeSync(address, requestBody, invokeContext, 3000);
+                }
                 log.warn("Result received in sync: " + result);
                 Assert.assertEquals(RequestBody.DEFAULT_SERVER_RETURN_STR, result);
             } catch (RemotingException e) {
-                String errorMsg = "RemotingException caught in sync!";
-                log.error(errorMsg, e);
-                Assert.fail(errorMsg);
+                String errorMessage = "RemotingException caught in sync!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             } catch (InterruptedException e) {
-                String errorMsg = "InterruptedException caught in sync!";
-                log.error(errorMsg, e);
-                Assert.fail(errorMsg);
+                String errorMessage = "InterruptedException caught in sync!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             }
         }
-
         Assert.assertTrue(serverConnectProcessor.isConnected());
         Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
         Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
@@ -132,23 +146,29 @@ public class BasicUsageDemo {
 
     @Test
     public void testFuture() throws InterruptedException {
-        RequestBody requestBody = new RequestBody(2, RequestBody.DEFAULT_FUTURE_STR);
+        RequestBody req = new RequestBody(1, RequestBody.DEFAULT_FUTURE_STR);
         for (int i = 0; i < invokeTimes; i++) {
             try {
-                RPCResponseFuture future = client.invokeWithFuture(address, requestBody, 3000);
-                String result = (String) future.get();
-                Assert.assertEquals(RequestBody.DEFAULT_SERVER_RETURN_STR, result);
+                RPCResponseFuture future;
+                if (i % 2 == 0) {
+                    future = client.invokeWithFuture(address, req, 3000);
+                } else {
+                    InvokeContext invokeContext = new InvokeContext();
+                    invokeContext.putIfAbsent(InvokeContext.BOLT_CRC_SWITCH, false);
+                    future = client.invokeWithFuture(address, req, invokeContext, 3000);
+                }
+                String serverReturn = (String) future.get();
+                Assert.assertEquals(RequestBody.DEFAULT_SERVER_RETURN_STR, serverReturn);
             } catch (RemotingException e) {
-                String errorMsg = "RemotingException caught in future!";
-                log.error(errorMsg, e);
-                Assert.fail(errorMsg);
+                String errorMessage = "RemotingException caught in future!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             } catch (InterruptedException e) {
-                String errorMsg = "InterruptedException caught in future!";
-                log.error(errorMsg, e);
-                Assert.fail(errorMsg);
+                String errorMessage = "InterruptedException caught in future!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             }
         }
-
         Assert.assertTrue(serverConnectProcessor.isConnected());
         Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
         Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
@@ -157,43 +177,29 @@ public class BasicUsageDemo {
     @Test
     public void testCallback() throws InterruptedException {
         RequestBody requestBody = new RequestBody(1, RequestBody.DEFAULT_CALLBACK_STR);
-        final List<String> resultList = new ArrayList(1);
+        final List<String> resultList = new ArrayList<>(1);
         for (int i = 0; i < invokeTimes; i++) {
             final CountDownLatch countDownLatch = new CountDownLatch(1);
             try {
-                client.invokeWithCallback(address, requestBody, new InvokeCallback() {
-                    Executor executor = Executors.newCachedThreadPool();
-
-                    @Override
-                    public void onResponse(Object result) {
-                        log.warn("Result received in callback: " + result);
-                        resultList.add((String) result);
-                        countDownLatch.countDown();
-                    }
-
-                    @Override
-                    public void onException(Throwable e) {
-                        log.error("Process exception in callback.", e);
-                        countDownLatch.countDown();
-                    }
-
-                    @Override
-                    public Executor getExecutor() {
-                        return executor;
-                    }
-                }, 1000);
+                if (i % 2 == 0) {
+                    client.invokeWithCallback(address, requestBody, new InvokeCallBackImpl(resultList, countDownLatch), 1000);
+                } else {
+                    InvokeContext invokeContext = new InvokeContext();
+                    invokeContext.putIfAbsent(InvokeContext.BOLT_CRC_SWITCH, false);
+                    client.invokeWithCallback(address, requestBody, invokeContext, new InvokeCallBackImpl(resultList, countDownLatch), 1000);
+                }
             } catch (RemotingException e) {
                 countDownLatch.countDown();
-                String errMsg = "RemotingException caught in callback!";
-                log.error(errMsg, e);
-                Assert.fail(errMsg);
+                String errorMessage = "RemotingException caught in callback!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             }
             try {
                 countDownLatch.await();
             } catch (InterruptedException e) {
-                String errMsg = "InterruptedException caught in callback!";
-                log.error(errMsg, e);
-                Assert.fail(errMsg);
+                String errorMessage = "InterruptedException caught in callback!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             }
             if (resultList.size() == 0) {
                 Assert.fail("No result! Maybe exception caught!");
@@ -201,7 +207,6 @@ public class BasicUsageDemo {
             Assert.assertEquals(RequestBody.DEFAULT_SERVER_RETURN_STR, resultList.get(0));
             resultList.clear();
         }
-
         Assert.assertTrue(serverConnectProcessor.isConnected());
         Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
         Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
@@ -209,9 +214,10 @@ public class BasicUsageDemo {
 
     @Test
     public void testServerSyncUsingConnection() throws Exception {
+        Connection clientConnection = client.createStandaloneConnection(ip, port, 1000);
         for (int i = 0; i < invokeTimes; i++) {
             RequestBody requestBody = new RequestBody(1, RequestBody.DEFAULT_CLIENT_STR);
-            String serverReturn = (String) client.invokeSync(address, requestBody, 1000);
+            String serverReturn = (String) client.invokeSync(clientConnection, requestBody, 1000);
             Assert.assertEquals(serverReturn, RequestBody.DEFAULT_SERVER_RETURN_STR);
 
             Assert.assertNotNull(serverConnectProcessor.getConnection());
@@ -220,27 +226,6 @@ public class BasicUsageDemo {
             String clientReturn = (String) server.invokeSync(serverConnection, requestBody2, 1000);
             Assert.assertEquals(clientReturn, RequestBody.DEFAULT_CLIENT_RETURN_STR);
         }
-
-        Assert.assertTrue(serverConnectProcessor.isConnected());
-        Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
-        Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
-    }
-
-    @Test
-    public void testServerSyncUsingConnection2() throws Exception {
-        Connection clientConnection = client.createStandaloneConnection(ip, port, 1000);
-        for (int i = 0; i < invokeTimes; i++) {
-            RequestBody requestBody = new RequestBody(1, RequestBody.DEFAULT_CLIENT_STR);
-            String serverReturn = (String) client.invokeSync(clientConnection, requestBody, 1000);
-            Assert.assertEquals(serverReturn, RequestBody.DEFAULT_SERVER_RETURN_STR);
-
-            Assert.assertNotNull(serverConnectProcessor.getConnection());
-            Connection serverConnection = serverConnectProcessor.getConnection();
-            RequestBody requestBody2 = new RequestBody(1, RequestBody.DEFAULT_SERVER_STR);
-            String clientres = (String) server.invokeSync(serverConnection, requestBody2, 1000);
-            Assert.assertEquals(clientres, RequestBody.DEFAULT_CLIENT_RETURN_STR);
-        }
-
         Assert.assertTrue(serverConnectProcessor.isConnected());
         Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
         Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
@@ -249,20 +234,53 @@ public class BasicUsageDemo {
     @Test
     public void testServerSyncUsingAddress() throws Exception {
         Connection clientConnection = client.createStandaloneConnection(ip, port, 1000);
+        String local = RemotingUtil.parseLocalAddress(clientConnection.getChannel());
+        String remote = RemotingUtil.parseRemoteAddress(clientConnection.getChannel());
+        log.warn("Client say local:" + local);
+        log.warn("Client say remote:" + remote);
         for (int i = 0; i < invokeTimes; i++) {
             RequestBody requestBody = new RequestBody(1, RequestBody.DEFAULT_CLIENT_STR);
             String serverReturn = (String) client.invokeSync(clientConnection, requestBody, 1000);
             Assert.assertEquals(serverReturn, RequestBody.DEFAULT_SERVER_RETURN_STR);
 
             Assert.assertNotNull(serverConnectProcessor.getConnection());
+            // only when client invoked, the remote address can be get by UserProcessor. otherwise, please use ConnectionEventProcessor
             String remoteAddress = serverUserProcessor.getRemoteAddress();
             RequestBody requestBody2 = new RequestBody(1, RequestBody.DEFAULT_SERVER_STR);
-            String clientReturns = (String) server.invokeSync(remoteAddress, requestBody2, 1000);
-            Assert.assertEquals(clientReturns, RequestBody.DEFAULT_CLIENT_RETURN_STR);
+            String clientReturn = (String) server.invokeSync(remoteAddress, requestBody2, 1000);
+            Assert.assertEquals(clientReturn, RequestBody.DEFAULT_CLIENT_RETURN_STR);
         }
-
         Assert.assertTrue(serverConnectProcessor.isConnected());
         Assert.assertEquals(1, serverConnectProcessor.getConnectTimes());
         Assert.assertEquals(invokeTimes, serverUserProcessor.getInvokeTimes());
+    }
+
+    private class InvokeCallBackImpl implements InvokeCallback {
+        private List<String> resultList;
+        private CountDownLatch countDownLatch;
+        private Executor executor = Executors.newCachedThreadPool();
+
+        public InvokeCallBackImpl(List<String> resultList, CountDownLatch countDownLatch) {
+            this.resultList = resultList;
+            this.countDownLatch = countDownLatch;
+        }
+
+        @Override
+        public void onResponse(Object result) {
+            log.warn("Result received in callback: " + result);
+            resultList.add((String) result);
+            countDownLatch.countDown();
+        }
+
+        @Override
+        public void onException(Throwable e) {
+            log.error("Process exception in callback.", e);
+            countDownLatch.countDown();
+        }
+
+        @Override
+        public Executor getExecutor() {
+            return executor;
+        }
     }
 }

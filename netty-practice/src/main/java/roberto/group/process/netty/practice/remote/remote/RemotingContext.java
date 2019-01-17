@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0.0
  */
 public class RemotingContext {
+    @Getter
     private boolean serverSide = false;
 
     @Setter

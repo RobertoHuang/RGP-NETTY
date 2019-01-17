@@ -138,7 +138,7 @@ public abstract class RPCRemoting extends Remoting {
             }
 
             // enable crc by default, user can disable by set invoke context `false` for key `InvokeContext.BOLT_CRC_SWITCH`
-            Boolean crcSwitch = invokeContext.get(InvokeContext.RGP_CRC_SWITCH, ProtocolSwitch.CRC_SWITCH_DEFAULT_VALUE);
+            Boolean crcSwitch = invokeContext.get(InvokeContext.BOLT_CRC_SWITCH, ProtocolSwitch.CRC_SWITCH_DEFAULT_VALUE);
             if (null != crcSwitch && crcSwitch) {
                 command.setProtocolSwitch(ProtocolSwitch.create(new int[]{ProtocolSwitch.CRC_SWITCH_INDEX}));
             }

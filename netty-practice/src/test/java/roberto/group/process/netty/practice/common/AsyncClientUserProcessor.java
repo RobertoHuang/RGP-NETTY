@@ -33,40 +33,31 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class AsyncClientUserProcessor extends AsyncUserProcessor<RequestBody> {
     /** delay milliseconds */
-    private long                delayMs;
+    private long delayMs;
 
     /** whether delay or not */
-    private boolean             delaySwitch;
+    private boolean delaySwitch;
 
     /** whether exception */
-    private boolean             isException;
+    private boolean isException;
 
     /** whether null */
-    private boolean             isNull;
+    private boolean isNull;
 
     /** executor */
     private ThreadPoolExecutor executor;
 
-    private ThreadPoolExecutor  asyncExecutor;
+    private ThreadPoolExecutor asyncExecutor;
 
     private AtomicInteger invokeTimes = new AtomicInteger();
 
     public AsyncClientUserProcessor() {
-        this.delaySwitch = false;
-        this.isException = false;
         this.isNull = false;
+        this.isException = false;
         this.delayMs = 0;
-        this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory("Request-process-pool"));
-        this.asyncExecutor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<Runnable>(4), new NamedThreadFactory(
-                "Another-aysnc-process-pool"));
-    }
-
-    public AsyncClientUserProcessor(boolean isException, boolean isNull) {
-        this();
-        this.isException = isException;
-        this.isNull = isNull;
+        this.delaySwitch = false;
+        this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("request-process-pool"));
+        this.asyncExecutor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("another-aysnc-process-pool"));
     }
 
     public AsyncClientUserProcessor(long delay) {
@@ -74,16 +65,21 @@ public class AsyncClientUserProcessor extends AsyncUserProcessor<RequestBody> {
         if (delay < 0) {
             throw new IllegalArgumentException("delay time illegal!");
         }
-        this.delaySwitch = true;
         this.delayMs = delay;
+        this.delaySwitch = true;
     }
 
-    public AsyncClientUserProcessor(long delay, int core, int max, int keepaliveSeconds,
-                                    int workQueue) {
+
+    public AsyncClientUserProcessor(boolean isException, boolean isNull) {
+        this();
+        this.isNull = isNull;
+        this.isException = isException;
+    }
+
+
+    public AsyncClientUserProcessor(long delay, int core, int max, int keepaliveSeconds, int workQueue) {
         this(delay);
-        this.executor = new ThreadPoolExecutor(core, max, keepaliveSeconds, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory(
-                "Request-process-pool"));
+        this.executor = new ThreadPoolExecutor(core, max, keepaliveSeconds, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(workQueue), new NamedThreadFactory("request-process-pool"));
     }
 
     @Override
@@ -92,12 +88,12 @@ public class AsyncClientUserProcessor extends AsyncUserProcessor<RequestBody> {
     }
 
     class InnerTask implements Runnable {
+        private RequestBody request;
         private AsyncContext asyncCtx;
-        private RequestBody  request;
 
         public InnerTask(AsyncContext asyncCtx, RequestBody request) {
-            this.asyncCtx = asyncCtx;
             this.request = request;
+            this.asyncCtx = asyncCtx;
         }
 
         public void run() {

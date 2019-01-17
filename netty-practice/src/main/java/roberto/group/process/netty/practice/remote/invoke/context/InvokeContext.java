@@ -28,7 +28,7 @@ public class InvokeContext {
     public final static int INITIAL_SIZE = 8;
 
     /** CRC认证开关 **/
-    public final static String RGP_CRC_SWITCH = "bolt.invoke.crc.switch";
+    public final static String BOLT_CRC_SWITCH = "bolt.invoke.crc.switch";
 
     /** invoke context keys of bolt client and server side **/
     public final static String BOLT_INVOKE_REQUEST_ID = "bolt.invoke.request.id";
