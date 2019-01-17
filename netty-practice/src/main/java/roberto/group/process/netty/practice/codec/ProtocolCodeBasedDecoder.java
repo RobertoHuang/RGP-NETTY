@@ -50,7 +50,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
                 ctx.channel().attr(Connection.PROTOCOL).set(protocolCode);
                 if (protocolVersion != DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH) {
                     // 为连接设置协议版本号信息
-                    ctx.channel().attr(Connection.VERSION).set(protocolVersion);
+                    ctx.channel().attr(Connection.PROTOCOL_VERSION).set(protocolVersion);
                 }
             }
             Protocol protocol = ProtocolManager.getProtocol(protocolCode);

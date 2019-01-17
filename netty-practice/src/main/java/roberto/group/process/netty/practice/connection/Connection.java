@@ -4,7 +4,7 @@
  * Date:     2019/1/2 10:37
  * Description: 连接实体类
  * History:
- * <author>          <time>          <version>          <desc>
+ * <author>          <time>          <protocolVersion>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
 package roberto.group.process.netty.practice.connection;
@@ -45,36 +45,33 @@ public class Connection {
     @Getter
     private ConnectionURL connectionURL;
 
-    private byte version = RPCProtocol.PROTOCOL_VERSION_1;
+    private ProtocolCode protocolCode;
+    private byte protocolVersion = RPCProtocol.PROTOCOL_VERSION_1;
 
+    /** store connection pool keys **/
+    private Set<String> poolKeys = new ConcurrentHashSet<>();
+    /** store the mapping between ID and poolKey **/
+    private final ConcurrentHashMap<Integer, String> id2PoolKey = new ConcurrentHashMap(256);
+
+    /** connection status **/
+    private AtomicBoolean closed = new AtomicBoolean(false);
+    /** used to record the number of times the connection was referenced **/
+    private final AtomicInteger referenceCount = new AtomicInteger();
+    /** store custom properties **/
+    private final ConcurrentHashMap<String, Object> attributes = new ConcurrentHashMap();
+    /** storage execution task **/
     private final ConcurrentHashMap<Integer, InvokeFuture> invokeFutureMap = new ConcurrentHashMap(4);
 
     /** Attribute key for protocol */
     public static final AttributeKey<ProtocolCode> PROTOCOL = AttributeKey.valueOf("protocol");
-    /** Attribute key for version */
-    public static final AttributeKey<Byte> VERSION = AttributeKey.valueOf("version");
+    /** Attribute key for protocolVersion */
+    public static final AttributeKey<Byte> PROTOCOL_VERSION = AttributeKey.valueOf("version");
     /** Attribute key for connection */
     public static final AttributeKey<Connection> CONNECTION = AttributeKey.valueOf("connection");
     /** Attribute key for heartbeat switch for each connection */
     public static final AttributeKey<Boolean> HEARTBEAT_SWITCH = AttributeKey.valueOf("heartbeatSwitch");
     /** Attribute key for heartbeat count */
     public static final AttributeKey<Integer> HEARTBEAT_COUNT = AttributeKey.valueOf("heartbeatCount");
-
-    private ProtocolCode protocolCode;
-
-    /** 连接标识符 **/
-    private Set<String> poolKeys = new ConcurrentHashSet<>();
-
-    private final ConcurrentHashMap<Integer, String> id2PoolKey = new ConcurrentHashMap(256);
-
-    /** 连接关闭状态 **/
-    private AtomicBoolean closed = new AtomicBoolean(false);
-
-    /** 用于记录连接被引用次数 - 主要提供连接回收使用 **/
-    private final AtomicInteger referenceCount = new AtomicInteger();
-
-    /** 用户保存连接自定义属性 **/
-    private final ConcurrentHashMap<String, Object> attributes = new ConcurrentHashMap();
 
     public Connection(Channel channel) {
         this.channel = channel;
@@ -93,9 +90,9 @@ public class Connection {
         this.init();
     }
 
-    public Connection(Channel channel, ProtocolCode protocolCode, byte version, ConnectionURL connectionURL) {
+    public Connection(Channel channel, ProtocolCode protocolCode, byte protocolVersion, ConnectionURL connectionURL) {
         this(channel, protocolCode, connectionURL);
-        this.version = version;
+        this.protocolVersion = protocolVersion;
         this.init();
     }
 
@@ -108,7 +105,7 @@ public class Connection {
      */
     private void init() {
         this.channel.attr(PROTOCOL).set(this.protocolCode);
-        this.channel.attr(VERSION).set(this.version);
+        this.channel.attr(PROTOCOL_VERSION).set(this.protocolVersion);
         this.channel.attr(HEARTBEAT_SWITCH).set(true);
         this.channel.attr(HEARTBEAT_COUNT).set(new Integer(0));
     }
@@ -208,9 +205,10 @@ public class Connection {
     public String removeIdPoolKeyMapping(Integer id) {
         return this.id2PoolKey.remove(id);
     }
+
     /**
      * 功能描述: <br>
-     * 〈Do something when closing.〉
+     * 〈do something when closing.〉
      *
      * @author HuangTaiHong
      * @date 2019.01.03 18:53:40

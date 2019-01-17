@@ -44,7 +44,7 @@ public class RPCCommandEncoder implements CommandEncoder {
                 out.writeByte(RPCProtocol.PROTOCOL_CODE);
 
                 /** version: version for protocol **/
-                Attribute<Byte> versionAttr = ctx.channel().attr(Connection.VERSION);
+                Attribute<Byte> versionAttr = ctx.channel().attr(Connection.PROTOCOL_VERSION);
                 byte defaultVersion = RPCProtocol.PROTOCOL_VERSION_1;
                 defaultVersion = (versionAttr != null && versionAttr.get() != null) ? versionAttr.get() : defaultVersion;
                 out.writeByte(defaultVersion);

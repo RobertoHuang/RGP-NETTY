@@ -59,7 +59,7 @@ public class RPCCommandHandler implements CommandHandler {
         // register default processor
         this.processorManager.registerDefaultProcessor(new RPCRemotingProcessor<RemotingCommand>() {
             @Override
-            public void doProcess(RemotingContext context, RemotingCommand command) throws Exception {
+            public void doProcess(RemotingContext context, RemotingCommand command) {
                 log.error("No processor available for command code {}, msgId {}", command.getRemoteCommandCode(), command.getId());
             }
         });
