@@ -2,7 +2,7 @@
  * FileName: RPCCommandHandler
  * Author:   HuangTaiHong
  * Date:     2019/1/7 10:57
- * Description:
+ * Description: RPC command handler.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述

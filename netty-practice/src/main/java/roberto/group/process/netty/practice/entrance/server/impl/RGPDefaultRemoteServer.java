@@ -2,7 +2,7 @@
  * FileName: RGPDefaultRemoteServer
  * Author:   HuangTaiHong
  * Date:     2019/1/2 10:18
- * Description: RGP RPC实现类
+ * Description: Server for RPC.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -65,7 +65,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈RGP RPC实现类〉
+ * 〈Server for RPC.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

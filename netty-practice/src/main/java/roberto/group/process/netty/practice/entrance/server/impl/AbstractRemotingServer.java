@@ -2,7 +2,7 @@
  * FileName: AbstractRemotingServer
  * Author:   HuangTaiHong
  * Date:     2018/12/29 15:37
- * Description: RPC Server抽象实现
+ * Description: Server template for remoting.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈RPC Server抽象实现〉
+ * 〈Server template for remoting.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29
