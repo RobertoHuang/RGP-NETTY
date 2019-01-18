@@ -13,7 +13,7 @@ import roberto.group.process.netty.practice.command.command.request.RequestComma
 import roberto.group.process.netty.practice.command.command.response.ResponseCommand;
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 
 /**
  * 〈一句话功能简述〉<br> 

@@ -28,7 +28,7 @@ import java.net.Socket;
 public class PortScanner {
     /**
      * 功能描述: <br>
-     * 〈Looking for a temporary port that is available〉
+     * 〈Looking for a temporary port that is available.〉
      *
      * @return  > int
      * @author HuangTaiHong

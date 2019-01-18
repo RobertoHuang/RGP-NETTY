@@ -50,13 +50,13 @@ import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.remote.help.impl.RPCAddressParser;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.remote.RPCRemoting;
 import roberto.group.process.netty.practice.remote.remote.RPCResponseFuture;
 import roberto.group.process.netty.practice.remote.remote.server.RPCServerRemoting;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 import roberto.group.process.netty.practice.utils.NettyEventLoopUtil;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
@@ -192,7 +192,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
             }
 
             private void createConnection(SocketChannel channel) {
-                ConnectionURL connectionURL = addressParser.parse(RemotingUtil.parseRemoteAddress(channel));
+                ConnectionURL connectionURL = addressParser.parse(RemotingAddressUtil.parseRemoteAddress(channel));
                 if (!switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
                     new Connection(channel, connectionURL);
                 } else {

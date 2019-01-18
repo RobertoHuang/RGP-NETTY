@@ -2,15 +2,14 @@
  * FileName: CustomSerializerManager
  * Author:   HuangTaiHong
  * Date:     2019/1/5 11:11
- * Description:
+ * Description: Manage the custom serializer according to the class name.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.serialize.custom.manager;
+package roberto.group.process.netty.practice.serialize.custom;
 
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
-import roberto.group.process.netty.practice.serialize.custom.CustomSerializer;
 
 import java.util.concurrent.ConcurrentHashMap;
 

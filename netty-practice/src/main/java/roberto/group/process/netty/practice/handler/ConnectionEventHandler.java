@@ -2,7 +2,7 @@
  * FileName: ConnectionEventHandler
  * Author:   HuangTaiHong
  * Date:     2019/1/2 10:24
- * Description: 连接事件处理器
+ * Description: Log the channel status event.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -26,7 +26,7 @@ import roberto.group.process.netty.practice.connection.manager.ConnectionManager
 import roberto.group.process.netty.practice.connection.manager.ReconnectManager;
 import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.net.SocketAddress;
 import java.util.Optional;
@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈连接事件处理器〉
+ * 〈Log the channel status event.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -76,8 +76,8 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
     @Override
     public void connect(ChannelHandlerContext ctx, SocketAddress remoteAddress, SocketAddress localAddress, ChannelPromise promise) throws Exception {
         if (log.isInfoEnabled()) {
-            final String local = localAddress == null ? null : RemotingUtil.parseSocketAddressToString(localAddress);
-            final String remote = remoteAddress == null ? "UNKNOWN" : RemotingUtil.parseSocketAddressToString(remoteAddress);
+            final String local = localAddress == null ? null : RemotingAddressUtil.parseSocketAddressToString(localAddress);
+            final String remote = remoteAddress == null ? "UNKNOWN" : RemotingAddressUtil.parseSocketAddressToString(remoteAddress);
             if (local == null) {
                 log.info("Try connect to {}", remote);
             } else {
@@ -88,13 +88,13 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
     }
 
     public void disconnect(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
-        log.info("Connection disconnect to {}", Optional.of(RemotingUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
+        log.info("Connection disconnect to {}", Optional.of(RemotingAddressUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
         super.disconnect(ctx, promise);
     }
 
     @Override
     public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
-        log.info("Connection closed: {}", Optional.of(RemotingUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
+        log.info("Connection closed: {}", Optional.of(RemotingAddressUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
         final Connection connection = ctx.channel().attr(Connection.CONNECTION).get();
         if (connection != null) {
             connection.onClose();
@@ -104,25 +104,25 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
-        log.info("Connection channel registered: {}", Optional.of(RemotingUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
+        log.info("Connection channel registered: {}", Optional.of(RemotingAddressUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
         super.channelRegistered(ctx);
     }
 
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-        log.info("Connection channel unregistered: {}", Optional.of(RemotingUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
+        log.info("Connection channel unregistered: {}", Optional.of(RemotingAddressUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
         super.channelUnregistered(ctx);
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info("Connection channel active: {}", Optional.of(RemotingUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
+        log.info("Connection channel active: {}", Optional.of(RemotingAddressUtil.parseRemoteAddress(ctx.channel())).orElse("UNKNOWN-ADDR"));
         super.channelActive(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        String remoteAddress = RemotingUtil.parseRemoteAddress(ctx.channel());
+        String remoteAddress = RemotingAddressUtil.parseRemoteAddress(ctx.channel());
         log.info("Connection channel inactive: {}", Optional.of(remoteAddress).orElse("UNKNOWN-ADDR"));
         super.channelInactive(ctx);
         Attribute attr = ctx.channel().attr(Connection.CONNECTION);
@@ -160,8 +160,8 @@ public class ConnectionEventHandler extends ChannelDuplexHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        final String remoteAddress = RemotingUtil.parseRemoteAddress(ctx.channel());
-        final String localAddress = RemotingUtil.parseLocalAddress(ctx.channel());
+        final String remoteAddress = RemotingAddressUtil.parseRemoteAddress(ctx.channel());
+        final String localAddress = RemotingAddressUtil.parseLocalAddress(ctx.channel());
         log.warn("ExceptionCaught in connection: local[{}], remote[{}], close the connection! Cause[{}:{}]", localAddress, remoteAddress, cause.getClass().getSimpleName(), cause.getMessage());
         ctx.channel().close();
     }

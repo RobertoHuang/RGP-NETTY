@@ -2,7 +2,7 @@
  * FileName: NamedThreadFactory
  * Author:   HuangTaiHong
  * Date:     2019/1/3 15:17
- * Description: 命名线程工厂
+ * Description: Thread factory to name the thread purposely.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈命名线程工厂〉
+ * 〈Thread factory to name the thread purposely.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/3

@@ -2,7 +2,7 @@
  * FileName: RPCAddressParser
  * Author:   HuangTaiHong
  * Date:     2019/1/4 9:47
- * Description: RPC地址解析器
+ * Description: This is address parser for RPC.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -21,7 +21,9 @@ import java.util.Properties;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈RPC地址解析器〉
+ * 〈This is address parser for RPC.〉
+ *
+ *  Normal format example: 127.0.0.1:12200?KEY1=VALUE1&KEY2=VALUE2
  *
  * @author HuangTaiHong
  * @create 2019/1/4
@@ -188,7 +190,7 @@ public class RPCAddressParser implements RemotingAddressParser {
 
     /**
      * 功能描述: <br>
-     * 〈尝试从缓存中获取〉
+     * 〈try get from cache.〉
      *
      * @param url
      * @return > roberto.group.process.netty.practice.connection.ConnectionURL

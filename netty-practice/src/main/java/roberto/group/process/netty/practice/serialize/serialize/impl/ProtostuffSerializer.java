@@ -2,7 +2,7 @@
  * FileName: ProtostuffSerializer
  * Author:   HuangTaiHong
  * Date:     2019/1/4 18:53
- * Description: Protostuff serializer
+ * Description: Protostuff serializer.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -14,7 +14,7 @@ import roberto.group.process.netty.practice.serialize.serialize.Serializer;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈Protostuff serializer〉
+ * 〈Protostuff serializer.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/4

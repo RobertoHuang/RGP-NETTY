@@ -13,7 +13,7 @@ import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
 import roberto.group.process.netty.practice.configuration.switches.impl.ProtocolSwitch;
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.protocol.ProtocolCode;
 
 import java.io.Serializable;
@@ -71,7 +71,7 @@ public interface RemotingCommand extends Serializable {
      * 功能描述: <br>
      * 〈Get invoke context for this command.〉
      *
-     * @return > roberto.group.process.netty.practice.remote.invoke.context.InvokeContext
+     * @return > roberto.group.process.netty.practice.context.InvokeContext
      * @author HuangTaiHong
      * @date 2019.01.04 14:23:51
      */

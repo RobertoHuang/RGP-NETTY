@@ -12,7 +12,7 @@ package roberto.group.process.netty.practice.serializer;
 import roberto.group.process.netty.practice.command.command.response.ResponseCommand;
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.serialize.custom.DefaultCustomSerializer;
 
 import java.util.concurrent.atomic.AtomicBoolean;

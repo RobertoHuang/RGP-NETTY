@@ -7,7 +7,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.invoke.future.impl;
+package roberto.group.process.netty.practice.remote.invoke.future;
 
 import io.netty.util.Timeout;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,7 @@ import roberto.group.process.netty.practice.protocol.Protocol;
 import roberto.group.process.netty.practice.protocol.ProtocolCode;
 import roberto.group.process.netty.practice.protocol.ProtocolManager;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
-import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallbackListener;
 
 import java.net.InetSocketAddress;

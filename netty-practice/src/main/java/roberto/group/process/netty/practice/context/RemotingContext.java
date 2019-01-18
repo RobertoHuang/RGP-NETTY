@@ -7,7 +7,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.remote;
+package roberto.group.process.netty.practice.context;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,7 +18,6 @@ import roberto.group.process.netty.practice.command.command.RPCCommandType;
 import roberto.group.process.netty.practice.command.command.RemotingCommand;
 import roberto.group.process.netty.practice.command.processor.custom.UserProcessor;
 import roberto.group.process.netty.practice.connection.Connection;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 import roberto.group.process.netty.practice.utils.ConnectionUtil;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -59,6 +58,15 @@ public class RemotingContext {
     private ChannelHandlerContext channelContext;
 
     private ConcurrentHashMap<String, UserProcessor<?>> customProcessors;
+
+    public RemotingContext(ChannelHandlerContext channelContext) {
+        this.channelContext = channelContext;
+    }
+
+    public RemotingContext(ChannelHandlerContext channelContext, boolean serverSide) {
+        this.serverSide = serverSide;
+        this.channelContext = channelContext;
+    }
 
     public RemotingContext(ChannelHandlerContext channelContext, boolean serverSide, ConcurrentHashMap<String, UserProcessor<?>> customProcessors) {
         this.serverSide = serverSide;

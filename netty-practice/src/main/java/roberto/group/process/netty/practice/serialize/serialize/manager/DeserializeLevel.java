@@ -2,7 +2,7 @@
  * FileName: DeserializeLevel
  * Author:   HuangTaiHong
  * Date:     2019/1/4 19:02
- * Description: RPC Deserializelevel
+ * Description: RPC Deserializelevel.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.serialize.serialize.manager;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈RPC Deserializelevel〉
+ * 〈RPC Deserializelevel.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/4

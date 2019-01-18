@@ -24,10 +24,10 @@ import roberto.group.process.netty.practice.command.processor.custom.AsyncUserPr
 import roberto.group.process.netty.practice.command.processor.processor.RPCRemotingProcessor;
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
+import roberto.group.process.netty.practice.context.RemotingContext;
 import roberto.group.process.netty.practice.serialize.serialize.manager.DeserializeLevel;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -208,7 +208,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
     public void sendResponseIfNecessary(final RemotingContext context, byte type, final RemotingCommand response) {
         final int id = response.getId();
         if (type == RPCCommandType.REQUEST_ONEWAY) {
-            log.debug("Oneway RPC request received, do not send response, id=" + id + ", the address is " + RemotingUtil.parseRemoteAddress(context.getChannelContext().channel()));
+            log.debug("Oneway RPC request received, do not send response, id=" + id + ", the address is " + RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()));
         } else {
             RemotingCommand serializedResponse = response;
             try {
@@ -231,10 +231,10 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
 
             context.writeAndFlush(serializedResponse).addListener((ChannelFutureListener) future -> {
                 if (log.isDebugEnabled()) {
-                    log.debug("Rpc response sent! requestId=" + id + ". The address is " + RemotingUtil.parseRemoteAddress(context.getChannelContext().channel()));
+                    log.debug("Rpc response sent! requestId=" + id + ". The address is " + RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()));
                 }
                 if (!future.isSuccess()) {
-                    log.error("Rpc response send failed! id=" + id + ". The address is " + RemotingUtil.parseRemoteAddress(context.getChannelContext().channel()), future.cause());
+                    log.error("Rpc response send failed! id=" + id + ". The address is " + RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()), future.cause());
                 }
             });
         }
@@ -271,7 +271,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
      */
     private void debugLog(RemotingContext context, RPCRequestCommand command, long currentTimestamp) {
         if (log.isDebugEnabled()) {
-            log.debug("RPC request received! requestId={}, from {}", command.getId(), RemotingUtil.parseRemoteAddress(context.getChannelContext().channel()));
+            log.debug("RPC request received! requestId={}, from {}", command.getId(), RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()));
             log.debug("request id {} currenTimestamp {} - arriveTime {} = server cost {} < timeout {}.", command.getId(), currentTimestamp, command.getArriveTime(), (currentTimestamp - command.getArriveTime()), command.getTimeout());
         }
     }
@@ -295,7 +295,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
         if (null != context) {
             Channel channel = context.getChannelContext().channel();
             if (null != channel) {
-                remoteAddr = RemotingUtil.parseRemoteAddress(channel);
+                remoteAddr = RemotingAddressUtil.parseRemoteAddress(channel);
             }
         }
         log.warn("RPC request id[{}], from remoteAddr[{}] stop process, total wait time in queue is [{}], client timeout setting is [{}].", command.getId(), remoteAddr, (currentTimestamp - command.getArriveTime()), command.getTimeout());

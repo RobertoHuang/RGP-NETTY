@@ -7,7 +7,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.invoke.callback.impl;
+package roberto.group.process.netty.practice.remote.invoke.callback;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -21,9 +21,7 @@ import roberto.group.process.netty.practice.exception.remote.InvokeException;
 import roberto.group.process.netty.practice.exception.remote.InvokeServerBusyException;
 import roberto.group.process.netty.practice.exception.remote.InvokeServerException;
 import roberto.group.process.netty.practice.exception.remote.InvokeTimeoutException;
-import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
-import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallbackListener;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 
 import java.util.concurrent.Executor;

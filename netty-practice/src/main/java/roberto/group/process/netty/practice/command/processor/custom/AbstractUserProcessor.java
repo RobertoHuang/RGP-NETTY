@@ -9,9 +9,9 @@
  */
 package roberto.group.process.netty.practice.command.processor.custom;
 
-import roberto.group.process.netty.practice.remote.biz.BizContext;
-import roberto.group.process.netty.practice.remote.biz.impl.DefaultBizContext;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
+import roberto.group.process.netty.practice.context.BizContext;
+import roberto.group.process.netty.practice.context.DefaultBizContext;
+import roberto.group.process.netty.practice.context.RemotingContext;
 
 import java.util.concurrent.Executor;
 

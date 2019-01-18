@@ -14,7 +14,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -31,7 +31,7 @@ public class AcceptorIdleStateTrigger extends ChannelDuplexHandler {
     public void userEventTriggered(final ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
             try {
-                log.warn("Connection idle, close it from server side: {}", RemotingUtil.parseRemoteAddress(ctx.channel()));
+                log.warn("Connection idle, close it from server side: {}", RemotingAddressUtil.parseRemoteAddress(ctx.channel()));
                 ctx.close();
             } catch (Exception e) {
                 log.warn("Exception caught when closing connection in ServerIdleHandler.", e);

@@ -2,19 +2,18 @@
  * FileName: BizContext
  * Author:   HuangTaiHong
  * Date:     2019/1/7 18:22
- * Description: basic info for biz
+ * Description: basic info for biz.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.biz;
+package roberto.group.process.netty.practice.context;
 
 import roberto.group.process.netty.practice.connection.Connection;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈basic info for biz〉
+ * 〈basic info for biz.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/7
@@ -23,7 +22,7 @@ import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 public interface BizContext {
     /**
      * 功能描述: <br>
-     * 〈get remote host ip〉
+     * 〈get remote host ip.〉
      *
      * @return > java.lang.String
      * @author HuangTaiHong
@@ -34,7 +33,7 @@ public interface BizContext {
 
     /**
      * 功能描述: <br>
-     * 〈get remote port〉
+     * 〈get remote port.〉
      *
      * @return > int
      * @author HuangTaiHong
@@ -44,7 +43,7 @@ public interface BizContext {
 
     /**
      * 功能描述: <br>
-     * 〈get remote address〉
+     * 〈get remote address.〉
      *
      * @return > java.lang.String
      * @author HuangTaiHong
@@ -54,7 +53,7 @@ public interface BizContext {
 
     /**
      * 功能描述: <br>
-     * 〈get the connection of this request〉
+     * 〈get the connection of this request.〉
      *
      * @return > roberto.group.process.netty.practice.connection.Connection
      * @author HuangTaiHong
@@ -74,7 +73,7 @@ public interface BizContext {
 
     /**
      * 功能描述: <br>
-     * 〈get the arrive time stamp〉
+     * 〈get the arrive time stamp.〉
      *
      * @return > long
      * @author HuangTaiHong
@@ -84,7 +83,7 @@ public interface BizContext {
 
     /**
      * 功能描述: <br>
-     * 〈check whether request already timeout〉
+     * 〈check whether request already timeout.〉
      *
      * @return > boolean
      * @author HuangTaiHong
@@ -94,7 +93,7 @@ public interface BizContext {
 
     /**
      * 功能描述: <br>
-     * 〈get value〉
+     * 〈get value.〉
      *
      * @param key
      * @return > java.lang.String
@@ -105,7 +104,7 @@ public interface BizContext {
 
     /**
      * 功能描述: <br>
-     * 〈put a key and value〉
+     * 〈put a key and value.〉
      *
      * @param key
      * @param value
@@ -118,7 +117,7 @@ public interface BizContext {
      * 功能描述: <br>
      * 〈get invoke context.〉
      *
-     * @return > roberto.group.process.netty.practice.remote.invoke.context.InvokeContext
+     * @return > roberto.group.process.netty.practice.context.InvokeContext
      * @author HuangTaiHong
      * @date 2019.01.07 18:25:30
      */

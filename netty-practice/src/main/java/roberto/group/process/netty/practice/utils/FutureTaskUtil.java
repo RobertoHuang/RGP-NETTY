@@ -2,7 +2,7 @@
  * FileName: FutureTaskUtil
  * Author:   HuangTaiHong
  * Date:     2019/1/8 10:58
- * Description: Utils for future task
+ * Description: Utils for future task.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Utils for future task〉
+ * 〈Utils for future task.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/8
@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
 public class FutureTaskUtil {
     /**
      * 功能描述: <br>
-     * 〈get the result of a future task〉
+     * 〈get the result of a future task.〉
      *
      *  Notice: the run method of this task should have been called at first.
      *
@@ -57,7 +57,7 @@ public class FutureTaskUtil {
 
     /**
      * 功能描述: <br>
-     * 〈launder the throwable〉
+     * 〈launder the throwable.〉
      *
      * @param t
      * @author HuangTaiHong

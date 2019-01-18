@@ -2,7 +2,7 @@
  * FileName: ProtocolManager
  * Author:   HuangTaiHong
  * Date:     2019/1/2 19:30
- * Description: 协议管理器
+ * Description: Manager of all protocols.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈协议管理器〉
+ * 〈Manager of all protocols.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

@@ -12,7 +12,7 @@ package roberto.group.process.netty.practice.heartbeat;
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.command.command.RemotingCommand;
 import roberto.group.process.netty.practice.command.processor.processor.RPCRemotingProcessor;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
+import roberto.group.process.netty.practice.context.RemotingContext;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -2,25 +2,22 @@
  * FileName: DefaultBizContext
  * Author:   HuangTaiHong
  * Date:     2019/1/7 18:26
- * Description: default biz context
+ * Description: default biz context.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.biz.impl;
+package roberto.group.process.netty.practice.context;
 
 import io.netty.channel.Channel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import roberto.group.process.netty.practice.remote.biz.BizContext;
 import roberto.group.process.netty.practice.connection.Connection;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈default biz context〉
+ * 〈default biz context.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/7
@@ -36,7 +33,7 @@ public class DefaultBizContext implements BizContext {
         if (this.remotingContext != null) {
             Channel channel = this.remotingContext.getChannelContext().channel();
             if (null != channel) {
-                return RemotingUtil.parseRemoteIP(channel);
+                return RemotingAddressUtil.parseRemoteIP(channel);
             }
         }
         return "UNKNOWN_HOST";
@@ -47,7 +44,7 @@ public class DefaultBizContext implements BizContext {
         if (this.remotingContext != null) {
             Channel channel = this.remotingContext.getChannelContext().channel();
             if (null != channel) {
-                return RemotingUtil.parseRemotePort(channel);
+                return RemotingAddressUtil.parseRemotePort(channel);
             }
         }
         return -1;
@@ -58,7 +55,7 @@ public class DefaultBizContext implements BizContext {
         if (this.remotingContext != null) {
             Channel channel = this.remotingContext.getChannelContext().channel();
             if (null != channel) {
-                return RemotingUtil.parseRemoteAddress(channel);
+                return RemotingAddressUtil.parseRemoteAddress(channel);
             }
         }
         return "UNKNOWN_ADDRESS";

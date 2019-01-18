@@ -10,7 +10,7 @@
 package roberto.group.process.netty.practice.command.processor.custom;
 
 import roberto.group.process.netty.practice.context.AsyncContext;
-import roberto.group.process.netty.practice.remote.biz.BizContext;
+import roberto.group.process.netty.practice.context.BizContext;
 
 /**
  * 〈一句话功能简述〉<br> 

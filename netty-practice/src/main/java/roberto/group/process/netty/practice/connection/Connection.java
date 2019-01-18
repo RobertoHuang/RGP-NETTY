@@ -18,7 +18,7 @@ import roberto.group.process.netty.practice.protocol.ProtocolCode;
 import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
 import roberto.group.process.netty.practice.utils.ConcurrentHashSet;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.net.InetSocketAddress;
 import java.util.Collections;
@@ -115,11 +115,11 @@ public class Connection {
     }
 
     public String getLocalIP() {
-        return RemotingUtil.parseLocalIP(this.channel);
+        return RemotingAddressUtil.parseLocalIP(this.channel);
     }
 
     public int getLocalPort() {
-        return RemotingUtil.parseLocalPort(this.channel);
+        return RemotingAddressUtil.parseLocalPort(this.channel);
     }
 
     public InetSocketAddress getLocalAddress() {
@@ -127,11 +127,11 @@ public class Connection {
     }
 
     public String getRemoteIP() {
-        return RemotingUtil.parseRemoteIP(this.channel);
+        return RemotingAddressUtil.parseRemoteIP(this.channel);
     }
 
     public int getRemotePort() {
-        return RemotingUtil.parseRemotePort(this.channel);
+        return RemotingAddressUtil.parseRemotePort(this.channel);
     }
 
     public InetSocketAddress getRemoteAddress() {
@@ -238,10 +238,10 @@ public class Connection {
         if (closed.compareAndSet(false, true)) {
             try {
                 if (this.getChannel() != null) {
-                    this.getChannel().close().addListener((ChannelFutureListener) future -> log.info("Close the connection to remote address={}, result={}, cause={}", RemotingUtil.parseRemoteAddress(Connection.this.getChannel()), future.isSuccess(), future.cause()));
+                    this.getChannel().close().addListener((ChannelFutureListener) future -> log.info("Close the connection to remote address={}, result={}, cause={}", RemotingAddressUtil.parseRemoteAddress(Connection.this.getChannel()), future.isSuccess(), future.cause()));
                 }
             } catch (Exception e) {
-                log.warn("Exception caught when closing connection {}", RemotingUtil.parseRemoteAddress(Connection.this.getChannel()), e);
+                log.warn("Exception caught when closing connection {}", RemotingAddressUtil.parseRemoteAddress(Connection.this.getChannel()), e);
             }
         }
     }

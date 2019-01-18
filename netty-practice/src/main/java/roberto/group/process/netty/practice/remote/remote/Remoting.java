@@ -18,10 +18,10 @@ import roberto.group.process.netty.practice.command.factory.CommandFactory;
 import roberto.group.process.netty.practice.command.command.RemotingCommand;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
 import roberto.group.process.netty.practice.thread.DelayedOperation;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -54,21 +54,21 @@ public abstract class Remoting {
         try {
             connection.getChannel().writeAndFlush(request).addListener((ChannelFutureListener) channelFuture -> {
                 if (!channelFuture.isSuccess()) {
-                    log.error("Invoke send failed. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
+                    log.error("Invoke send failed. The address is {}", RemotingAddressUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
                 }
             });
         } catch (Exception e) {
             if (null == connection) {
                 log.error("Connection is null");
             } else {
-                log.error("Exception caught when sending invocation. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), e);
+                log.error("Exception caught when sending invocation. The address is {}", RemotingAddressUtil.parseRemoteAddress(connection.getChannel()), e);
             }
         }
     }
 
     /**
      * 功能描述: <br>
-     * 〈Synchronous invocation〉
+     * 〈Synchronous invocation.〉
      *
      * @param connection
      * @param request
@@ -137,7 +137,7 @@ public abstract class Remoting {
                         failedFuture.cancelTimeout();
                         failedFuture.putResponse(commandFactory.createSendFailedResponse(connection.getRemoteAddress(), channelFuture.cause()));
                     }
-                    log.error("Invoke send failed. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
+                    log.error("Invoke send failed. The address is {}", RemotingAddressUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
                 }
             });
         } catch (Exception e) {
@@ -146,7 +146,7 @@ public abstract class Remoting {
                 exceptionFuture.cancelTimeout();
                 exceptionFuture.putResponse(commandFactory.createSendFailedResponse(connection.getRemoteAddress(), e));
             }
-            log.error("Exception caught when sending invocation. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), e);
+            log.error("Exception caught when sending invocation. The address is {}", RemotingAddressUtil.parseRemoteAddress(connection.getChannel()), e);
         }
         return future;
     }
@@ -184,7 +184,7 @@ public abstract class Remoting {
                         failedFuture.putResponse(commandFactory.createSendFailedResponse(connection.getRemoteAddress(), channelFuture.cause()));
                         failedFuture.tryAsyncExecuteInvokeCallbackAbnormally();
                     }
-                    log.error("Invoke send failed. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
+                    log.error("Invoke send failed. The address is {}", RemotingAddressUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
                 }
             });
         } catch (Exception e) {
@@ -194,13 +194,13 @@ public abstract class Remoting {
                 exceptionFuture.putResponse(commandFactory.createSendFailedResponse(connection.getRemoteAddress(), e));
                 exceptionFuture.tryAsyncExecuteInvokeCallbackAbnormally();
             }
-            log.error("Exception caught when sending invocation. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), e);
+            log.error("Exception caught when sending invocation. The address is {}", RemotingAddressUtil.parseRemoteAddress(connection.getChannel()), e);
         }
     }
 
     /**
      * 功能描述: <br>
-     * 〈Create invoke future〉
+     * 〈Create invoke future.〉
      *
      * @param request
      * @param invokeContext
@@ -212,7 +212,7 @@ public abstract class Remoting {
 
     /**
      * 功能描述: <br>
-     * 〈Create invoke future〉
+     * 〈Create invoke future.〉
      *
      * @param connection
      * @param request

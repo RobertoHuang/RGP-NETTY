@@ -2,7 +2,7 @@
  * FileName: Protocol
  * Author:   HuangTaiHong
  * Date:     2019/1/2 14:06
- * Description: 通讯协议接口
+ * Description: A protocol contains a group of commands.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -17,7 +17,7 @@ import roberto.group.process.netty.practice.heartbeat.HeartbeatTrigger;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈通讯协议接口〉
+ * 〈A protocol contains a group of commands.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

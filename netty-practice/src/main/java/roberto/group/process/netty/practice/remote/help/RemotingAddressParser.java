@@ -2,7 +2,7 @@
  * FileName: RemotingAddressParser
  * Author:   HuangTaiHong
  * Date:     2019/1/4 9:43
- * Description: 地址解析器
+ * Description: Remoting address parser.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -13,7 +13,7 @@ import roberto.group.process.netty.practice.connection.ConnectionURL;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈地址解析器〉
+ * 〈Remoting address parser.〉
  *
  *  实现此类用于解析出ConnectionURL对象
  *
@@ -24,7 +24,7 @@ import roberto.group.process.netty.practice.connection.ConnectionURL;
 public interface RemotingAddressParser {
     /**
      * 功能描述: <br>
-     * 〈将给定的字符串解析成ConnectionURL对象〉
+     * 〈Parse a simple string url to get ConnectionURL〉
      *
      * @param url
      * @return > roberto.group.process.netty.practice.connection.ConnectionURL
@@ -35,7 +35,7 @@ public interface RemotingAddressParser {
 
     /**
      * 功能描述: <br>
-     * 〈初始化ConnectionURL配置参数〉
+     * 〈Initialize ConnectionURL arguments〉
      *
      * @param connectionURL
      * @author HuangTaiHong

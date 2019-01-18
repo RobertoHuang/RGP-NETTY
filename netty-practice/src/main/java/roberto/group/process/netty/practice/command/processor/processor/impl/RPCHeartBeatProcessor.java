@@ -17,8 +17,8 @@ import roberto.group.process.netty.practice.command.command.response.impl.Heartb
 import roberto.group.process.netty.practice.command.processor.processor.RPCRemotingProcessor;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.context.RemotingContext;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -35,12 +35,12 @@ public class RPCHeartBeatProcessor extends RPCRemotingProcessor {
         // process the heartbeat
         if (remotingCommand instanceof HeartbeatCommand) {
             final int id = remotingCommand.getId();
-            log.debug("Heartbeat received! Id=" + id + ", from " + RemotingUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()));
+            log.debug("Heartbeat received! Id=" + id + ", from " + RemotingAddressUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()));
             remotingContext.writeAndFlush(new HeartbeatAckCommand(id)).addListener((ChannelFutureListener) future -> {
                 if (future.isSuccess()) {
-                    log.debug("Send heartbeat ack done! Id={}, to remoteAddr={}", id, RemotingUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()));
+                    log.debug("Send heartbeat ack done! Id={}, to remoteAddr={}", id, RemotingAddressUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()));
                 } else {
-                    log.error("Send heartbeat ack failed! Id={}, to remoteAddr={}", id, RemotingUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()));
+                    log.error("Send heartbeat ack failed! Id={}, to remoteAddr={}", id, RemotingAddressUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()));
                 }
             });
         } else if (remotingCommand instanceof HeartbeatAckCommand) {
@@ -52,10 +52,10 @@ public class RPCHeartBeatProcessor extends RPCRemotingProcessor {
                 try {
                     future.executeInvokeCallback();
                 } catch (Exception e) {
-                    log.error("Exception caught when executing heartbeat invoke callback. From {}", RemotingUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()), e);
+                    log.error("Exception caught when executing heartbeat invoke callback. From {}", RemotingAddressUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()), e);
                 }
             } else {
-                log.warn("Cannot find heartbeat InvokeFuture, maybe already timeout. Id={}, From {}", remotingCommand.getId(), RemotingUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()));
+                log.warn("Cannot find heartbeat InvokeFuture, maybe already timeout. Id={}, From {}", remotingCommand.getId(), RemotingAddressUtil.parseRemoteAddress(remotingContext.getChannelContext().channel()));
             }
         } else {
             throw new RuntimeException("Cannot process command: " + remotingCommand.getClass().getName());

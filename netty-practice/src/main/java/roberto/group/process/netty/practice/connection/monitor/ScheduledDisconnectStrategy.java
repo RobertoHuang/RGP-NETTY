@@ -15,7 +15,7 @@ import roberto.group.process.netty.practice.configuration.support.ConfigsSupport
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionPool;
 import roberto.group.process.netty.practice.utils.FutureTaskUtil;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 import roberto.group.process.netty.practice.utils.RunStateRecordedFutureTask;
 
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ public class ScheduledDisconnectStrategy implements ConnectionMonitorStrategy {
                 if (lastSelectConnect.isInvokeFutureMapFinish()) {
                     serviceOffConnections.add(lastSelectConnect);
                 } else {
-                    log.info("Address={} won't close at this schedule turn", RemotingUtil.parseRemoteAddress(lastSelectConnect.getChannel()));
+                    log.info("Address={} won't close at this schedule turn", RemotingAddressUtil.parseRemoteAddress(lastSelectConnect.getChannel()));
                 }
             }
         }

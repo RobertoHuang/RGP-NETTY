@@ -26,11 +26,11 @@ import roberto.group.process.netty.practice.entrance.server.impl.RGPDefaultRemot
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
 import roberto.group.process.netty.practice.remote.remote.RPCResponseFuture;
-import roberto.group.process.netty.practice.serialize.custom.manager.CustomSerializerManager;
+import roberto.group.process.netty.practice.serialize.custom.CustomSerializerManager;
 import static roberto.group.process.netty.practice.userprocessor.executorselector.DefaultExecutorSelector.EXECUTOR0;
 import static roberto.group.process.netty.practice.userprocessor.executorselector.DefaultExecutorSelector.EXECUTOR1;
 import roberto.group.process.netty.practice.utils.PortScanner;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -251,8 +251,8 @@ public class BasicUsageExecutorSelectorTest {
     @SuppressWarnings("all")
     public void testServerSyncUsingAddress() throws Exception {
         Connection clientConn = client.createStandaloneConnection(ip, port, 1000);
-        String local = RemotingUtil.parseLocalAddress(clientConn.getChannel());
-        String remote = RemotingUtil.parseRemoteAddress(clientConn.getChannel());
+        String local = RemotingAddressUtil.parseLocalAddress(clientConn.getChannel());
+        String remote = RemotingAddressUtil.parseRemoteAddress(clientConn.getChannel());
         log.warn("Client say local:" + local);
         log.warn("Client say remote:" + remote);
 

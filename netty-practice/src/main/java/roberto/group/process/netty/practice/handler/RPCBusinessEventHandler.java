@@ -2,7 +2,7 @@
  * FileName: RPCBusinessEventHandler
  * Author:   HuangTaiHong
  * Date:     2019/1/6 17:10
- * Description:
+ * Description: Dispatch messages to corresponding protocol.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -17,14 +17,14 @@ import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.protocol.Protocol;
 import roberto.group.process.netty.practice.protocol.ProtocolCode;
 import roberto.group.process.netty.practice.protocol.ProtocolManager;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
+import roberto.group.process.netty.practice.context.RemotingContext;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈〉
+ * 〈Dispatch messages to corresponding protocol.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/6

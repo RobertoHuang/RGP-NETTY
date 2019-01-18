@@ -21,9 +21,9 @@ import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.heartbeat.HeartbeatTrigger;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallbackListener;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
-import roberto.group.process.netty.practice.remote.invoke.future.impl.DefaultInvokeFuture;
+import roberto.group.process.netty.practice.remote.invoke.future.DefaultInvokeFuture;
 import roberto.group.process.netty.practice.thread.DelayedOperation;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +55,7 @@ public class RPCHeartbeatTrigger implements HeartbeatTrigger {
         if (heartbeatTimes >= maxCount) {
             try {
                 connection.close();
-                log.error("Heartbeat failed for {} times, close the connection from client side: {} ", heartbeatTimes, RemotingUtil.parseRemoteAddress(ctx.channel()));
+                log.error("Heartbeat failed for {} times, close the connection from client side: {} ", heartbeatTimes, RemotingAddressUtil.parseRemoteAddress(ctx.channel()));
             } catch (Exception e) {
                 log.warn("Exception caught when closing connection in SharableHandler.", e);
             }
@@ -72,18 +72,18 @@ public class RPCHeartbeatTrigger implements HeartbeatTrigger {
                         try {
                             response = (ResponseCommand) future.waitResponse(0);
                         } catch (InterruptedException e) {
-                            log.error("Heartbeat ack process error! Id={}, from remoteAddr={}", heartbeatCommand.getId(), RemotingUtil.parseRemoteAddress(ctx.channel()), e);
+                            log.error("Heartbeat ack process error! Id={}, from remoteAddr={}", heartbeatCommand.getId(), RemotingAddressUtil.parseRemoteAddress(ctx.channel()), e);
                             return;
                         }
 
                         if (response != null && response.getResponseStatus() == ResponseStatusEnum.SUCCESS) {
-                            log.debug("Heartbeat ack received! Id={}, from remoteAddr={}", response.getId(), RemotingUtil.parseRemoteAddress(ctx.channel()));
+                            log.debug("Heartbeat ack received! Id={}, from remoteAddr={}", response.getId(), RemotingAddressUtil.parseRemoteAddress(ctx.channel()));
                             ctx.channel().attr(Connection.HEARTBEAT_COUNT).set(0);
                         } else {
                             if (response == null) {
-                                log.error("Heartbeat timeout! The address is {}", RemotingUtil.parseRemoteAddress(ctx.channel()));
+                                log.error("Heartbeat timeout! The address is {}", RemotingAddressUtil.parseRemoteAddress(ctx.channel()));
                             } else {
-                                log.error("Heartbeat exception caught! Error code={}, The address is {}", response.getResponseStatus(), RemotingUtil.parseRemoteAddress(ctx.channel()));
+                                log.error("Heartbeat exception caught! Error code={}, The address is {}", response.getResponseStatus(), RemotingAddressUtil.parseRemoteAddress(ctx.channel()));
                             }
                             Integer times = ctx.channel().attr(Connection.HEARTBEAT_COUNT).get();
                             ctx.channel().attr(Connection.HEARTBEAT_COUNT).set(times + 1);
@@ -98,12 +98,12 @@ public class RPCHeartbeatTrigger implements HeartbeatTrigger {
 
                 connection.addInvokeFuture(future);
                 final int heartbeatId = heartbeatCommand.getId();
-                log.debug("Send heartbeat, successive count={}, Id={}, to remoteAddr={}", heartbeatTimes, heartbeatId, RemotingUtil.parseRemoteAddress(ctx.channel()));
+                log.debug("Send heartbeat, successive count={}, Id={}, to remoteAddr={}", heartbeatTimes, heartbeatId, RemotingAddressUtil.parseRemoteAddress(ctx.channel()));
                 ctx.writeAndFlush(heartbeatCommand).addListener((ChannelFutureListener) channelFuture -> {
                     if (channelFuture.isSuccess()) {
-                        log.debug("Send heartbeat done! Id={}, to remoteAddr={}", heartbeatId, RemotingUtil.parseRemoteAddress(ctx.channel()));
+                        log.debug("Send heartbeat done! Id={}, to remoteAddr={}", heartbeatId, RemotingAddressUtil.parseRemoteAddress(ctx.channel()));
                     } else {
-                        log.error("Send heartbeat failed! Id={}, to remoteAddr={}", heartbeatId, RemotingUtil.parseRemoteAddress(ctx.channel()));
+                        log.error("Send heartbeat failed! Id={}, to remoteAddr={}", heartbeatId, RemotingAddressUtil.parseRemoteAddress(ctx.channel()));
                     }
                 });
 

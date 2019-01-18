@@ -2,7 +2,7 @@
  * FileName: BitSetConvertUtils
  * Author:   HuangTaiHong
  * Date:     2019/1/4 16:58
- * Description: BitSetConvert
+ * Description: BitSet and byte convert to each other.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -13,7 +13,7 @@ import java.util.BitSet;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈BitSet and byte convert to each other〉
+ * 〈BitSet and byte convert to each other.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/4
@@ -22,7 +22,7 @@ import java.util.BitSet;
 public class BitSetConvertUtils {
     /**
      * 功能描述: <br>
-     * 〈from bit set to byte〉
+     * 〈from bit set to byte.〉
      *
      * @param bitSet
      * @return > byte
@@ -45,7 +45,7 @@ public class BitSetConvertUtils {
 
     /**
      * 功能描述: <br>
-     * 〈from byte to bit set〉
+     * 〈from byte to bit set.〉
      *
      * @param value
      * @return > java.util.BitSet

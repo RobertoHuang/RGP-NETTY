@@ -1,8 +1,8 @@
 /**
- * FileName: RemotingUtil
+ * FileName: RemotingAddressUtil
  * Author:   HuangTaiHong
  * Date:     2019/1/3 10:12
- * Description: RemotingUtil
+ * Description: Some utilities for remoting.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -18,13 +18,13 @@ import java.net.SocketAddress;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈RemotingUtil〉
+ * 〈Some utilities for remoting.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/3
  * @since 1.0.0
  */
-public class RemotingUtil {
+public class RemotingAddressUtil {
     public static String parseRemoteAddress(final Channel channel) {
         if (null == channel) {
             return StringUtils.EMPTY;

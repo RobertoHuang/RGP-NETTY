@@ -39,7 +39,7 @@ public class RPCResponseFuture {
         return RPCResponseResolver.resolveResponseObject(responseCommand, address);
     }
 
-    public Object get(int timeoutMillis) throws InvokeTimeoutException, RemotingException, InterruptedException {
+    public Object get(int timeoutMillis) throws RemotingException, InterruptedException {
         this.future.waitResponse(timeoutMillis);
         if (!isDone()) {
             throw new InvokeTimeoutException("Future get result timeout!");

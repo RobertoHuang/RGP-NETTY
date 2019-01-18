@@ -17,7 +17,7 @@ import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.configuration.switches.impl.ProtocolSwitch;
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.protocol.ProtocolCode;
 import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
 import roberto.group.process.netty.practice.serialize.serialize.manager.DeserializeLevel;

@@ -2,7 +2,7 @@
  * FileName: Scannable
  * Author:   HuangTaiHong
  * Date:     2019/1/2 10:34
- * Description: 扫描标记接口
+ * Description: Can be scanned.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.scanner;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈扫描标记接口〉
+ * 〈Can be scanned.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

@@ -12,7 +12,6 @@ package roberto.group.process.netty.practice.context;
 import lombok.AllArgsConstructor;
 import roberto.group.process.netty.practice.command.command.request.impl.RPCRequestCommand;
 import roberto.group.process.netty.practice.command.processor.processor.impl.RPCRequestProcessor;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

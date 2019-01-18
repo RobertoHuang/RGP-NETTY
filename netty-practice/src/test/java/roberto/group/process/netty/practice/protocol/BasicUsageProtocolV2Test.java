@@ -25,10 +25,10 @@ import roberto.group.process.netty.practice.entrance.client.RGPDefaultRemoteClie
 import roberto.group.process.netty.practice.entrance.server.impl.RGPDefaultRemoteServer;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.remote.RPCResponseFuture;
 import roberto.group.process.netty.practice.utils.PortScanner;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -238,8 +238,8 @@ public class BasicUsageProtocolV2Test {
     @Test
     public void testServerSyncUsingAddress() throws Exception {
         Connection clientConnection = client.createStandaloneConnection(ip, port, 1000);
-        String local = RemotingUtil.parseLocalAddress(clientConnection.getChannel());
-        String remote = RemotingUtil.parseRemoteAddress(clientConnection.getChannel());
+        String local = RemotingAddressUtil.parseLocalAddress(clientConnection.getChannel());
+        String remote = RemotingAddressUtil.parseRemoteAddress(clientConnection.getChannel());
         log.warn("Client say local:" + local);
         log.warn("Client say remote:" + remote);
 

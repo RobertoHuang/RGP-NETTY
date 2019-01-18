@@ -26,9 +26,9 @@ import roberto.group.process.netty.practice.entrance.server.impl.RGPDefaultRemot
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.remote.RPCResponseFuture;
-import roberto.group.process.netty.practice.serialize.custom.manager.CustomSerializerManager;
+import roberto.group.process.netty.practice.serialize.custom.CustomSerializerManager;
 import roberto.group.process.netty.practice.serialize.serialize.manager.SerializerManager;
 import roberto.group.process.netty.practice.utils.PortScanner;
 

@@ -2,7 +2,7 @@
  * FileName: RPCServerRemoting
  * Author:   HuangTaiHong
  * Date:     2019/1/6 16:02
- * Description:
+ * Description: RPC server remoting.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -17,14 +17,14 @@ import roberto.group.process.netty.practice.connection.manager.DefaultConnection
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.remote.RPCRemoting;
 import roberto.group.process.netty.practice.remote.remote.RPCResponseFuture;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈RPC server remoting〉
+ * 〈RPC server remoting.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/6
@@ -85,10 +85,10 @@ public class RPCServerRemoting extends RPCRemoting {
     protected void preProcessInvokeContext(Connection connection, RemotingCommand remotingCommand, InvokeContext invokeContext) {
         if (null != invokeContext) {
             invokeContext.putIfAbsent(InvokeContext.BOLT_INVOKE_REQUEST_ID, remotingCommand.getId());
-            invokeContext.putIfAbsent(InvokeContext.SERVER_REMOTE_IP, RemotingUtil.parseRemoteIP(connection.getChannel()));
-            invokeContext.putIfAbsent(InvokeContext.SERVER_REMOTE_PORT, RemotingUtil.parseRemotePort(connection.getChannel()));
-            invokeContext.putIfAbsent(InvokeContext.SERVER_LOCAL_IP, RemotingUtil.parseLocalIP(connection.getChannel()));
-            invokeContext.putIfAbsent(InvokeContext.SERVER_LOCAL_PORT, RemotingUtil.parseLocalPort(connection.getChannel()));
+            invokeContext.putIfAbsent(InvokeContext.SERVER_REMOTE_IP, RemotingAddressUtil.parseRemoteIP(connection.getChannel()));
+            invokeContext.putIfAbsent(InvokeContext.SERVER_REMOTE_PORT, RemotingAddressUtil.parseRemotePort(connection.getChannel()));
+            invokeContext.putIfAbsent(InvokeContext.SERVER_LOCAL_IP, RemotingAddressUtil.parseLocalIP(connection.getChannel()));
+            invokeContext.putIfAbsent(InvokeContext.SERVER_LOCAL_PORT, RemotingAddressUtil.parseLocalPort(connection.getChannel()));
         }
     }
 }

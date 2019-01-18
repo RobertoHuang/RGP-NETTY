@@ -16,8 +16,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.command.command.RemotingCommand;
 import roberto.group.process.netty.practice.command.factory.CommandFactory;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.context.RemotingContext;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.util.concurrent.ExecutorService;
 
@@ -89,7 +89,7 @@ public abstract class RPCRemotingProcessor<T extends RemotingCommand> implements
                 RPCRemotingProcessor.this.doProcess(context, message);
             } catch (Throwable e) {
                 // protect the thread running this task
-                String remotingAddress = RemotingUtil.parseRemoteAddress(context.getChannelContext().channel());
+                String remotingAddress = RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel());
                 log.error("Exception caught when process RPC request command in AbstractRemotingProcessor, Id=" + message.getId() + "! Invoke source address is [" + remotingAddress + "].", e);
             }
         }

@@ -42,11 +42,9 @@ public class RunStateRecordedFutureTask<V> extends FutureTask<V> {
         if (!hasRun.get()) {
             throw new FutureTaskNotRunYetException();
         }
-
         if (!isDone()) {
             throw new FutureTaskNotCompleted();
         }
-
         return super.get();
     }
 }

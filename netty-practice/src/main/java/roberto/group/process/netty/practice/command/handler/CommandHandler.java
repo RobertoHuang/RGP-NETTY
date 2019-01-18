@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.command.handler;
 
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
 import roberto.group.process.netty.practice.command.processor.processor.RemotingProcessor;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
+import roberto.group.process.netty.practice.context.RemotingContext;
 
 import java.util.concurrent.ExecutorService;
 

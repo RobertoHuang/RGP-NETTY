@@ -39,7 +39,7 @@ import roberto.group.process.netty.practice.handler.RPCConnectionEventHandler;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.remote.help.impl.RPCAddressParser;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.remote.RPCRemoting;
 import roberto.group.process.netty.practice.remote.remote.RPCResponseFuture;
 import roberto.group.process.netty.practice.remote.remote.client.RPCClientRemoting;

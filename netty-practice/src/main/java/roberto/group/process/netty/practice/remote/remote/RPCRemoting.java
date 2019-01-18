@@ -26,11 +26,11 @@ import roberto.group.process.netty.practice.protocol.ProtocolManager;
 import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.callback.impl.RPCInvokeCallbackListener;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.remote.invoke.callback.RPCInvokeCallbackListener;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
-import roberto.group.process.netty.practice.remote.invoke.future.impl.DefaultInvokeFuture;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.remote.invoke.future.DefaultInvokeFuture;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -88,7 +88,7 @@ public abstract class RPCRemoting extends Remoting {
         RemotingCommand requestCommand = buildRemotingCommand(request, invokeContext, timeoutMillis);
         preProcessInvokeContext(connection, requestCommand, invokeContext);
         ResponseCommand responseCommand = (ResponseCommand) super.invokeSync(connection, requestCommand, timeoutMillis);
-        return RPCResponseResolver.resolveResponseObject(responseCommand, RemotingUtil.parseRemoteAddress(connection.getChannel()));
+        return RPCResponseResolver.resolveResponseObject(responseCommand, RemotingAddressUtil.parseRemoteAddress(connection.getChannel()));
     }
 
     public RPCResponseFuture invokeWithFuture(final String address, final Object request, final InvokeContext invokeContext, int timeoutMillis) throws RemotingException, InterruptedException {
@@ -100,7 +100,7 @@ public abstract class RPCRemoting extends Remoting {
         RemotingCommand requestCommand = buildRemotingCommand(request, invokeContext, timeoutMillis);
         preProcessInvokeContext(connection, requestCommand, invokeContext);
         InvokeFuture future = super.invokeWithFuture(connection, requestCommand, timeoutMillis);
-        return new RPCResponseFuture(RemotingUtil.parseRemoteAddress(connection.getChannel()), future);
+        return new RPCResponseFuture(RemotingAddressUtil.parseRemoteAddress(connection.getChannel()), future);
     }
 
     public void invokeWithCallback(String address, Object request, final InvokeContext invokeContext, InvokeCallback invokeCallback, int timeoutMillis) throws RemotingException, InterruptedException {
@@ -121,7 +121,7 @@ public abstract class RPCRemoting extends Remoting {
 
     @Override
     protected InvokeFuture createInvokeFuture(Connection connection, RemotingCommand request, InvokeContext invokeContext, InvokeCallback invokeCallback) {
-        return new DefaultInvokeFuture(request.getId(), new RPCInvokeCallbackListener(RemotingUtil.parseRemoteAddress(connection.getChannel())), invokeCallback, request.getProtocolCode().getFirstByte(), this.getCommandFactory(), invokeContext);
+        return new DefaultInvokeFuture(request.getId(), new RPCInvokeCallbackListener(RemotingAddressUtil.parseRemoteAddress(connection.getChannel())), invokeCallback, request.getProtocolCode().getFirstByte(), this.getCommandFactory(), invokeContext);
     }
 
     protected RemotingCommand buildRemotingCommand(Object request, InvokeContext invokeContext, int timeoutMillis) throws SerializationException {
@@ -217,7 +217,7 @@ public abstract class RPCRemoting extends Remoting {
 
     /**
      * 功能描述: <br>
-     * 〈Process InvokeContext and add the necessary information〉
+     * 〈Process InvokeContext and add the necessary information.〉
      *
      * @param connection
      * @param remotingCommand

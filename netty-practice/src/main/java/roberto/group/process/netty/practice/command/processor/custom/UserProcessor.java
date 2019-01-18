@@ -10,8 +10,8 @@
 package roberto.group.process.netty.practice.command.processor.custom;
 
 import roberto.group.process.netty.practice.context.AsyncContext;
-import roberto.group.process.netty.practice.remote.biz.BizContext;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
+import roberto.group.process.netty.practice.context.BizContext;
+import roberto.group.process.netty.practice.context.RemotingContext;
 
 import java.util.concurrent.Executor;
 
@@ -94,7 +94,7 @@ public interface UserProcessor<T> {
      *
      * @param remotingCtx
      * @param request
-     * @return > roberto.group.process.netty.practice.remote.biz.BizContext
+     * @return > roberto.group.process.netty.practice.context.BizContext
      * @author HuangTaiHong
      * @date 2019.01.07 18:44:08
      */

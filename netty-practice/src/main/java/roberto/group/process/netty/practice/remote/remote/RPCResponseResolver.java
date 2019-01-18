@@ -137,7 +137,7 @@ public class RPCResponseResolver {
 
     /**
      * 功能描述: <br>
-     * 〈Detail your error msg with the error msg returned from response command〉
+     * 〈Detail your error msg with the error msg returned from response command.〉
      *
      * @param clientErrMsg
      * @param responseCommand

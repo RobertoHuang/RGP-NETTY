@@ -2,12 +2,12 @@
  * FileName: InvokeContext
  * Author:   HuangTaiHong
  * Date:     2019/1/2 11:04
- * Description: Invoke Context
+ * Description: Invoke Context.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.remote.invoke.context;
+package roberto.group.process.netty.practice.context;
 
 import lombok.NoArgsConstructor;
 
@@ -15,9 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Invoke Context〉
- *
- * 将被保存在InvokeFuture中使用
+ * 〈Invoke Context.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

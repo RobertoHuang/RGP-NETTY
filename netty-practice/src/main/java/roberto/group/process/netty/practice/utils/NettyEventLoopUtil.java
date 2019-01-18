@@ -2,7 +2,7 @@
  * FileName: NettyEventLoopUtil
  * Author:   HuangTaiHong
  * Date:     2019/1/3 18:59
- * Description: NettyEventLoopUtil
+ * Description: Utils for netty EventLoop.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -28,7 +28,7 @@ import java.util.concurrent.ThreadFactory;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈NettyEventLoopUtil〉
+ * 〈Utils for netty EventLoop.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/3

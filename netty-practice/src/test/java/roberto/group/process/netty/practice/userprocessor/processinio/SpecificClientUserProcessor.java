@@ -13,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import roberto.group.process.netty.practice.command.processor.custom.SyncUserProcessor;
 import roberto.group.process.netty.practice.common.RequestBody;
-import roberto.group.process.netty.practice.remote.biz.BizContext;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.BizContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 
 import java.util.concurrent.ArrayBlockingQueue;

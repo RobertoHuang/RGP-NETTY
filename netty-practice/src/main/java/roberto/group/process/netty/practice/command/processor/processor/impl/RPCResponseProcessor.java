@@ -16,8 +16,8 @@ import roberto.group.process.netty.practice.command.command.response.impl.RPCRes
 import roberto.group.process.netty.practice.command.processor.processor.RPCRemotingProcessor;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.remote.invoke.future.InvokeFuture;
-import roberto.group.process.netty.practice.remote.remote.RemotingContext;
-import roberto.group.process.netty.practice.utils.RemotingUtil;
+import roberto.group.process.netty.practice.context.RemotingContext;
+import roberto.group.process.netty.practice.utils.RemotingAddressUtil;
 
 import java.util.concurrent.ExecutorService;
 
@@ -56,7 +56,7 @@ public class RPCResponseProcessor extends RPCRemotingProcessor<RPCResponseComman
                     log.error("Exception caught when executing invoke callback, id={}", responseCommand.getId(), e);
                 }
             } else {
-                log.warn("Cannot find InvokeFuture, maybe already timeout, id={}, from={} ", responseCommand.getId(), RemotingUtil.parseRemoteAddress(context.getChannelContext().channel()));
+                log.warn("Cannot find InvokeFuture, maybe already timeout, id={}, from={} ", responseCommand.getId(), RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()));
             }
         } finally {
             if (null != oldClassLoader) {

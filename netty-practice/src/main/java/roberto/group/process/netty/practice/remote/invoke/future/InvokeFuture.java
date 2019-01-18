@@ -12,7 +12,7 @@ package roberto.group.process.netty.practice.remote.invoke.future;
 import io.netty.util.Timeout;
 import roberto.group.process.netty.practice.command.command.RemotingCommand;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
-import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
+import roberto.group.process.netty.practice.context.InvokeContext;
 
 import java.net.InetSocketAddress;
 
@@ -141,7 +141,7 @@ public interface InvokeFuture {
      * 功能描述: <br>
      * 〈Get invoke context.〉
      *
-     * @return > roberto.group.process.netty.practice.remote.invoke.context.InvokeContext
+     * @return > roberto.group.process.netty.practice.context.InvokeContext
      * @author HuangTaiHong
      * @date 2019.01.02 11:04:35
      */

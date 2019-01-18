@@ -2,7 +2,7 @@
  * FileName: RPCProtocol
  * Author:   HuangTaiHong
  * Date:     2019/1/4 10:54
- * Description: RPC协议
+ * Description: RPC Protocol.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -23,7 +23,32 @@ import roberto.group.process.netty.practice.protocol.Protocol;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈RPC协议〉
+ * 〈RPC Protocol.〉
+ *
+ *  Request command protocol for v2
+ *  0     1     2           4           6           8          10     11     12          14         16
+ *  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+-----+-----+
+ *  |proto| ver1|type | cmdcode   |ver2 |   requestId           |codec|switch|   timeout             |
+ *  +-----------+-----------+-----------+-----------+-----------+------------+-----------+-----------+
+ *  |classLen   |headerLen  |contentLen             |           ...                                  |
+ *  +-----------+-----------+-----------+-----------+                                                +
+ *  |               className + header  + content  bytes                                             |
+ *  +                                                                                                +
+ *  |                               ... ...                                  | CRC32(optional)       |
+ *  +------------------------------------------------------------------------------------------------+
+ *
+ *
+ *  Response command protocol
+ *  0     1     2     3     4           6           8          10     11    12          14          16
+ *  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+-----+-----+
+ *  |proto| ver1| type| cmdcode   |ver2 |   requestId           |codec|switch|respstatus |  classLen |
+ *  +-----------+-----------+-----------+-----------+-----------+------------+-----------+-----------+
+ *  |headerLen  | contentLen            |                      ...                                   |
+ *  +-----------------------------------+                                                            +
+ *  |               className + header  + content  bytes                                             |
+ *  +                                                                                                +
+ *  |                               ... ...                                  | CRC32(optional)       |
+ *  +------------------------------------------------------------------------------------------------+
  *
  * @author HuangTaiHong
  * @create 2019/1/4
