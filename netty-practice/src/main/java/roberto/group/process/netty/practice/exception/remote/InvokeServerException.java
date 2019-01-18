@@ -2,7 +2,7 @@
  * FileName: InvokeServerException
  * Author:   HuangTaiHong
  * Date:     2019/1/5 16:29
- * Description: Server exception caught when invoking
+ * Description: Server exception caught when invoking.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -14,7 +14,7 @@ import roberto.group.process.netty.practice.exception.RemotingException;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈Server exception caught when invoking〉
+ * 〈Server exception caught when invoking.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/5

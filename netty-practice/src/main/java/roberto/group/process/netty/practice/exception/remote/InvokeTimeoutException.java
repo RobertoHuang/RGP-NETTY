@@ -2,7 +2,7 @@
  * FileName: InvokeTimeoutException
  * Author:   HuangTaiHong
  * Date:     2019/1/5 16:07
- * Description: Exception when invoke timeout
+ * Description: Exception when invoke timeout.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -14,7 +14,7 @@ import roberto.group.process.netty.practice.exception.RemotingException;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Exception when invoke timeout〉
+ * 〈Exception when invoke timeout.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/5

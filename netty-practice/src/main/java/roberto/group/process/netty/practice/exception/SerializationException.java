@@ -2,7 +2,7 @@
  * FileName: SerializationException
  * Author:   HuangTaiHong
  * Date:     2019/1/4 16:09
- * Description: Exception when serialize failed
+ * Description: Exception when serialize failed.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.exception;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Exception when serialize failed〉
+ * 〈Exception when serialize failed.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/4

@@ -2,7 +2,7 @@
  * FileName: RPCServerException
  * Author:   HuangTaiHong
  * Date:     2019/1/6 15:20
- * Description: RPC server exception when processing request
+ * Description: RPC server exception when processing request.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -14,7 +14,7 @@ import roberto.group.process.netty.practice.exception.RemotingException;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈RPC server exception when processing request〉
+ * 〈RPC server exception when processing request.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/6

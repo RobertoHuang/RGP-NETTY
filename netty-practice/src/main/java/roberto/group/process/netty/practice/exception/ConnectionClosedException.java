@@ -2,7 +2,7 @@
  * FileName: ConnectionClosedException
  * Author:   HuangTaiHong
  * Date:     2019/1/5 16:11
- * Description:
+ * Description: Exception when connection is closed.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
