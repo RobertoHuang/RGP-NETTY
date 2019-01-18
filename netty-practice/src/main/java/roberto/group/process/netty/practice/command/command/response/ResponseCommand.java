@@ -2,7 +2,7 @@
  * FileName: ResponseCommand
  * Author:   HuangTaiHong
  * Date:     2019/1/5 10:19
- * Description:
+ * Description: Command of response.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -19,7 +19,7 @@ import java.net.InetSocketAddress;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈〉
+ * 〈Command of response.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/5

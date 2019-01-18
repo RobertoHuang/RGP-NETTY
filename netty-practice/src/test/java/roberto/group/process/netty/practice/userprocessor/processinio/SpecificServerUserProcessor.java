@@ -2,7 +2,7 @@
  * FileName: SpecificServerUserProcessor
  * Author:   HuangTaiHong
  * Date:     2019/1/16 17:25
- * Description: a demo user processor for rpc server.
+ * Description: a demo user processor for RPC server.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.userprocessor.processinio;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import roberto.group.process.netty.practice.command.processor.custom.impl.SyncUserProcessor;
+import roberto.group.process.netty.practice.command.processor.custom.SyncUserProcessor;
 import roberto.group.process.netty.practice.common.RequestBody;
 import roberto.group.process.netty.practice.remote.biz.BizContext;
 import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈a demo user processor for rpc server.〉
+ * 〈a demo user processor for RPC server.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/16
@@ -52,7 +52,7 @@ public class SpecificServerUserProcessor extends SyncUserProcessor<RequestBody> 
     public SpecificServerUserProcessor() {
         this.delaySwitch = false;
         this.delayMs = 0;
-        this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("rpc-common-executor"));
+        this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("RPC-common-executor"));
     }
 
     public SpecificServerUserProcessor(long delay) {
@@ -61,7 +61,7 @@ public class SpecificServerUserProcessor extends SyncUserProcessor<RequestBody> 
         }
         this.delayMs = delay;
         this.delaySwitch = true;
-        this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("rpc-common-executor"));
+        this.executor = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("RPC-common-executor"));
     }
 
     @Override

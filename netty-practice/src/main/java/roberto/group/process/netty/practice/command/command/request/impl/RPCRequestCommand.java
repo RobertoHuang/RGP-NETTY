@@ -107,7 +107,7 @@ public class RPCRequestCommand extends RequestCommand {
             } catch (SerializationException e) {
                 throw e;
             } catch (Exception e) {
-                throw new SerializationException("Exception caught when serialize header of rpc request command!", e);
+                throw new SerializationException("Exception caught when serialize header of RPC request command!", e);
             }
         }
     }
@@ -121,7 +121,7 @@ public class RPCRequestCommand extends RequestCommand {
                 } catch (DeserializationException e) {
                     throw e;
                 } catch (Exception e) {
-                    throw new DeserializationException("Exception caught when deserialize header of rpc request command!", e);
+                    throw new DeserializationException("Exception caught when deserialize header of RPC request command!", e);
                 }
             }
         }
@@ -138,7 +138,7 @@ public class RPCRequestCommand extends RequestCommand {
             } catch (SerializationException e) {
                 throw e;
             } catch (Exception e) {
-                throw new SerializationException("Exception caught when serialize content of rpc request command!", e);
+                throw new SerializationException("Exception caught when serialize content of RPC request command!", e);
             }
         }
     }

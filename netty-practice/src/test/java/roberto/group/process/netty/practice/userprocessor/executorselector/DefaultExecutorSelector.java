@@ -38,8 +38,8 @@ public class DefaultExecutorSelector implements UserProcessor.ExecutorSelector {
 
     public DefaultExecutorSelector(String chooseExecutorStr) {
         this.chooseExecutorStr = chooseExecutorStr;
-        this.executor0 = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("rpc-specific0-executor"));
-        this.executor1 = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("rpc-specific1-executor"));
+        this.executor0 = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("RPC-specific0-executor"));
+        this.executor1 = new ThreadPoolExecutor(1, 3, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<>(4), new NamedThreadFactory("RPC-specific1-executor"));
     }
 
     @Override

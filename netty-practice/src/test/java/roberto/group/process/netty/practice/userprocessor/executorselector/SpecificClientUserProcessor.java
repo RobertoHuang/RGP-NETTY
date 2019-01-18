@@ -2,7 +2,7 @@
  * FileName: SpecificClientUserProcessor
  * Author:   HuangTaiHong
  * Date:     2019/1/16 15:45
- * Description: a demo specific user processor for rpc client.
+ * Description: a demo specific user processor for RPC client.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.userprocessor.executorselector;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import roberto.group.process.netty.practice.command.processor.custom.impl.SyncUserProcessor;
+import roberto.group.process.netty.practice.command.processor.custom.SyncUserProcessor;
 import roberto.group.process.netty.practice.common.RequestBody;
 import roberto.group.process.netty.practice.remote.biz.BizContext;
 import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈a demo specific user processor for rpc client.〉
+ * 〈a demo specific user processor for RPC client.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/16
@@ -52,7 +52,7 @@ public class SpecificClientUserProcessor extends SyncUserProcessor<RequestBody> 
     @Override
     public Object handleRequest(BizContext bizCtx, RequestBody request) throws Exception {
         String threadName = Thread.currentThread().getName();
-        Assert.assertTrue(threadName.contains("rpc-specific1-executor"));
+        Assert.assertTrue(threadName.contains("RPC-specific1-executor"));
 
         log.warn("Request received:" + request);
         Assert.assertEquals(RequestBody.class, request.getClass());

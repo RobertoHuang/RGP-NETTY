@@ -34,7 +34,7 @@ import java.util.concurrent.Executors;
  * 〈一句话功能简述〉<br> 
  * 〈basic usage test.〉
  *
- *  basic usage of rpc client and rpc server using multi interest user processor.
+ *  basic usage of RPC client and RPC server using multi interest user processor.
  *
  * @author HuangTaiHong
  * @create 2019/1/16

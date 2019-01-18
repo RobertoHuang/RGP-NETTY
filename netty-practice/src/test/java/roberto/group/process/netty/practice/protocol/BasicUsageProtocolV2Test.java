@@ -40,7 +40,7 @@ import java.util.concurrent.Executors;
  * 〈一句话功能简述〉<br> 
  * 〈basic usage test for protocol v2〉
  *
- *  basic usage of rpc client and rpc server
+ *  basic usage of RPC client and RPC server
  *
  * @author HuangTaiHong
  * @create 2019/1/17

@@ -2,7 +2,7 @@
  * FileName: RPCHeartBeatProcessor
  * Author:   HuangTaiHong
  * Date:     2019/1/7 11:31
- * Description:
+ * Description: Processor for heart beat.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -22,7 +22,7 @@ import roberto.group.process.netty.practice.utils.RemotingUtil;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈〉
+ * 〈Processor for heart beat.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/7

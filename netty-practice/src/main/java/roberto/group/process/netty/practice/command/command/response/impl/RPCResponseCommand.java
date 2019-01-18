@@ -110,7 +110,7 @@ public class RPCResponseCommand extends ResponseCommand {
             } catch (SerializationException e) {
                 throw e;
             } catch (Exception e) {
-                throw new SerializationException("Exception caught when serialize header of rpc response command!", e);
+                throw new SerializationException("Exception caught when serialize header of RPC response command!", e);
             }
         }
     }
@@ -124,7 +124,7 @@ public class RPCResponseCommand extends ResponseCommand {
                 } catch (DeserializationException e) {
                     throw e;
                 } catch (Exception e) {
-                    throw new DeserializationException("Exception caught when deserialize header of rpc response command!", e);
+                    throw new DeserializationException("Exception caught when deserialize header of RPC response command!", e);
                 }
             }
         }
@@ -142,7 +142,7 @@ public class RPCResponseCommand extends ResponseCommand {
             } catch (SerializationException e) {
                 throw e;
             } catch (Exception e) {
-                throw new SerializationException("Exception caught when serialize content of rpc response command!", e);
+                throw new SerializationException("Exception caught when serialize content of RPC response command!", e);
             }
         }
     }
@@ -160,7 +160,7 @@ public class RPCResponseCommand extends ResponseCommand {
             } catch (DeserializationException e) {
                 throw e;
             } catch (Exception e) {
-                throw new DeserializationException("Exception caught when deserialize content of rpc response command!", e);
+                throw new DeserializationException("Exception caught when deserialize content of RPC response command!", e);
             }
         }
     }

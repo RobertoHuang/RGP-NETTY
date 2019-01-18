@@ -35,7 +35,7 @@ import java.io.Serializable;
 @Slf4j
 public class RPCCommandEncoder implements CommandEncoder {
     @Override
-    public void encode(ChannelHandlerContext ctx, Serializable message, ByteBuf out) throws Exception {
+    public void encode(ChannelHandlerContext ctx, Serializable message, ByteBuf out) {
         try {
             if (message instanceof RPCRemotingCommand) {
                 int index = out.writerIndex();

@@ -2,7 +2,7 @@
  * FileName: RGPDefaultRemoteClientTest
  * Author:   HuangTaiHong
  * Date:     2019/1/10 13:49
- * Description: a demo for rpc client, you can just run the main method after started rpc server of {@link RGPDefaultRemoteServerTest}
+ * Description: a demo for RPC client, you can just run the main method after started RPC server of {@link RGPDefaultRemoteServerTest}
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -19,7 +19,7 @@ import roberto.group.process.netty.practice.exception.RemotingException;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈a demo for rpc client, you can just run the main method after started rpc server of {@link RGPDefaultRemoteServerTest}〉
+ * 〈a demo for RPC client, you can just run the main method after started RPC server of {@link RGPDefaultRemoteServerTest}〉
  *
  * @author HuangTaiHong
  * @create 2019/1/10
@@ -35,7 +35,7 @@ public class RGPDefaultRemoteClientTest {
     private static final DISCONNECTEventProcessor CLIENT_DISCONNECT_PROCESSOR = new DISCONNECTEventProcessor();
     
     public static void main(String[] args) throws RemotingException, InterruptedException {
-        // 1.create a rpc client
+        // 1.create a RPC client
         RGPDefaultRemoteClient client = new RGPDefaultRemoteClient();
 
         // 2.add processor for connect and close event if you need

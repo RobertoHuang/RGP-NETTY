@@ -70,7 +70,7 @@ public class RPCResponseResolver {
                     errorMsg = String.format("Connection closed! the address is %s", address);
                     exception = new ConnectionClosedException(errorMsg);
                     break;
-                case SERVER_THREADPOOL_BUSY:
+                case SERVER_THREAD_POOL_BUSY:
                     errorMsg = String.format("Server thread pool busy! the address is %s, id=%s", address, responseCommand.getId());
                     exception = new InvokeServerBusyException(errorMsg);
                     break;

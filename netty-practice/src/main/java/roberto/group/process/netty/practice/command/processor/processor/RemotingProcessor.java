@@ -2,7 +2,7 @@
  * FileName: RemotingProcessor
  * Author:   HuangTaiHong
  * Date:     2018/12/29 15:19
- * Description: 远程指令处理器接口
+ * Description: Remoting processor processes remoting commands.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈远程指令处理器接口〉
+ * 〈Remoting processor processes remoting commands.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29

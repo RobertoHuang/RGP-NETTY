@@ -18,9 +18,9 @@ import roberto.group.process.netty.practice.command.command.RemotingCommand;
 import roberto.group.process.netty.practice.command.command.request.impl.RPCRequestCommand;
 import roberto.group.process.netty.practice.command.command.response.ResponseStatusEnum;
 import roberto.group.process.netty.practice.command.factory.CommandFactory;
-import roberto.group.process.netty.practice.command.processor.context.impl.RPCAsyncContext;
+import roberto.group.process.netty.practice.context.RPCAsyncContext;
 import roberto.group.process.netty.practice.command.processor.custom.UserProcessor;
-import roberto.group.process.netty.practice.command.processor.custom.impl.AsyncUserProcessor;
+import roberto.group.process.netty.practice.command.processor.custom.AsyncUserProcessor;
 import roberto.group.process.netty.practice.command.processor.processor.RPCRemotingProcessor;
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
@@ -126,7 +126,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
 
     /**
      * 功能描述: <br>
-     * 〈dispatch request command to user processor〉
+     * 〈dispatch request command to user processor.〉
      *
      * @param context
      * @param command
@@ -143,9 +143,9 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
                 processor.handleRequest(processor.preHandleRequest(context, command.getRequestObject()), new RPCAsyncContext(context, command, this), command.getRequestObject());
             } catch (RejectedExecutionException e) {
                 log.warn("RejectedExecutionException occurred when do ASYNC process in RpcRequestProcessor");
-                sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, ResponseStatusEnum.SERVER_THREADPOOL_BUSY));
+                sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, ResponseStatusEnum.SERVER_THREAD_POOL_BUSY));
             } catch (Throwable t) {
-                String errorMsg = "AYSNC process rpc request failed in RpcRequestProcessor, id=" + id;
+                String errorMsg = "AYSNC process RPC request failed in RpcRequestProcessor, id=" + id;
                 log.error(errorMsg, t);
                 sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, t, errorMsg));
             }
@@ -155,9 +155,9 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
                 sendResponseIfNecessary(context, type, this.getCommandFactory().createResponse(responseObject, command));
             } catch (RejectedExecutionException e) {
                 log.warn("RejectedExecutionException occurred when do SYNC process in RPCRequestProcessor");
-                sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, ResponseStatusEnum.SERVER_THREADPOOL_BUSY));
+                sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, ResponseStatusEnum.SERVER_THREAD_POOL_BUSY));
             } catch (Throwable t) {
-                String errorMessage = "SYNC process rpc request failed in RPCRequestProcessor, id=" + id;
+                String errorMessage = "SYNC process RPC request failed in RPCRequestProcessor, id=" + id;
                 log.error(errorMessage, t);
                 sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, t, errorMessage));
             }
@@ -166,7 +166,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
 
     /**
      * 功能描述: <br>
-     * 〈deserialize request command〉
+     * 〈deserialize request command.〉
      *
      * @param context
      * @param requestCommand
@@ -195,7 +195,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
 
     /**
      * 功能描述: <br>
-     * 〈Send response using remoting context if necessary〉
+     * 〈Send response using remoting context if necessary.〉
      *
      * If request type is oneway, no need to send any response nor exception.
      *
@@ -208,7 +208,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
     public void sendResponseIfNecessary(final RemotingContext context, byte type, final RemotingCommand response) {
         final int id = response.getId();
         if (type == RPCCommandType.REQUEST_ONEWAY) {
-            log.debug("Oneway rpc request received, do not send response, id=" + id + ", the address is " + RemotingUtil.parseRemoteAddress(context.getChannelContext().channel()));
+            log.debug("Oneway RPC request received, do not send response, id=" + id + ", the address is " + RemotingUtil.parseRemoteAddress(context.getChannelContext().channel()));
         } else {
             RemotingCommand serializedResponse = response;
             try {
@@ -243,7 +243,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
 
     /**
      * 功能描述: <br>
-     * 〈pre process remoting context, initial some useful infos and pass to biz〉
+     * 〈pre process remoting context, initial some useful infos and pass to biz.〉
      *
      * @param context
      * @param command
@@ -261,7 +261,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
 
     /**
      * 功能描述: <br>
-     * 〈print some debug log when receive request〉
+     * 〈print some debug log when receive request.〉
      *
      * @param context
      * @param command
@@ -278,7 +278,7 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
 
     /**
      * 功能描述: <br>
-     * 〈print some log when request timeout and discarded in io thread〉
+     * 〈print some log when request timeout and discarded in io thread.〉
      *
      * @param context
      * @param command

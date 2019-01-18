@@ -18,13 +18,13 @@ package roberto.group.process.netty.practice.serialize.serialize.manager;
  * @since 1.0.0
  */
 public class DeserializeLevel {
-    /** deserialize only the clazz part of rpc command */
+    /** deserialize only the clazz part of RPC command */
     public final static int DESERIALIZE_CLAZZ = 0x00;
 
-    /** deserialize both header and clazz parts of rpc command */
+    /** deserialize both header and clazz parts of RPC command */
     public final static int DESERIALIZE_HEADER = 0x01;
 
-    /** deserialize clazz, header, contents all three parts of rpc command */
+    /** deserialize clazz, header, contents all three parts of RPC command */
     public final static int DESERIALIZE_ALL = 0x02;
 
     public static String valueOf(int value) {

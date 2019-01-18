@@ -36,7 +36,7 @@ public class RemotingContext {
     private boolean serverSide = false;
 
     @Setter
-    /** rpc command type */
+    /** RPC command type */
     private int commandType;
 
     @Setter

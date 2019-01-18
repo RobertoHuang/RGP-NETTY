@@ -2,7 +2,7 @@
  * FileName: SimpleServerUserProcessor
  * Author:   HuangTaiHong
  * Date:     2019/1/10 11:29
- * Description: a demo user processor for rpc server.
+ * Description: a demo user processor for RPC server.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import roberto.group.process.netty.practice.command.processor.custom.impl.SyncUserProcessor;
+import roberto.group.process.netty.practice.command.processor.custom.SyncUserProcessor;
 import roberto.group.process.netty.practice.remote.biz.BizContext;
 import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈a demo user processor for rpc server.〉
+ * 〈a demo user processor for RPC server.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/10

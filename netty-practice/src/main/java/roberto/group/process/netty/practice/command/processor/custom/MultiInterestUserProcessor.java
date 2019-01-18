@@ -2,20 +2,18 @@
  * FileName: MultiInterestUserProcessor
  * Author:   HuangTaiHong
  * Date:     2019/1/9 16:36
- * Description: Support multi-interests feature based on UserProcessor
+ * Description: Support multi-interests feature based on UserProcessor.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.command.processor.custom.impl;
-
-import roberto.group.process.netty.practice.command.processor.custom.UserProcessor;
+package roberto.group.process.netty.practice.command.processor.custom;
 
 import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Support multi-interests feature based on UserProcessor〉
+ * 〈Support multi-interests feature based on UserProcessor.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/9

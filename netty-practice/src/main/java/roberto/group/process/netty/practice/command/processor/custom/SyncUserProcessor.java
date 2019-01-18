@@ -7,9 +7,9 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.command.processor.custom.impl;
+package roberto.group.process.netty.practice.command.processor.custom;
 
-import roberto.group.process.netty.practice.command.processor.context.AsyncContext;
+import roberto.group.process.netty.practice.context.AsyncContext;
 import roberto.group.process.netty.practice.remote.biz.BizContext;
 
 /**

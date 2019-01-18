@@ -11,7 +11,6 @@ package roberto.group.process.netty.practice.command.processor.custom;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import roberto.group.process.netty.practice.command.processor.custom.impl.MultiInterestUserProcessor;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -60,7 +59,7 @@ public class UserProcessorRegisterHelper {
         } else {
             UserProcessor<?> preProcessor = userProcessors.putIfAbsent(processor.interest(), processor);
             if (preProcessor != null) {
-                throw new RuntimeException("Processor with interest key [" + processor.interest() + "] has already been registered to rpc server, can not register again!");
+                throw new RuntimeException("Processor with interest key [" + processor.interest() + "] has already been registered to RPC server, can not register again!");
             }
         }
     }
@@ -81,7 +80,7 @@ public class UserProcessorRegisterHelper {
             processor.multiInterest().forEach(interest -> {
                 UserProcessor<?> preProcessor = userProcessors.putIfAbsent(interest, processor);
                 if (preProcessor != null) {
-                    throw new RuntimeException("Processor with interest key [" + interest + "] has already been registered to rpc server, can not register again!");
+                    throw new RuntimeException("Processor with interest key [" + interest + "] has already been registered to RPC server, can not register again!");
                 }
             });
         }

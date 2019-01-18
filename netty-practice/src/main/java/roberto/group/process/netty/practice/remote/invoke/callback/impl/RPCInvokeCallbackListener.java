@@ -96,7 +96,7 @@ public class RPCInvokeCallbackListener implements InvokeCallbackListener {
                             case CONNECTION_CLOSED:
                                 exception = new ConnectionClosedException("Connection closed when invoke with callback.The address is " + this.remoteAddress);
                                 break;
-                            case SERVER_THREADPOOL_BUSY:
+                            case SERVER_THREAD_POOL_BUSY:
                                 exception = new InvokeServerBusyException("Server thread pool busy when invoke with callback.The address is " + this.remoteAddress);
                                 break;
                             case SERVER_EXCEPTION:

@@ -169,7 +169,7 @@ public abstract class RPCRemoting extends Remoting {
 
     /**
      * 功能描述: <br>
-     * 〈Synchronous rpc invocation.〉
+     * 〈Synchronous RPC invocation.〉
      *
      * @param connectionURL
      * @param request

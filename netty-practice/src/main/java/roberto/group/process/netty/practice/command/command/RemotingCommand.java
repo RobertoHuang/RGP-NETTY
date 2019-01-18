@@ -2,7 +2,7 @@
  * FileName: Remoting command
  * Author:   HuangTaiHong
  * Date:     2018/12/29 15:18
- * Description: 指令抽象类
+ * Description: Remoting command.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈Remoting command〉
+ * 〈Remoting command.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29
@@ -29,7 +29,7 @@ import java.io.Serializable;
 public interface RemotingCommand extends Serializable {
     /**
      * 功能描述: <br>
-     * 〈Get the id of the command〉
+     * 〈Get the id of the command.〉
      *
      * @return > int
      * @author HuangTaiHong
@@ -39,7 +39,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Get the code of the protocol that this command belongs to〉
+     * 〈Get the code of the protocol that this command belongs to.〉
      *
      * @return > roberto.group.process.netty.practice.protocol.ProtocolCode
      * @author HuangTaiHong
@@ -49,7 +49,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Get the protocol switch status for this command〉
+     * 〈Get the protocol switch status for this command.〉
      *
      * @return > roberto.group.process.netty.practice.configuration.switches.impl.ProtocolSwitch
      * @author HuangTaiHong
@@ -59,7 +59,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Get the command code for this command〉
+     * 〈Get the command code for this command.〉
      *
      * @return > roberto.group.process.netty.practice.command.code.RemoteCommandCode
      * @author HuangTaiHong
@@ -69,7 +69,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Get invoke context for this command〉
+     * 〈Get invoke context for this command.〉
      *
      * @return > roberto.group.process.netty.practice.remote.invoke.context.InvokeContext
      * @author HuangTaiHong
@@ -79,7 +79,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Get serializer type for this command〉
+     * 〈Get serializer type for this command.〉
      *
      * @return > byte
      * @author HuangTaiHong
@@ -89,7 +89,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Serialize all parts of remoting command〉
+     * 〈Serialize all parts of remoting command.〉
      *
      * @throws SerializationException
      * @author HuangTaiHong
@@ -99,7 +99,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Deserialize all parts of remoting command〉
+     * 〈Deserialize all parts of remoting command.〉
      *
      * @throws DeserializationException
      * @author HuangTaiHong
@@ -109,7 +109,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Serialize content of remoting command〉
+     * 〈Serialize content of remoting command.〉
      *
      * @param invokeContext
      * @throws SerializationException
@@ -120,7 +120,7 @@ public interface RemotingCommand extends Serializable {
 
     /**
      * 功能描述: <br>
-     * 〈Deserialize content of remoting command〉
+     * 〈Deserialize content of remoting command.〉
      *
      * @param invokeContext
      * @throws DeserializationException

@@ -2,7 +2,7 @@
  * FileName: CommandFactory
  * Author:   HuangTaiHong
  * Date:     2019/1/4 14:02
- * Description: command factory
+ * Description: command factory.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -16,7 +16,7 @@ import java.net.InetSocketAddress;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈command factory〉
+ * 〈command factory.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/4
@@ -25,7 +25,7 @@ import java.net.InetSocketAddress;
 public interface CommandFactory {
     /**
      * 功能描述: <br>
-     * 〈create request command〉
+     * 〈create request command.〉
      *
      * @param <T>
      * @param requestObject
@@ -37,7 +37,7 @@ public interface CommandFactory {
 
     /**
      * 功能描述: <br>
-     * 〈create response command〉
+     * 〈create response command.〉
      *
      * @param <T>
      * @param responseObject
@@ -50,7 +50,7 @@ public interface CommandFactory {
 
     /**
      * 功能描述: <br>
-     * 〈create exception response command〉
+     * 〈create exception response command.〉
      *
      * @param <T>
      * @param id
@@ -63,7 +63,7 @@ public interface CommandFactory {
 
     /**
      * 功能描述: <br>
-     * 〈create exception response command〉
+     * 〈create exception response command.〉
      *
      * @param <T>
      * @param id
@@ -76,7 +76,7 @@ public interface CommandFactory {
 
     /**
      * 功能描述: <br>
-     * 〈create exception response command〉
+     * 〈create exception response command.〉
      *
      * @param <T>    the type parameter
      * @param id
@@ -90,7 +90,7 @@ public interface CommandFactory {
 
     /**
      * 功能描述: <br>
-     * 〈create exception response command〉
+     * 〈create exception response command.〉
      *
      * @param <T>
      * @param id
@@ -104,7 +104,7 @@ public interface CommandFactory {
 
     /**
      * 功能描述: <br>
-     * 〈create timeout response command〉
+     * 〈create timeout response command.〉
      *
      * @param <T>
      * @param address
@@ -116,7 +116,7 @@ public interface CommandFactory {
 
     /**
      * 功能描述: <br>
-     * 〈create send failed response command〉
+     * 〈create send failed response command.〉
      *
      * @param <T>
      * @param address
@@ -129,7 +129,7 @@ public interface CommandFactory {
 
     /**
      * 功能描述: <br>
-     * 〈create connection closed response command〉
+     * 〈create connection closed response command.〉
      *
      * @param <T>
      * @param address

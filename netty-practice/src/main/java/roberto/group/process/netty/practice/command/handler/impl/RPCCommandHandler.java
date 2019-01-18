@@ -20,7 +20,7 @@ import roberto.group.process.netty.practice.command.command.response.ResponseCom
 import roberto.group.process.netty.practice.command.command.response.ResponseStatusEnum;
 import roberto.group.process.netty.practice.command.factory.CommandFactory;
 import roberto.group.process.netty.practice.command.handler.CommandHandler;
-import roberto.group.process.netty.practice.command.processor.manager.ProcessorManager;
+import roberto.group.process.netty.practice.command.processor.processor.ProcessorManager;
 import roberto.group.process.netty.practice.command.processor.processor.RPCRemotingProcessor;
 import roberto.group.process.netty.practice.command.processor.processor.RemotingProcessor;
 import roberto.group.process.netty.practice.command.processor.processor.impl.RPCHeartBeatProcessor;
@@ -36,6 +36,10 @@ import java.util.concurrent.RejectedExecutionException;
 /**
  * 〈一句话功能简述〉<br>
  * 〈RPC command handler.〉
+ *
+ *  CommandHandler(根据RemoteCommandCode分发) -> RemotingProcessor
+ *
+ *  RemotingProcessor(根据不同的className分发) -> UserProcessor
  *
  * @author HuangTaiHong
  * @create 2019/1/7
@@ -136,7 +140,7 @@ public class RPCCommandHandler implements CommandHandler {
             // RejectedExecutionException here assures no response has been sent back
             // Other exceptions should be processed where exception was caught, because here we don't known whether ack had been sent back.
             if ((requestCommand.getType() != RPCCommandType.REQUEST_ONEWAY) && (t instanceof RejectedExecutionException)) {
-                final ResponseCommand response = this.commandFactory.createExceptionResponse(id, ResponseStatusEnum.SERVER_THREADPOOL_BUSY);
+                final ResponseCommand response = this.commandFactory.createExceptionResponse(id, ResponseStatusEnum.SERVER_THREAD_POOL_BUSY);
                 context.getChannelContext().writeAndFlush(response).addListener((ChannelFutureListener) future -> {
                     if (!future.isSuccess()) {
                         log.error("Write back exception response failed, requestId={}", id, future.cause());

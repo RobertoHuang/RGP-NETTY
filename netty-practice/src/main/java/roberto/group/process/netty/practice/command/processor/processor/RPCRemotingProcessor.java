@@ -2,7 +2,7 @@
  * FileName: RPCRemotingProcessor
  * Author:   HuangTaiHong
  * Date:     2019/1/7 11:25
- * Description:
+ * Description: Remoting processor processes remoting commands.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈〉
+ * 〈Remoting processor processes remoting commands.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/7
@@ -90,7 +90,7 @@ public abstract class RPCRemotingProcessor<T extends RemotingCommand> implements
             } catch (Throwable e) {
                 // protect the thread running this task
                 String remotingAddress = RemotingUtil.parseRemoteAddress(context.getChannelContext().channel());
-                log.error("Exception caught when process rpc request command in AbstractRemotingProcessor, Id=" + message.getId() + "! Invoke source address is [" + remotingAddress + "].", e);
+                log.error("Exception caught when process RPC request command in AbstractRemotingProcessor, Id=" + message.getId() + "! Invoke source address is [" + remotingAddress + "].", e);
             }
         }
     }

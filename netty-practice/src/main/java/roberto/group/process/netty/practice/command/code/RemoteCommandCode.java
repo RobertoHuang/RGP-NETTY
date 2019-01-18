@@ -2,7 +2,7 @@
  * FileName: RemoteCommandCode
  * Author:   HuangTaiHong
  * Date:     2018/12/29 15:09
- * Description: 远程指令码
+ * Description: Remoting command code stands for a specific remoting command, and every kind of command has its own code.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.command.code;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈远程指令码〉
+ * 〈Remoting command code stands for a specific remoting command, and every kind of command has its own code.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29

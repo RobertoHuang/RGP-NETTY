@@ -2,7 +2,7 @@
  * FileName: AbstractBatchDecoder
  * Author:   HuangTaiHong
  * Date:     2019/1/2 14:41
- * Description: Abstract Message Decoder - Support Batch Processing
+ * Description: Abstract Message Decoder - Support Batch Processing.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Abstract Message Decoder - Support Batch Processing〉
+ * 〈Abstract Message Decoder - Support Batch Processing.〉
  *
  * 1.如果当前读取的数据不足以拼接成一个完整的业务数据包，那就保留该数据继续从TCP缓冲区中读取，直到得到一个完整的数据包
  *
@@ -91,7 +91,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+    public void handlerRemoved(ChannelHandlerContext ctx) {
         ByteBuf byteBuf = internalBuffer();
         int readable = byteBuf.readableBytes();
         if (readable < 0) {
@@ -109,19 +109,18 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
 
     /**
      * 功能描述: <br>
-     * 〈Gets called after the AbstractBatchDecoder was removed from the actual context and it doesn't handle events anymore〉
+     * 〈Gets called after the AbstractBatchDecoder was removed from the actual context and it doesn't handle events anymore.〉
      *
      * @param ctx
-     * @throws Exception
      * @author HuangTaiHong
      * @date 2019.01.09 11:23:24
      */
-    protected void handlerRemovedProcess(ChannelHandlerContext ctx) throws Exception {
+    protected void handlerRemovedProcess(ChannelHandlerContext ctx) {
 
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         if (msg instanceof ByteBuf) {
             RecyclableArrayList out = RecyclableArrayList.newInstance();
             try {
@@ -170,7 +169,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) {
         numReads = 0;
         discardSomeReadBytes();
         if (decodeWasNull) {
@@ -186,7 +185,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         RecyclableArrayList out = RecyclableArrayList.newInstance();
         try {
             if (cumulation != null) {
@@ -225,7 +224,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
 
     /**
      * 功能描述: <br>
-     * 〈Called once data should be decoded from the given ByteBuf〉
+     * 〈Called once data should be decoded from the given ByteBuf.〉
      *
      * @param ctx
      * @param in
@@ -274,7 +273,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
 
     /**
      * 功能描述: <br>
-     * 〈清理字节容器〉
+     * 〈清理字节容器.〉
      *
      * 业务拆包完成之后只是从字节容器中取走了数据，但是这部分空间对于字节容器来说依然保留着
      * 而字节容器每次累加字节数据的时候都是将字节数据追加到尾部，如果不对字节容器做清理那么时间一长就会OOM
@@ -290,7 +289,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
 
     /**
      * 功能描述: <br>
-     * 〈通道转为非激活状态最后一次解码〉
+     * 〈通道转为非激活状态最后一次解码.〉
      *
      * @param ctx
      * @param in
@@ -307,7 +306,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
 
     /**
      * 〈一句话功能简述〉
-     * 〈Cumulate ByteBuf〉
+     * 〈Cumulate ByteBuf.〉
      *
      * @author HuangTaiHong
      * @create 2019.01.02
@@ -316,7 +315,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     public static abstract class Cumulator {
         /**
          * 功能描述: <br>
-         * 〈Cumulate the given ByteBuf and return the ByteBuf that holds the cumulated bytes〉
+         * 〈Cumulate the given ByteBuf and return the ByteBuf that holds the cumulated bytes.〉
          *
          * The implementation is responsible to correctly handle the life-cycle of the given ByteBuf and so call ByteBuf.release() if a ByteBuf is fully consumed.
          *
@@ -331,7 +330,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
 
         /**
          * 功能描述: <br>
-         * 〈expand cumulation〉
+         * 〈expand cumulation.〉
          *
          * @param allocator
          * @param cumulation

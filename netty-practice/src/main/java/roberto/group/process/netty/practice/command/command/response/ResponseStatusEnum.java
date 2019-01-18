@@ -22,7 +22,7 @@ public enum ResponseStatusEnum {
     ERROR,
     SERVER_EXCEPTION,
     UNKNOWN,
-    SERVER_THREADPOOL_BUSY,
+    SERVER_THREAD_POOL_BUSY,
     ERROR_COMM,
     NO_PROCESSOR,
     TIMEOUT,
@@ -42,7 +42,7 @@ public enum ResponseStatusEnum {
                 return 0x0002;
             case UNKNOWN:
                 return 0x0003;
-            case SERVER_THREADPOOL_BUSY:
+            case SERVER_THREAD_POOL_BUSY:
                 return 0x0004;
             case ERROR_COMM:
                 return 0x0005;
@@ -76,7 +76,7 @@ public enum ResponseStatusEnum {
             case 0x0003:
                 return UNKNOWN;
             case 0x0004:
-                return SERVER_THREADPOOL_BUSY;
+                return SERVER_THREAD_POOL_BUSY;
             case 0x0005:
                 return ERROR_COMM;
             case 0x0006:

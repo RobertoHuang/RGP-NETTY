@@ -2,7 +2,7 @@
  * FileName: RPCCommandFactory
  * Author:   HuangTaiHong
  * Date:     2019/1/6 15:11
- * Description: command factory for rpc protocol.
+ * Description: command factory for RPC protocol.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -21,7 +21,7 @@ import java.net.InetSocketAddress;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈command factory for rpc protocol.〉
+ * 〈command factory for RPC protocol.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/6

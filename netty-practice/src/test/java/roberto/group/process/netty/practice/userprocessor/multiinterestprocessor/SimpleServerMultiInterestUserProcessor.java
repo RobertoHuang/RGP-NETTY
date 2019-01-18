@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import roberto.group.process.netty.practice.command.processor.custom.impl.SyncMutiInterestUserProcessor;
+import roberto.group.process.netty.practice.command.processor.custom.SyncMutiInterestUserProcessor;
 import roberto.group.process.netty.practice.common.RequestBody;
 import roberto.group.process.netty.practice.remote.biz.BizContext;
 import roberto.group.process.netty.practice.remote.invoke.context.InvokeContext;

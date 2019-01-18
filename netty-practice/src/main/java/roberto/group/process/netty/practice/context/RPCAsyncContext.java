@@ -7,11 +7,10 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.command.processor.context.impl;
+package roberto.group.process.netty.practice.context;
 
 import lombok.AllArgsConstructor;
 import roberto.group.process.netty.practice.command.command.request.impl.RPCRequestCommand;
-import roberto.group.process.netty.practice.command.processor.context.AsyncContext;
 import roberto.group.process.netty.practice.command.processor.processor.impl.RPCRequestProcessor;
 import roberto.group.process.netty.practice.remote.remote.RemotingContext;
 
@@ -30,10 +29,10 @@ public class RPCAsyncContext implements AsyncContext {
     /** remoting context */
     private RemotingContext remotingContext;
 
-    /** rpc request command */
+    /** RPC request command */
     private RPCRequestCommand requestCommand;
 
-    /** rpc request processor **/
+    /** RPC request processor **/
     private RPCRequestProcessor requestProcessor;
 
     /** is response sent already */

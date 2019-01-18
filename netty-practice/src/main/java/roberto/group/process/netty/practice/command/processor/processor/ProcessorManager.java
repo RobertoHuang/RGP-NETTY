@@ -2,18 +2,17 @@
  * FileName: ProcessorManager
  * Author:   HuangTaiHong
  * Date:     2019/1/7 11:00
- * Description:
+ * Description: Manager of processors.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.command.processor.manager;
+package roberto.group.process.netty.practice.command.processor.processor;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
-import roberto.group.process.netty.practice.command.processor.processor.RemotingProcessor;
 import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 
@@ -25,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Manager of processors〉
+ * 〈Manager of processors.〉
  *
  * Maintains the relationship between command and command processor through command code.
  *

@@ -2,7 +2,7 @@
  * FileName: RPCResponseProcessor
  * Author:   HuangTaiHong
  * Date:     2019/1/7 11:29
- * Description:
+ * Description: Processor to process RPCResponse.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈〉
+ * 〈Processor to process RPCResponse.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/7

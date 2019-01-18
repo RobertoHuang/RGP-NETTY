@@ -69,7 +69,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class RGPDefaultRemoteClient extends AbstractConfigurableInstance {
-    /** rpc remoting */
+    /** RPC remoting */
     protected RPCRemoting remoting;
 
     @Getter

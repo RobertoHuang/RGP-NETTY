@@ -11,8 +11,8 @@ package roberto.group.process.netty.practice.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import roberto.group.process.netty.practice.command.processor.context.AsyncContext;
-import roberto.group.process.netty.practice.command.processor.custom.impl.AsyncUserProcessor;
+import roberto.group.process.netty.practice.context.AsyncContext;
+import roberto.group.process.netty.practice.command.processor.custom.AsyncUserProcessor;
 import roberto.group.process.netty.practice.remote.biz.BizContext;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 

@@ -2,7 +2,7 @@
  * FileName: RPCConfigsSupport
  * Author:   HuangTaiHong
  * Date:     2019/1/4 10:35
- * Description: Constants for rpc.
+ * Description: Constants for RPC.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.configuration.support;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Constants for rpc.〉
+ * 〈Constants for RPC.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/4
@@ -34,6 +34,6 @@ public class RPCConfigsSupport {
     public static final String CONNECTION_WARMUP_KEY = "_CONNECTIONWARMUP";
 
     /** whether to dispatch message list in default executor. **/
-    public static final String DISPATCH_MSG_LIST_IN_DEFAULT_EXECUTOR = "bolt.rpc.dispatch-msg-list-in-default-executor";
+    public static final String DISPATCH_MSG_LIST_IN_DEFAULT_EXECUTOR = "bolt.RPC.dispatch-msg-list-in-default-executor";
     public static final String DISPATCH_MSG_LIST_IN_DEFAULT_EXECUTOR_DEFAULT = "true";
 }

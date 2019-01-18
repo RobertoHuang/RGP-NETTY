@@ -82,7 +82,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
     /** boss event loop group, boss group should not be daemon, need shutdown manually **/
     private final EventLoopGroup bossGroup = NettyEventLoopUtil.newEventLoopGroup(1, new NamedThreadFactory("bolt-netty-server-boss", false));
 
-    /** worker event loop group. Reuse I/O worker threads between rpc servers. **/
+    /** worker event loop group. Reuse I/O worker threads between RPC servers. **/
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2, new NamedThreadFactory("bolt-netty-server-worker", true));
 
     /** RPC remoting */
@@ -100,7 +100,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
     /** connection event listener */
     private ConnectionEventListener connectionEventListener = new ConnectionEventListener();
 
-    /** user processors of rpc server */
+    /** user processors of RPC server */
     private ConcurrentHashMap<String, UserProcessor<?>> userProcessors = new ConcurrentHashMap(4);
 
     static {

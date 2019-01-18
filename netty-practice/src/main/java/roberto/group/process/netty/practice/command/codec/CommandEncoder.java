@@ -2,7 +2,7 @@
  * FileName: CommandEncoder
  * Author:   HuangTaiHong
  * Date:     2019/1/2 19:30
- * Description: 命令编码器
+ * Description: Encode command.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈命令编码器〉
+ * 〈Encode command.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -25,7 +25,7 @@ import java.io.Serializable;
 public interface CommandEncoder {
     /**
      * 功能描述: <br>
-     * 〈命令编码〉
+     * 〈Encode object into bytes.〉
      *
      * @param ctx
      * @param msg

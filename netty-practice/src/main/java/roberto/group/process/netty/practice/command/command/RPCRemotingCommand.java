@@ -26,18 +26,6 @@ import roberto.group.process.netty.practice.serialize.serialize.manager.Deserial
  * 〈一句话功能简述〉<br>
  * 〈Remoting command.〉
  *
- * * proto: code for protocol
- * * ver1: version for protocol
- * * type: request/response/request oneway
- * * cmdcode: code for remoting command
- * * ver2:version for remoting command
- * * requestId: id of request
- * * codec: code for codec
- * * switch: function switch for protocol
- * * headerLen: length of header
- * * contentLen: length of content
- * * CRC32: CRC32 of the frame(Exists when ver1 > 1)
- *
  * @author HuangTaiHong
  * @create 2019/1/4
  * @since 1.0.0
@@ -65,33 +53,37 @@ public abstract class RPCRemotingCommand implements RemotingCommand {
 
     @Getter
     @Setter
-    /** Serializer, see the Configs.SERIALIZER_DEFAULT for the default serializer. **/
-    /** Notice: this can not be changed after initialized at runtime. **/
+    /** Serializer, see the Configs.SERIALIZER_DEFAULT for the default serializer. Notice: this can not be changed after initialized at runtime. **/
     private byte serializer = ConfigManager.serializer;
 
     @Getter
     @Setter
     private ProtocolSwitch protocolSwitch = new ProtocolSwitch();
 
-    /** The class of content */
     @Getter
+    /** The class of content */
     private byte[] clazz;
+
     @Getter
     private short clazzLength = 0;
-    /** Header is used for transparent transmission */
+
     @Getter
+    /** Header is used for transparent transmission */
     private byte[] header;
+
     @Getter
     private short headerLength = 0;
-    /** The bytes format of the content of the command */
+
     @Getter
+    /** The bytes format of the content of the command */
     private byte[] content;
+
     @Getter
     private int contentLength = 0;
 
     @Getter
     @Setter
-    /** invoke context of each rpc command */
+    /** invoke context of each RPC command */
     private InvokeContext invokeContext;
 
     public RPCRemotingCommand(byte type) {

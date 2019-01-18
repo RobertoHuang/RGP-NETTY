@@ -43,6 +43,31 @@ public abstract class Remoting {
 
     /**
      * 功能描述: <br>
+     * 〈Oneway invocation.〉
+     *
+     * @param connection
+     * @param request
+     * @author HuangTaiHong
+     * @date 2019.01.04 15:50:59
+     */
+    protected void oneway(final Connection connection, final RemotingCommand request) {
+        try {
+            connection.getChannel().writeAndFlush(request).addListener((ChannelFutureListener) channelFuture -> {
+                if (!channelFuture.isSuccess()) {
+                    log.error("Invoke send failed. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
+                }
+            });
+        } catch (Exception e) {
+            if (null == connection) {
+                log.error("Connection is null");
+            } else {
+                log.error("Exception caught when sending invocation. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), e);
+            }
+        }
+    }
+
+    /**
+     * 功能描述: <br>
      * 〈Synchronous invocation〉
      *
      * @param connection
@@ -79,53 +104,6 @@ public abstract class Remoting {
             log.warn("Wait response, request id={} timeout!", request.getId());
         }
         return response;
-    }
-
-    /**
-     * 功能描述: <br>
-     * 〈Invocation with callback.〉
-     *
-     * @param connection
-     * @param request
-     * @param invokeCallback
-     * @param timeoutMillis
-     * @author HuangTaiHong
-     * @date 2019.01.04 14:50:58
-     */
-    protected void invokeWithCallback(final Connection connection, final RemotingCommand request, final InvokeCallback invokeCallback, final int timeoutMillis) {
-        final InvokeFuture future = createInvokeFuture(connection, request, request.getInvokeContext(), invokeCallback);
-        connection.addInvokeFuture(future);
-        try {
-            // 添加定时任务 监听异步任务是否已超时
-            Timeout timeout = DelayedOperation.getTimer().newTimeout(timeoutTemp -> {
-                InvokeFuture timeoutFuture = connection.removeInvokeFuture(request.getId());
-                if (timeoutFuture != null) {
-                    timeoutFuture.putResponse(commandFactory.createTimeoutResponse(connection.getRemoteAddress()));
-                    timeoutFuture.tryAsyncExecuteInvokeCallbackAbnormally();
-                }
-            }, timeoutMillis, TimeUnit.MILLISECONDS);
-            future.addTimeout(timeout);
-
-            connection.getChannel().writeAndFlush(request).addListener((ChannelFutureListener) channelFuture -> {
-                if (!channelFuture.isSuccess()) {
-                    InvokeFuture failedFuture = connection.removeInvokeFuture(request.getId());
-                    if (failedFuture != null) {
-                        failedFuture.cancelTimeout();
-                        failedFuture.putResponse(commandFactory.createSendFailedResponse(connection.getRemoteAddress(), channelFuture.cause()));
-                        failedFuture.tryAsyncExecuteInvokeCallbackAbnormally();
-                    }
-                    log.error("Invoke send failed. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
-                }
-            });
-        } catch (Exception e) {
-            InvokeFuture exceptionFuture = connection.removeInvokeFuture(request.getId());
-            if (exceptionFuture != null) {
-                exceptionFuture.cancelTimeout();
-                exceptionFuture.putResponse(commandFactory.createSendFailedResponse(connection.getRemoteAddress(), e));
-                exceptionFuture.tryAsyncExecuteInvokeCallbackAbnormally();
-            }
-            log.error("Exception caught when sending invocation. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), e);
-        }
     }
 
     /**
@@ -175,26 +153,48 @@ public abstract class Remoting {
 
     /**
      * 功能描述: <br>
-     * 〈Oneway invocation.〉
+     * 〈Invocation with callback.〉
      *
      * @param connection
      * @param request
+     * @param invokeCallback
+     * @param timeoutMillis
      * @author HuangTaiHong
-     * @date 2019.01.04 15:50:59
+     * @date 2019.01.04 14:50:58
      */
-    protected void oneway(final Connection connection, final RemotingCommand request) {
+    protected void invokeWithCallback(final Connection connection, final RemotingCommand request, final InvokeCallback invokeCallback, final int timeoutMillis) {
+        final InvokeFuture future = createInvokeFuture(connection, request, request.getInvokeContext(), invokeCallback);
+        connection.addInvokeFuture(future);
         try {
+            // 添加定时任务 监听异步任务是否已超时
+            Timeout timeout = DelayedOperation.getTimer().newTimeout(timeoutTemp -> {
+                InvokeFuture timeoutFuture = connection.removeInvokeFuture(request.getId());
+                if (timeoutFuture != null) {
+                    timeoutFuture.putResponse(commandFactory.createTimeoutResponse(connection.getRemoteAddress()));
+                    timeoutFuture.tryAsyncExecuteInvokeCallbackAbnormally();
+                }
+            }, timeoutMillis, TimeUnit.MILLISECONDS);
+            future.addTimeout(timeout);
+
             connection.getChannel().writeAndFlush(request).addListener((ChannelFutureListener) channelFuture -> {
                 if (!channelFuture.isSuccess()) {
+                    InvokeFuture failedFuture = connection.removeInvokeFuture(request.getId());
+                    if (failedFuture != null) {
+                        failedFuture.cancelTimeout();
+                        failedFuture.putResponse(commandFactory.createSendFailedResponse(connection.getRemoteAddress(), channelFuture.cause()));
+                        failedFuture.tryAsyncExecuteInvokeCallbackAbnormally();
+                    }
                     log.error("Invoke send failed. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), channelFuture.cause());
                 }
             });
         } catch (Exception e) {
-            if (null == connection) {
-                log.error("Connection is null");
-            } else {
-                log.error("Exception caught when sending invocation. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), e);
+            InvokeFuture exceptionFuture = connection.removeInvokeFuture(request.getId());
+            if (exceptionFuture != null) {
+                exceptionFuture.cancelTimeout();
+                exceptionFuture.putResponse(commandFactory.createSendFailedResponse(connection.getRemoteAddress(), e));
+                exceptionFuture.tryAsyncExecuteInvokeCallbackAbnormally();
             }
+            log.error("Exception caught when sending invocation. The address is {}", RemotingUtil.parseRemoteAddress(connection.getChannel()), e);
         }
     }
 

@@ -38,6 +38,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Slf4j
+@SuppressWarnings({"all"})
 public class RPCCommandDecoder implements CommandDecoder {
     private int lessLength;
 
@@ -82,7 +83,6 @@ public class RPCCommandDecoder implements CommandDecoder {
         }
     }
 
-    @SuppressWarnings({"all"})
     private void decodeRequest(ByteBuf in, List<Object> out, int startIndex, byte version, byte type) {
         // decode request
         if (in.readableBytes() >= RPCProtocol.getRequestHeaderLength() - 3) {
@@ -163,7 +163,6 @@ public class RPCCommandDecoder implements CommandDecoder {
         }
     }
 
-    @SuppressWarnings({"all"})
     private void decodeResponse(ChannelHandlerContext ctx, ByteBuf in, List<Object> out, int startIndex, byte version, byte type) {
         // decode response
         if (in.readableBytes() >= RPCProtocol.getResponseHeaderLength() - 3) {

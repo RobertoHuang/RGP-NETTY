@@ -2,14 +2,14 @@
  * FileName: AuthenticationProcessor
  * Author:   HuangTaiHong
  * Date:     2018/12/29 15:26
- * Description: 用户处理器接口
+ * Description: Defined all functions for biz to process user defined request.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
 package roberto.group.process.netty.practice.command.processor.custom;
 
-import roberto.group.process.netty.practice.command.processor.context.AsyncContext;
+import roberto.group.process.netty.practice.context.AsyncContext;
 import roberto.group.process.netty.practice.remote.biz.BizContext;
 import roberto.group.process.netty.practice.remote.remote.RemotingContext;
 

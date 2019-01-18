@@ -2,7 +2,7 @@
  * FileName: RGPDefaultRemoteServerStopTest
  * Author:   HuangTaiHong
  * Date:     2019/1/17 10:00
- * Description: test rpc server and stop logic.
+ * Description: test RPC server and stop logic.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -18,7 +18,7 @@ import roberto.group.process.netty.practice.entrance.server.impl.RGPDefaultRemot
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈test rpc server and stop logic.〉
+ * 〈test RPC server and stop logic.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/17

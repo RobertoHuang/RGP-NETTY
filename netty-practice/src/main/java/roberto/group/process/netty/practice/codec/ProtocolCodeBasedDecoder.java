@@ -23,6 +23,8 @@ import java.util.List;
  * 〈一句话功能简述〉<br>
  * 〈Protocol code based decoder, the main decoder for a certain protocol, which is lead by one or multi bytes (magic code).〉
  *
+ *  Decoder是有状态的 不能加@ChannelHandler.Sharable注解
+ *
  * @author HuangTaiHong
  * @create 2019/1/2
  * @since 1.0.0
@@ -30,7 +32,7 @@ import java.util.List;
 public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
     /** the length of protocol code */
     protected int protocolCodeLength;
-    /** by default, suggest design a single byte for protocol version. */
+    /** by default, suggest design a single byte for protocol version */
     public static final int DEFAULT_PROTOCOL_VERSION_LENGTH = 1;
     /** protocol version should be a positive number, we use -1 to represent illegal */
     public static final int DEFAULT_ILLEGAL_PROTOCOL_VERSION_LENGTH = -1;
@@ -65,7 +67,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
 
     /**
      * 功能描述: <br>
-     * 〈decode the protocol code〉
+     * 〈decode the protocol code.〉
      *
      * @param in
      * @return > roberto.group.process.netty.practice.protocol.ProtocolCode
@@ -83,7 +85,7 @@ public class ProtocolCodeBasedDecoder extends AbstractBatchDecoder {
 
     /**
      * 功能描述: <br>
-     * 〈decode the protocol version〉
+     * 〈decode the protocol version.〉
      *
      * @param in
      * @return > byte

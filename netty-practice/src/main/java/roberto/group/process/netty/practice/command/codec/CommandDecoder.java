@@ -2,7 +2,7 @@
  * FileName: CommandDecoder
  * Author:   HuangTaiHong
  * Date:     2019/1/2 19:30
- * Description: 命令解码器
+ * Description: Decode command.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈命令解码器〉
+ * 〈Decode command.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -25,7 +25,7 @@ import java.util.List;
 public interface CommandDecoder {
     /**
      * 功能描述: <br>
-     * 〈命令解码〉
+     * 〈Decode bytes into object.〉
      *
      * @param ctx
      * @param in

@@ -42,7 +42,7 @@ import java.util.concurrent.Executors;
  * 〈一句话功能简述〉<br> 
  * 〈basic usage test.〉
  *
- *  basic usage of rpc client and rpc server using executor selector.
+ *  basic usage of RPC client and RPC server using executor selector.
  *
  * @author HuangTaiHong
  * @create 2019/1/16

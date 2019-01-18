@@ -12,7 +12,7 @@ package roberto.group.process.netty.practice.userprocessor.manager;
 import org.junit.Assert;
 import org.junit.Test;
 import roberto.group.process.netty.practice.command.code.RemoteCommandCode;
-import roberto.group.process.netty.practice.command.processor.manager.ProcessorManager;
+import roberto.group.process.netty.practice.command.processor.processor.ProcessorManager;
 import roberto.group.process.netty.practice.command.processor.processor.impl.RPCRequestProcessor;
 
 /**
