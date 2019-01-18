@@ -2,7 +2,7 @@
  * FileName: ConfigTypeEnum
  * Author:   HuangTaiHong
  * Date:     2018/12/29 17:29
- * Description: type of config
+ * Description: type of config.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.configuration.container;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈type of config〉
+ * 〈type of config.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29

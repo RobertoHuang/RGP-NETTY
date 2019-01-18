@@ -2,15 +2,14 @@
  * FileName: DefaultConfigContainer
  * Author:   HuangTaiHong
  * Date:     2018/12/29 17:31
- * Description: default implementation for config container
+ * Description: default implementation for config container.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
 package roberto.group.process.netty.practice.configuration.container.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.configuration.container.ConfigContainer;
 import roberto.group.process.netty.practice.configuration.container.ConfigItemEnum;
 import roberto.group.process.netty.practice.configuration.container.ConfigTypeEnum;
@@ -20,15 +19,14 @@ import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈default implementation for config container〉
+ * 〈default implementation for config container.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29
  * @since 1.0.0
  */
+@Slf4j
 public class DefaultConfigContainer implements ConfigContainer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConfigContainer.class);
-
     /** use a hash map to store the user configs with different config types and config items. **/
     private Map<ConfigTypeEnum, Map<ConfigItemEnum, Object>> userConfigs = new HashMap<ConfigTypeEnum, Map<ConfigItemEnum, Object>>();
 
@@ -55,7 +53,7 @@ public class DefaultConfigContainer implements ConfigContainer {
 
         Object prev = items.put(configItem, value);
         if (null != prev) {
-            LOGGER.warn("the value of ConfigType {}, ConfigItem {} changed from {} to {}", configType, configItem, prev.toString(), value.toString());
+            log.warn("the value of ConfigType {}, ConfigItem {} changed from {} to {}", configType, configItem, prev.toString(), value.toString());
         }
     }
 

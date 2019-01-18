@@ -2,7 +2,7 @@
  * FileName: GlobalSwitch
  * Author:   HuangTaiHong
  * Date:     2018/12/29 18:18
- * Description: Global switches used in client or server
+ * Description: Global switches used in client or server.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -16,7 +16,7 @@ import java.util.BitSet;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Global switches used in client or server〉
+ * 〈Global switches used in client or server.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29

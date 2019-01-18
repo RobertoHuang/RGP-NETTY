@@ -2,7 +2,7 @@
  * FileName: CustomNettyConfigure
  * Author:   HuangTaiHong
  * Date:     2019/1/2 9:56
- * Description: netty related configuration items
+ * Description: netty related configuration items.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.configuration.configs;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈netty related configuration items〉
+ * 〈netty related configuration items.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -20,7 +20,7 @@ package roberto.group.process.netty.practice.configuration.configs;
 public interface CustomNettyConfigure {
     /**
      * 功能描述: <br>
-     * 〈Initialize netty write buffer water mark for remoting instance〉
+     * 〈Initialize netty write buffer water mark for remoting instance.〉
      *
      * @param low
      * @param high
@@ -31,7 +31,7 @@ public interface CustomNettyConfigure {
 
     /**
      * 功能描述: <br>
-     * 〈get the low water mark for netty write buffer〉
+     * 〈get the low water mark for netty write buffer.〉
      *
      * @return > int
      * @author HuangTaiHong
@@ -41,7 +41,7 @@ public interface CustomNettyConfigure {
 
     /**
      * 功能描述: <br>
-     * 〈get the high water mark for netty write buffer〉
+     * 〈get the high water mark for netty write buffer.〉
      *
      * @return > int
      * @author HuangTaiHong

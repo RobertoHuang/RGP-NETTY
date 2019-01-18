@@ -2,7 +2,7 @@
  * FileName: AbstractConfigurableInstance
  * Author:   HuangTaiHong
  * Date:     2019/1/2 10:04
- * Description: common implementation for a configurable instance
+ * Description: common implementation for a configurable instance.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -19,7 +19,7 @@ import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSw
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈common implementation for a configurable instance〉
+ * 〈common implementation for a configurable instance.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

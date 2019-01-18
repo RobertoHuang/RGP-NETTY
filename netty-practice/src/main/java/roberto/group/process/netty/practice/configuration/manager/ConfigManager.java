@@ -2,7 +2,7 @@
  * FileName: ConfigManager
  * Author:   HuangTaiHong
  * Date:     2018/12/29 18:29
- * Description: 配置管理器
+ * Description: get configs through system properties prior to default value.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -13,7 +13,7 @@ import roberto.group.process.netty.practice.configuration.support.ConfigsSupport
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈配置管理器〉
+ * 〈get configs through system properties prior to default value.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29

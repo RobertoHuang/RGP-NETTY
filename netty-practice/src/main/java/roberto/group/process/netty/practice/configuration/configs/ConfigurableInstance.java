@@ -23,7 +23,7 @@ import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSw
 public interface ConfigurableInstance extends CustomNettyConfigure {
     /**
      * 功能描述: <br>
-     * 〈get the config container for current instance〉
+     * 〈get the config container for current instance.〉
      *
      * @return > roberto.group.process.netty.practice.configuration.container.ConfigContainer
      * @author HuangTaiHong
@@ -33,7 +33,7 @@ public interface ConfigurableInstance extends CustomNettyConfigure {
 
     /**
      * 功能描述: <br>
-     * 〈get the global switch for current instance〉
+     * 〈get the global switch for current instance.〉
      *
      * @return > roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch
      * @author HuangTaiHong

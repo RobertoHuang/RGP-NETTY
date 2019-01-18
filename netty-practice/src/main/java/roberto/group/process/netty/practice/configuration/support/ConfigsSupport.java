@@ -2,7 +2,7 @@
  * FileName: ConfigsSupport
  * Author:   HuangTaiHong
  * Date:     2019/1/2 9:47
- * Description: 可支持配置项
+ * Description: Define the key for a certain config item using system property, and provide the default value for that config item.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -13,7 +13,7 @@ import roberto.group.process.netty.practice.serialize.serialize.manager.Serializ
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈可支持配置项〉
+ * 〈Define the key for a certain config item using system property, and provide the default value for that config item.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
