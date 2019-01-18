@@ -95,9 +95,9 @@ public class SimpleServerMultiInterestUserProcessor extends SyncMutiInterestUser
     public Object handleRequest(BizContext bizCtx, MultiInterestBaseRequestBody request) throws Exception {
         log.warn("Request received:" + request + ", timeout:" + bizCtx.getClientTimeout() + ", arriveTimestamp:" + bizCtx.getArriveTimestamp());
         if (bizCtx.isRequestTimeout()) {
-            String errMsg = "Stop process in server biz thread, already timeout!";
-            log.warn(errMsg);
-            throw new Exception(errMsg);
+            String errorMessage = "Stop process in server biz thread, already timeout!";
+            log.warn(errorMessage);
+            throw new Exception(errorMessage);
         }
 
         this.remoteAddress = bizCtx.getRemoteAddress();

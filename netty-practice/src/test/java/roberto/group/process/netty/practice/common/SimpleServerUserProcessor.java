@@ -103,10 +103,10 @@ public class SimpleServerUserProcessor extends SyncUserProcessor<RequestBody> {
     public Object handleRequest(BizContext bizContext, RequestBody request) throws Exception {
         log.warn("Request received:" + request + ", timeout:" + bizContext.getClientTimeout() + ", arriveTimestamp:" + bizContext.getArriveTimestamp());
         if (bizContext.isRequestTimeout()) {
-            String errMsg = "Stop process in server biz thread, already timeout!";
+            String errorMessage = "Stop process in server biz thread, already timeout!";
             processTimes(request);
-            log.warn(errMsg);
-            throw new Exception(errMsg);
+            log.warn(errorMessage);
+            throw new Exception(errorMessage);
         }
 
         this.remoteAddress = bizContext.getRemoteAddress();

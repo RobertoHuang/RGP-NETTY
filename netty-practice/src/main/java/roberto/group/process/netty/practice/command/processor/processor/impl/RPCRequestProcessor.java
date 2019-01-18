@@ -157,9 +157,9 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
                 log.warn("RejectedExecutionException occurred when do SYNC process in RPCRequestProcessor");
                 sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, ResponseStatusEnum.SERVER_THREADPOOL_BUSY));
             } catch (Throwable t) {
-                String errMsg = "SYNC process rpc request failed in RPCRequestProcessor, id=" + id;
-                log.error(errMsg, t);
-                sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, t, errMsg));
+                String errorMessage = "SYNC process rpc request failed in RPCRequestProcessor, id=" + id;
+                log.error(errorMessage, t);
+                sendResponseIfNecessary(context, type, this.getCommandFactory().createExceptionResponse(id, t, errorMessage));
             }
         }
     }
@@ -224,9 +224,9 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
                     log.error("serialize SerializationException response failed!");
                 }
             } catch (Throwable t) {
-                String errMsg = "Serialize RpcResponseCommand failed when sendResponseIfNecessary in RpcRequestProcessor, id=" + id;
-                log.error(errMsg, t);
-                serializedResponse = this.getCommandFactory().createExceptionResponse(id, t, errMsg);
+                String errorMessage = "Serialize RpcResponseCommand failed when sendResponseIfNecessary in RpcRequestProcessor, id=" + id;
+                log.error(errorMessage, t);
+                serializedResponse = this.getCommandFactory().createExceptionResponse(id, t, errorMessage);
             }
 
             context.writeAndFlush(serializedResponse).addListener((ChannelFutureListener) future -> {

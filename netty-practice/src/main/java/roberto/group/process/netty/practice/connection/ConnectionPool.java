@@ -2,7 +2,7 @@
  * FileName: ConnectionPool
  * Author:   HuangTaiHong
  * Date:     2019/1/3 9:56
- * Description: 连接池
+ * Description: Connection pool.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,7 +11,6 @@ package roberto.group.process.netty.practice.connection;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import roberto.group.process.netty.practice.connection.strategy.ConnectionSelectStrategy;
 import roberto.group.process.netty.practice.scanner.Scannable;
 
 import java.util.Collections;
@@ -20,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈连接池〉
+ * 〈Connection pool.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/3
@@ -28,14 +27,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @Slf4j
 public class ConnectionPool implements Scannable {
+    /** connetion select strategy **/
+    private ConnectionSelectStrategy strategy;
+
     /** whether async create connection done */
     private volatile boolean asyncCreationDone = true;
 
     /** timestamp to record the last time this pool be accessed */
     private volatile long lastAccessTimestamp;
-
-    /** connetion select strategy **/
-    private ConnectionSelectStrategy strategy;
 
     /** used to save the connection **/
     private CopyOnWriteArrayList<Connection> connections = new CopyOnWriteArrayList<>();

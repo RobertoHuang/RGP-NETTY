@@ -2,7 +2,7 @@
  * FileName: DefaultConnectionMonitor
  * Author:   HuangTaiHong
  * Date:     2019/1/9 17:02
- * Description:
+ * Description: A default connection monitor that handle connections with strategies.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -11,8 +11,7 @@ package roberto.group.process.netty.practice.connection.monitor;
 
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
-import roberto.group.process.netty.practice.connection.manager.impl.DefaultConnectionManager;
-import roberto.group.process.netty.practice.connection.strategy.ConnectionMonitorStrategy;
+import roberto.group.process.netty.practice.connection.manager.DefaultConnectionManager;
 import roberto.group.process.netty.practice.thread.NamedThreadFactory;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -21,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈A default connection monitor that handle connections with strategies〉
+ * 〈A default connection monitor that handle connections with strategies.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/9

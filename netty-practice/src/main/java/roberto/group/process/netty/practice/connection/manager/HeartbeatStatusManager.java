@@ -2,7 +2,7 @@
  * FileName: HeartbeatStatusManager
  * Author:   HuangTaiHong
  * Date:     2019/1/8 9:48
- * Description:
+ * Description: Connection heart beat manager, operate heart beat whether enabled for a certain connection at runtime.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -13,7 +13,7 @@ import roberto.group.process.netty.practice.connection.Connection;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈Connection heart beat manager, operate heart beat whether enabled for a certain connection at runtime〉
+ * 〈Connection heart beat manager, operate heart beat whether enabled for a certain connection at runtime.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/8
@@ -22,7 +22,7 @@ import roberto.group.process.netty.practice.connection.Connection;
 public interface HeartbeatStatusManager {
     /**
      * 功能描述: <br>
-     * 〈enable heart beat for a certain connection〉
+     * 〈enable heart beat for a certain connection.〉
      *
      * @param connection
      * @author HuangTaiHong
@@ -32,7 +32,7 @@ public interface HeartbeatStatusManager {
 
     /**
      * 功能描述: <br>
-     * 〈disable heart beat for a certain connection〉
+     * 〈disable heart beat for a certain connection.〉
      *
      * @param connection
      * @author HuangTaiHong

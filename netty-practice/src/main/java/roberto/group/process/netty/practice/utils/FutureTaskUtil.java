@@ -39,7 +39,7 @@ public class FutureTaskUtil {
      */
     public static <T> T getFutureTaskResult(RunStateRecordedFutureTask<T> task, Logger logger) {
         T t = null;
-        if (null != task) {
+        if (task != null) {
             try {
                 t = task.getAfterRun();
             } catch (InterruptedException e) {

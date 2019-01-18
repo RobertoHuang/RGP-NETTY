@@ -104,9 +104,9 @@ public class WaterMarkSystemPropertyExceptionTest {
                         overFlow.add(true);
                     }
                 } catch (InterruptedException e) {
-                    String errMsg = "InterruptedException caught in sync!";
-                    log.error(errMsg, e);
-                    Assert.fail(errMsg);
+                    String errorMessage = "InterruptedException caught in sync!";
+                    log.error(errorMessage, e);
+                    Assert.fail(errorMessage);
                 }
                 log.warn("Result received in sync: " + result);
                 Assert.assertEquals(RequestBody.DEFAULT_SERVER_RETURN_STR, result);
@@ -148,9 +148,9 @@ public class WaterMarkSystemPropertyExceptionTest {
                         overFlow.add(true);
                     }
                 } catch (InterruptedException e) {
-                    String errMsg = "InterruptedException caught in sync!";
-                    log.error(errMsg, e);
-                    Assert.fail(errMsg);
+                    String errorMessage = "InterruptedException caught in sync!";
+                    log.error(errorMessage, e);
+                    Assert.fail(errorMessage);
                 }
             }).start();
         }

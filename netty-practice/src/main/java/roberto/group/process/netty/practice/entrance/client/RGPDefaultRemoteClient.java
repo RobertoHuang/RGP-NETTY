@@ -20,19 +20,19 @@ import roberto.group.process.netty.practice.configuration.container.ConfigTypeEn
 import roberto.group.process.netty.practice.configuration.support.RPCConfigsSupport;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
 import roberto.group.process.netty.practice.connection.Connection;
-import roberto.group.process.netty.practice.connection.ConnectionEventListener;
-import roberto.group.process.netty.practice.connection.ConnectionEventProcessor;
+import roberto.group.process.netty.practice.connection.RandomConnectionSelectStrategy;
+import roberto.group.process.netty.practice.connection.processor.ConnectionEventListener;
+import roberto.group.process.netty.practice.connection.processor.ConnectionEventProcessor;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
-import roberto.group.process.netty.practice.connection.ReconnectManager;
+import roberto.group.process.netty.practice.connection.manager.ReconnectManager;
 import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
 import roberto.group.process.netty.practice.connection.factory.ConnectionFactory;
-import roberto.group.process.netty.practice.connection.factory.impl.DefaultRPCConnectionFactory;
-import roberto.group.process.netty.practice.connection.manager.impl.DefaultConnectionManager;
+import roberto.group.process.netty.practice.connection.factory.DefaultRPCConnectionFactory;
+import roberto.group.process.netty.practice.connection.manager.DefaultConnectionManager;
 import roberto.group.process.netty.practice.connection.monitor.DefaultConnectionMonitor;
-import roberto.group.process.netty.practice.connection.strategy.ConnectionMonitorStrategy;
-import roberto.group.process.netty.practice.connection.strategy.ConnectionSelectStrategy;
-import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
-import roberto.group.process.netty.practice.connection.strategy.impl.ScheduledDisconnectStrategy;
+import roberto.group.process.netty.practice.connection.monitor.ConnectionMonitorStrategy;
+import roberto.group.process.netty.practice.connection.ConnectionSelectStrategy;
+import roberto.group.process.netty.practice.connection.monitor.ScheduledDisconnectStrategy;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
 import roberto.group.process.netty.practice.handler.RPCConnectionEventHandler;
@@ -93,7 +93,7 @@ public class RGPDefaultRemoteClient extends AbstractConfigurableInstance {
     private ConnectionMonitorStrategy monitorStrategy;
 
     /** connection select strategy */
-    private ConnectionSelectStrategy connectionSelectStrategy = new RandomSelectStrategy(switches());
+    private ConnectionSelectStrategy connectionSelectStrategy = new RandomConnectionSelectStrategy(switches());
 
     /** connection factory */
     private ConnectionFactory connectionFactory = new DefaultRPCConnectionFactory(userProcessors, this);

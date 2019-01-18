@@ -2,16 +2,18 @@
  * FileName: ConnectionEventProcessor
  * Author:   HuangTaiHong
  * Date:     2019/1/3 14:42
- * Description: 连接事件处理器
+ * Description: Process connection events.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection;
+package roberto.group.process.netty.practice.connection.processor;
+
+import roberto.group.process.netty.practice.connection.Connection;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈连接事件处理器〉
+ * 〈Process connection events.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/3

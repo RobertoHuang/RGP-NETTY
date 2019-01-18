@@ -7,14 +7,13 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection.strategy.impl;
+package roberto.group.process.netty.practice.connection.monitor;
 
 import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.configuration.support.ConfigsSupport;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionPool;
-import roberto.group.process.netty.practice.connection.strategy.ConnectionMonitorStrategy;
 import roberto.group.process.netty.practice.utils.FutureTaskUtil;
 import roberto.group.process.netty.practice.utils.RemotingUtil;
 import roberto.group.process.netty.practice.utils.RunStateRecordedFutureTask;

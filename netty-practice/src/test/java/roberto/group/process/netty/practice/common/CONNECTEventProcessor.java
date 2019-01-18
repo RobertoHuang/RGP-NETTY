@@ -11,7 +11,7 @@ package roberto.group.process.netty.practice.common;
 
 import org.junit.Assert;
 import roberto.group.process.netty.practice.connection.Connection;
-import roberto.group.process.netty.practice.connection.ConnectionEventProcessor;
+import roberto.group.process.netty.practice.connection.processor.ConnectionEventProcessor;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;

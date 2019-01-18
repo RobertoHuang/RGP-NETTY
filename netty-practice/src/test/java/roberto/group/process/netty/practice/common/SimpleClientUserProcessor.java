@@ -84,10 +84,10 @@ public class SimpleClientUserProcessor extends SyncUserProcessor<RequestBody> {
     public Object handleRequest(BizContext bizContext, RequestBody request) throws Exception {
         log.warn("Request received:" + request);
         if (bizContext.isRequestTimeout()) {
-            String errMsg = "Stop process in client biz thread, already timeout!";
-            log.warn(errMsg);
+            String errorMessage = "Stop process in client biz thread, already timeout!";
+            log.warn(errorMessage);
             processTimes(request);
-            throw new Exception(errMsg);
+            throw new Exception(errorMessage);
         }
         Assert.assertEquals(RequestBody.class, request.getClass());
 

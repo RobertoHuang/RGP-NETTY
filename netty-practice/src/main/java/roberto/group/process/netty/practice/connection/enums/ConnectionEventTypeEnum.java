@@ -2,7 +2,7 @@
  * FileName: ConnectionEventTypeEnum
  * Author:   HuangTaiHong
  * Date:     2019/1/3 14:41
- * Description: 连接状态枚举类
+ * Description: Event triggered by connection state.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述

@@ -353,9 +353,9 @@ public class ServerTimeoutDiscardCloseTest {
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
-            String errMsg = "InterruptedException caught in callback!";
-            log.error(errMsg, e);
-            Assert.fail(errMsg);
+            String errorMessage = "InterruptedException caught in callback!";
+            log.error(errorMessage, e);
+            Assert.fail(errorMessage);
         }
         Assert.assertEquals(InvokeTimeoutException.class.getName(), resultList.get(0));
         resultList.clear();

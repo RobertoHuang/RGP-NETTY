@@ -1,13 +1,13 @@
 /**
- * FileName: RandomSelectStrategy
+ * FileName: RandomConnectionSelectStrategy
  * Author:   HuangTaiHong
  * Date:     2019/1/5 14:01
- * Description: Select a connection randomly
+ * Description: Select a connection randomly.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection.strategy.impl;
+package roberto.group.process.netty.practice.connection;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +15,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import roberto.group.process.netty.practice.configuration.support.ConfigsSupport;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
-import roberto.group.process.netty.practice.connection.Connection;
-import roberto.group.process.netty.practice.connection.strategy.ConnectionSelectStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ import java.util.Random;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Select a connection randomly〉
+ * 〈Select a connection randomly.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/5
@@ -32,7 +30,7 @@ import java.util.Random;
  */
 @Slf4j
 @NoArgsConstructor
-public class RandomSelectStrategy implements ConnectionSelectStrategy {
+public class RandomConnectionSelectStrategy implements ConnectionSelectStrategy {
     private GlobalSwitch globalSwitch;
 
     /** max retry times */
@@ -40,7 +38,7 @@ public class RandomSelectStrategy implements ConnectionSelectStrategy {
 
     private final Random random = new Random();
 
-    public RandomSelectStrategy(GlobalSwitch globalSwitch) {
+    public RandomConnectionSelectStrategy(GlobalSwitch globalSwitch) {
         this.globalSwitch = globalSwitch;
     }
 
@@ -61,7 +59,7 @@ public class RandomSelectStrategy implements ConnectionSelectStrategy {
                         }
                     }
                     if (serviceStatusOnConns.size() == 0) {
-                        throw new Exception("No available connection when select in RandomSelectStrategy.");
+                        throw new Exception("No available connection when select in RandomConnectionSelectStrategy.");
                     }
                     result = randomGetConnection(serviceStatusOnConns);
                 } else {
@@ -70,7 +68,7 @@ public class RandomSelectStrategy implements ConnectionSelectStrategy {
                 return result;
             }
         } catch (Throwable e) {
-            log.error("Choose connection failed using RandomSelectStrategy!", e);
+            log.error("Choose connection failed using RandomConnectionSelectStrategy!", e);
             return null;
         }
     }

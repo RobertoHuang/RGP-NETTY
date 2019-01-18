@@ -34,7 +34,7 @@ public interface ConnectionFactory {
 
     /**
      * 功能描述: <br>
-     * 〈Create a connection use connectionURL〉
+     * 〈Create a connection use connectionURL.〉
      *
      * @param connectionURL
      * @return > roberto.group.process.netty.practice.connection.Connection

@@ -2,7 +2,7 @@
  * FileName: ConnectionManager
  * Author:   HuangTaiHong
  * Date:     2019/1/2 10:35
- * Description: Connection manager of connection pool
+ * Description: Connection manager of connection pool.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Connection manager of connection pool〉
+ * 〈Connection manager of connection pool.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -34,6 +34,17 @@ public interface ConnectionManager extends Scannable {
      * @date 2019.01.02 20:04:14
      */
     void init();
+
+    /**
+     * 功能描述: <br>
+     * 〈Get the number of Connection in ConnectionPool with the specified pool key.〉
+     *
+     * @param poolKey
+     * @return > int
+     * @author HuangTaiHong
+     * @date 2019.01.03 09:56:04
+     */
+    int count(String poolKey);
 
     /**
      * 功能描述: <br>
@@ -143,17 +154,6 @@ public interface ConnectionManager extends Scannable {
 
     /**
      * 功能描述: <br>
-     * 〈Get the number of Connection in ConnectionPool with the specified pool key.〉
-     *
-     * @param poolKey
-     * @return > int
-     * @author HuangTaiHong
-     * @date 2019.01.03 09:56:04
-     */
-    int count(String poolKey);
-
-    /**
-     * 功能描述: <br>
      * 〈Create a connection using specified connectionURL.〉
      *
      * @param connectionURL
@@ -193,7 +193,7 @@ public interface ConnectionManager extends Scannable {
 
     /**
      * 功能描述: <br>
-     * 〈Get a connection using connectionURL, if null then create and add into  ConnectionPool.〉
+     * 〈Get a connection using connectionURL, if null then create and add into ConnectionPool.〉
      *
      * @param connectionURL
      * @return > roberto.group.process.netty.practice.connection.Connection

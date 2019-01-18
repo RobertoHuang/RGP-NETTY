@@ -19,7 +19,7 @@ import roberto.group.process.netty.practice.command.factory.CommandFactory;
 import roberto.group.process.netty.practice.configuration.switches.impl.ProtocolSwitch;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
-import roberto.group.process.netty.practice.connection.manager.impl.DefaultConnectionManager;
+import roberto.group.process.netty.practice.connection.manager.DefaultConnectionManager;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.exception.SerializationException;
 import roberto.group.process.netty.practice.protocol.ProtocolManager;

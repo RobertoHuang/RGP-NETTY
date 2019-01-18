@@ -2,16 +2,16 @@
  * FileName: ReconnectManager
  * Author:   HuangTaiHong
  * Date:     2019/1/3 13:48
- * Description: 重新连接管理器
+ * Description: Reconnect manager.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection;
+package roberto.group.process.netty.practice.connection.manager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import roberto.group.process.netty.practice.connection.manager.ConnectionManager;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.exception.RemotingException;
 
 import java.util.List;
@@ -20,105 +20,69 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈重新连接管理器〉
+ * 〈Reconnect manager.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/3
  * @since 1.0.0
  */
+@Slf4j
 public class ReconnectManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReconnectManager.class);
-
-    /** 重连线程状态 **/
     private volatile boolean started;
 
-    /** 重连时间间隔 **/
     private int healConnectionInterval = 1000;
 
-    /** 重新连接线程 **/
     private final Thread healConnectionThreads;
 
-    /** 连接管理器 - 用于真正执行重新连接任务 **/
     private ConnectionManager connectionManager;
 
-    /** 用于保存取消重新连接的任务 **/
-    protected final List<ConnectionURL> canceledTasks = new CopyOnWriteArrayList<>();
+    private final List<ConnectionURL> canceledTasks = new CopyOnWriteArrayList<>();
 
-    /** 用于保存需要重新连接的任务 **/
     private final LinkedBlockingQueue<ReconnectTask> reconnectTasks = new LinkedBlockingQueue<>();
 
     public ReconnectManager(ConnectionManager connectionManager) {
-        this.connectionManager = connectionManager;
-        // 启动消费重新连接任务线程
-        this.healConnectionThreads = new Thread(new HealConnectionRunner());
-        this.healConnectionThreads.start();
         this.started = true;
+        this.connectionManager = connectionManager;
+        (this.healConnectionThreads = new Thread(new HealConnectionRunner())).start();
     }
 
-    public void addReconnectTask(ConnectionURL url) {
-        reconnectTasks.add(new ReconnectTask(url));
+    private boolean isValidTask(ReconnectTask task) {
+        return !canceledTasks.contains(task.connectionURL);
+    }
+
+    public void addReconnectTask(ConnectionURL connectionURL) {
+        reconnectTasks.add(new ReconnectTask(connectionURL));
     }
 
     private void addReconnectTask(ReconnectTask task) {
         reconnectTasks.add(task);
     }
 
-    public void addCancelUrl(ConnectionURL url) {
-        canceledTasks.add(url);
+    public void addCancelUrl(ConnectionURL connectionURL) {
+        canceledTasks.add(connectionURL);
     }
 
-    public void removeCancelUrl(ConnectionURL url) {
-        canceledTasks.remove(url);
+    public void removeCancelUrl(ConnectionURL connectionURL) {
+        canceledTasks.remove(connectionURL);
     }
 
     private void doReconnectTask(ReconnectTask task) throws InterruptedException, RemotingException {
         connectionManager.createConnectionAndHealIfNeed(task.connectionURL);
     }
 
-    /**
-     * 功能描述: <br>
-     * 〈检查任务是否有效、如果被取消则无效〉
-     *
-     * @param task
-     * @return > boolean
-     * @author HuangTaiHong
-     * @date 2019.01.03 13:58:06
-     */
-    private boolean isValidTask(ReconnectTask task) {
-        return !canceledTasks.contains(task.connectionURL);
-    }
-
-    /**
-     * 功能描述: <br>
-     * 〈停止消费重新连接任务线程〉
-     *
-     * @author HuangTaiHong
-     * @date 2019.01.03 14:34:25
-     */
     public void stop() {
         if (!this.started) {
             return;
         }
         this.started = false;
         healConnectionThreads.interrupt();
-        this.reconnectTasks.clear();
         this.canceledTasks.clear();
+        this.reconnectTasks.clear();
     }
 
-    /**
-     * 〈一句话功能简述〉
-     * 〈重新连接任务〉
-     *
-     * @author HuangTaiHong
-     * @create 2019.01.03
-     * @since 1.0.0
-     */
+    @AllArgsConstructor
     class ReconnectTask {
         private ConnectionURL connectionURL;
-
-        public ReconnectTask(ConnectionURL connectionURL) {
-            this.connectionURL = connectionURL;
-        }
     }
 
     private final class HealConnectionRunner implements Runnable {
@@ -152,7 +116,7 @@ public class ReconnectManager {
                             throw e;
                         }
                     } else {
-                        LOGGER.warn("Invalid reconnect request task {}, cancel list size {}", task.connectionURL, canceledTasks.size());
+                        log.warn("Invalid reconnect request task {}, cancel list size {}", task.connectionURL, canceledTasks.size());
                     }
                     this.lastConnectTime = System.currentTimeMillis() - start;
                 } catch (Exception e) {
@@ -161,23 +125,13 @@ public class ReconnectManager {
             }
         }
 
-        /**
-         * 功能描述: <br>
-         * 〈出现异常则重新加回任务队列〉
-         *
-         * @param start
-         * @param task
-         * @param e
-         * @author HuangTaiHong
-         * @date 2019.01.03 14:26:23
-         */
         private void retryWhenException(long start, ReconnectTask task, Exception e) {
             if (start != -1) {
                 this.lastConnectTime = System.currentTimeMillis() - start;
             }
 
             if (task != null) {
-                LOGGER.warn("reconnect target: {} failed.", task.connectionURL, e);
+                log.warn("reconnect target: {} failed.", task.connectionURL, e);
                 ReconnectManager.this.addReconnectTask(task);
             }
         }

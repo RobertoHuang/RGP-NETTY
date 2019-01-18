@@ -2,7 +2,7 @@
  * FileName: Connection
  * Author:   HuangTaiHong
  * Date:     2019/1/2 10:37
- * Description: 连接实体类
+ * Description: An abstraction of socket channel.
  * History:
  * <author>          <time>          <protocolVersion>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈连接实体类〉
+ * 〈An abstraction of socket channel.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

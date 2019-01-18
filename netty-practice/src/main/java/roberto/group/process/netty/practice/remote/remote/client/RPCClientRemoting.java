@@ -13,7 +13,7 @@ import roberto.group.process.netty.practice.command.command.RemotingCommand;
 import roberto.group.process.netty.practice.command.factory.CommandFactory;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
-import roberto.group.process.netty.practice.connection.manager.impl.DefaultConnectionManager;
+import roberto.group.process.netty.practice.connection.manager.DefaultConnectionManager;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
 import roberto.group.process.netty.practice.remote.invoke.callback.InvokeCallback;
@@ -37,9 +37,9 @@ public class RPCClientRemoting extends RPCRemoting {
 
     @Override
     public void oneway(ConnectionURL connectionURL, Object request, InvokeContext invokeContext) throws RemotingException, InterruptedException {
-        final Connection conn = getConnectionAndInitInvokeContext(connectionURL, invokeContext);
-        this.connectionManager.check(conn);
-        this.oneway(conn, request, invokeContext);
+        final Connection connection = getConnectionAndInitInvokeContext(connectionURL, invokeContext);
+        this.connectionManager.check(connection);
+        this.oneway(connection, request, invokeContext);
     }
 
     @Override
@@ -51,16 +51,16 @@ public class RPCClientRemoting extends RPCRemoting {
 
     @Override
     public RPCResponseFuture invokeWithFuture(ConnectionURL connectionURL, Object request, InvokeContext invokeContext, int timeoutMillis) throws RemotingException, InterruptedException {
-        final Connection conn = getConnectionAndInitInvokeContext(connectionURL, invokeContext);
-        this.connectionManager.check(conn);
-        return this.invokeWithFuture(conn, request, invokeContext, timeoutMillis);
+        final Connection connection = getConnectionAndInitInvokeContext(connectionURL, invokeContext);
+        this.connectionManager.check(connection);
+        return this.invokeWithFuture(connection, request, invokeContext, timeoutMillis);
     }
 
     @Override
     public void invokeWithCallback(ConnectionURL connectionURL, Object request, InvokeContext invokeContext, InvokeCallback invokeCallback, int timeoutMillis) throws RemotingException, InterruptedException {
-        final Connection conn = getConnectionAndInitInvokeContext(connectionURL, invokeContext);
-        this.connectionManager.check(conn);
-        this.invokeWithCallback(conn, request, invokeContext, invokeCallback, timeoutMillis);
+        final Connection connection = getConnectionAndInitInvokeContext(connectionURL, invokeContext);
+        this.connectionManager.check(connection);
+        this.invokeWithCallback(connection, request, invokeContext, invokeCallback, timeoutMillis);
     }
 
     @Override

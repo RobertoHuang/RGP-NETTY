@@ -2,12 +2,12 @@
  * FileName: ConnectionMonitorStrategy
  * Author:   HuangTaiHong
  * Date:     2019/1/9 17:03
- * Description: The strategy of connection monitor
+ * Description: The strategy of connection monitor.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection.strategy;
+package roberto.group.process.netty.practice.connection.monitor;
 
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionPool;

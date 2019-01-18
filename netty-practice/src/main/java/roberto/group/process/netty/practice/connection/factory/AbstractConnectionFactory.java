@@ -7,7 +7,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection.factory.impl;
+package roberto.group.process.netty.practice.connection.factory;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -30,7 +30,6 @@ import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
-import roberto.group.process.netty.practice.connection.factory.ConnectionFactory;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
 import roberto.group.process.netty.practice.protocol.ProtocolCode;
 import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
@@ -51,18 +50,22 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public abstract class AbstractConnectionFactory implements ConnectionFactory {
     protected Bootstrap bootstrap;
-    private final ChannelHandler heartbeatHandler;
+    private final ChannelHandler encoder;
+    private final ChannelHandler decoder;
     private final ChannelHandler businessHandler;
+    private final ChannelHandler heartbeatHandler;
     private final ConfigurableInstance configurableInstance;
     private static final EventLoopGroup workerGroup = NettyEventLoopUtil.newEventLoopGroup(Runtime.getRuntime().availableProcessors() + 1, new NamedThreadFactory("bolt-netty-client-worker", true));
 
-    public AbstractConnectionFactory(ChannelHandler heartbeatHandler, ChannelHandler businessHandler, ConfigurableInstance configurableInstance) {
+    public AbstractConnectionFactory(ChannelHandler encoder, ChannelHandler decoder, ChannelHandler businessHandler, ChannelHandler heartbeatHandler, ConfigurableInstance configurableInstance) {
         if (businessHandler == null) {
             throw new IllegalArgumentException("businessHandler must no be null.");
         }
 
-        this.heartbeatHandler = heartbeatHandler;
+        this.encoder = encoder;
+        this.decoder = decoder;
         this.businessHandler = businessHandler;
+        this.heartbeatHandler = heartbeatHandler;
         this.configurableInstance = configurableInstance;
     }
 
@@ -127,7 +130,7 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
 
     /**
      * 功能描述: <br>
-     * 〈init netty write buffer water mark〉
+     * 〈init netty write buffer water mark.〉
      *
      * @author HuangTaiHong
      * @date 2019.01.08 16:36:01
@@ -163,17 +166,17 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
         bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, connectTimeout);
         ChannelFuture future = bootstrap.connect(new InetSocketAddress(targetIP, targetPort)).awaitUninterruptibly();
         if (!future.isDone()) {
-            String errMsg = "Create connection to " + address + " timeout!";
-            log.warn(errMsg);
-            throw new Exception(errMsg);
+            String errorMessage = "Create connection to " + address + " timeout!";
+            log.warn(errorMessage);
+            throw new Exception(errorMessage);
         } else if (future.isCancelled()) {
-            String errMsg = "Create connection to " + address + " cancelled by user!";
-            log.warn(errMsg);
-            throw new Exception(errMsg);
+            String errorMessage = "Create connection to " + address + " cancelled by user!";
+            log.warn(errorMessage);
+            throw new Exception(errorMessage);
         } else if (!future.isSuccess()) {
-            String errMsg = "Create connection to " + address + " error!";
-            log.warn(errMsg);
-            throw new Exception(errMsg, future.cause());
+            String errorMessage = "Create connection to " + address + " error!";
+            log.warn(errorMessage);
+            throw new Exception(errorMessage, future.cause());
         }
         return future.channel();
     }

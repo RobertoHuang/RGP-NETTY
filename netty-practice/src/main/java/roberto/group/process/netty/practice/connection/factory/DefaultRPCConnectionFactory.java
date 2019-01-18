@@ -7,12 +7,16 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection.factory.impl;
+package roberto.group.process.netty.practice.connection.factory;
 
+import roberto.group.process.netty.practice.codec.ProtocolCodeBasedDecoder;
+import roberto.group.process.netty.practice.codec.ProtocolCodeBasedEncoder;
 import roberto.group.process.netty.practice.command.processor.custom.UserProcessor;
 import roberto.group.process.netty.practice.configuration.configs.ConfigurableInstance;
 import roberto.group.process.netty.practice.handler.HeartbeatHandler;
 import roberto.group.process.netty.practice.handler.RPCBusinessEventHandler;
+import roberto.group.process.netty.practice.protocol.ProtocolCode;
+import roberto.group.process.netty.practice.protocol.impl.RPCProtocol;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,8 +28,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @create 2019/1/8
  * @since 1.0.0
  */
-public class DefaultRPCConnectionFactory extends AbstractConnectionFactory{
+public class DefaultRPCConnectionFactory extends AbstractConnectionFactory {
     public DefaultRPCConnectionFactory(ConcurrentHashMap<String, UserProcessor<?>> userProcessors, ConfigurableInstance configurableInstance) {
-        super(new HeartbeatHandler(), new RPCBusinessEventHandler(userProcessors), configurableInstance);
+        super(new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RPCProtocol.PROTOCOL_CODE)), new ProtocolCodeBasedDecoder(RPCProtocol.DEFAULT_PROTOCOL_CODE_LENGTH), new HeartbeatHandler(), new RPCBusinessEventHandler(userProcessors), configurableInstance);
     }
 }

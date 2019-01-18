@@ -96,9 +96,9 @@ public class BasicUsageDemo {
                 client.oneway(address, requestBody);
                 Thread.sleep(100);
             } catch (RemotingException e) {
-                String errMsg = "RemotingException caught in oneway!";
-                log.error(errMsg, e);
-                Assert.fail(errMsg);
+                String errorMessage = "RemotingException caught in oneway!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             }
         }
         Assert.assertTrue(serverConnectProcessor.isConnected());
@@ -184,16 +184,16 @@ public class BasicUsageDemo {
                 }, 1000);
             } catch (RemotingException e) {
                 countDownLatch.countDown();
-                String errMsg = "RemotingException caught in callback!";
-                log.error(errMsg, e);
-                Assert.fail(errMsg);
+                String errorMessage = "RemotingException caught in callback!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             }
             try {
                 countDownLatch.await();
             } catch (InterruptedException e) {
-                String errMsg = "InterruptedException caught in callback!";
-                log.error(errMsg, e);
-                Assert.fail(errMsg);
+                String errorMessage = "InterruptedException caught in callback!";
+                log.error(errorMessage, e);
+                Assert.fail(errorMessage);
             }
             if (resultList.size() == 0) {
                 Assert.fail("No result! Maybe exception caught!");

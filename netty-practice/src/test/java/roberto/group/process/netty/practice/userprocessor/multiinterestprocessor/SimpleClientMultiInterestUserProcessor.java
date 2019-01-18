@@ -92,9 +92,9 @@ public class SimpleClientMultiInterestUserProcessor extends SyncMutiInterestUser
     public Object handleRequest(BizContext bizCtx, MultiInterestBaseRequestBody request) throws Exception {
         log.warn("Request received:" + request);
         if (bizCtx.isRequestTimeout()) {
-            String errMsg = "Stop process in client biz thread, already timeout!";
-            log.warn(errMsg);
-            throw new Exception(errMsg);
+            String errorMessage = "Stop process in client biz thread, already timeout!";
+            log.warn(errorMessage);
+            throw new Exception(errorMessage);
         }
         if (request instanceof RequestBodyFromClient1) {
             Assert.assertEquals(RequestBodyFromClient1.class, request.getClass());

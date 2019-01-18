@@ -2,12 +2,12 @@
  * FileName: DefaultConnectionManager
  * Author:   HuangTaiHong
  * Date:     2019/1/4 15:56
- * Description: default connection manager
+ * Description: default connection manager.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection.manager.impl;
+package roberto.group.process.netty.practice.connection.manager;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,14 +18,12 @@ import org.apache.commons.lang3.StringUtils;
 import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
 import roberto.group.process.netty.practice.connection.Connection;
-import roberto.group.process.netty.practice.connection.ConnectionEventListener;
+import roberto.group.process.netty.practice.connection.RandomConnectionSelectStrategy;
+import roberto.group.process.netty.practice.connection.processor.ConnectionEventListener;
 import roberto.group.process.netty.practice.connection.ConnectionPool;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.connection.factory.ConnectionFactory;
-import roberto.group.process.netty.practice.connection.manager.ConnectionManager;
-import roberto.group.process.netty.practice.connection.manager.HeartbeatStatusManager;
-import roberto.group.process.netty.practice.connection.strategy.ConnectionSelectStrategy;
-import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
+import roberto.group.process.netty.practice.connection.ConnectionSelectStrategy;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
 import roberto.group.process.netty.practice.remote.help.RemotingAddressParser;
@@ -51,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈default connection manager〉
+ * 〈default connection manager.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/4
@@ -61,6 +59,7 @@ import java.util.concurrent.TimeUnit;
 public class DefaultConnectionManager implements ConnectionManager, HeartbeatStatusManager {
     /** switch status **/
     private GlobalSwitch globalSwitch;
+
     @Getter
     @Setter
     /** address parser **/
@@ -84,6 +83,26 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
     /** default expire time to remove connection connectionPool, time unit: milliseconds **/
     private static final int DEFAULT_EXPIRE_TIME = 10 * 60 * 1000;
 
+    @Getter
+    @Setter
+    /** connection factory **/
+    protected ConnectionFactory connectionFactory;
+
+    @Getter
+    @Setter
+    /** connectionPool select strategy **/
+    protected ConnectionSelectStrategy connectionSelectStrategy;
+
+    @Getter
+    @Setter
+    /** connection event handler **/
+    protected ConnectionEventHandler connectionEventHandler;
+
+    @Getter
+    @Setter
+    /** connection event listener **/
+    protected ConnectionEventListener connectionEventListener;
+
     /** heal connection tasks **/
     protected ConcurrentHashMap<String, FutureTask<Integer>> healTasks;
 
@@ -91,27 +110,10 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
     /** connection pool initialize tasks **/
     protected ConcurrentHashMap<String, RunStateRecordedFutureTask<ConnectionPool>> connectionTasks;
 
-    @Getter
-    @Setter
-    /** connection factory **/
-    protected ConnectionFactory connectionFactory;
-    @Getter
-    @Setter
-    /** connection connectionPool select strategy **/
-    protected ConnectionSelectStrategy connectionSelectStrategy;
-    @Getter
-    @Setter
-    /** connection event handler **/
-    protected ConnectionEventHandler connectionEventHandler;
-    @Getter
-    @Setter
-    /** connection event listener **/
-    protected ConnectionEventListener connectionEventListener;
-
     public DefaultConnectionManager() {
         this.healTasks = new ConcurrentHashMap();
         this.connectionTasks = new ConcurrentHashMap();
-        this.connectionSelectStrategy = new RandomSelectStrategy(globalSwitch);
+        this.connectionSelectStrategy = new RandomConnectionSelectStrategy(globalSwitch);
     }
 
     public DefaultConnectionManager(ConnectionSelectStrategy connectionSelectStrategy) {
@@ -125,7 +127,7 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
     }
 
     public DefaultConnectionManager(ConnectionFactory connectionFactory, RemotingAddressParser addressParser, ConnectionEventHandler connectionEventHandler) {
-        this(new RandomSelectStrategy(), connectionFactory);
+        this(new RandomConnectionSelectStrategy(), connectionFactory);
         this.addressParser = addressParser;
         this.connectionEventHandler = connectionEventHandler;
     }
@@ -146,6 +148,16 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
         this.connectionEventHandler.setConnectionManager(this);
         this.connectionEventHandler.setConnectionEventListener(connectionEventListener);
         this.connectionFactory.init(connectionEventHandler);
+    }
+
+    @Override
+    public int count(String poolKey) {
+        if (StringUtils.isBlank(poolKey)) {
+            return 0;
+        } else {
+            ConnectionPool connectionPool;
+            return (connectionPool = this.getConnectionPool(this.connectionTasks.get(poolKey))) == null ? 0 : connectionPool.size();
+        }
     }
 
     @Override
@@ -204,7 +216,7 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
             return;
         } else {
             Set<String> poolKeys = connection.getPoolKeys();
-            if (null == poolKeys || poolKeys.isEmpty()) {
+            if (poolKeys == null || poolKeys.isEmpty()) {
                 connection.close();
                 log.warn("Remove and close a standalone connection.");
             } else {
@@ -215,7 +227,7 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
 
     @Override
     public void remove(String poolKey, Connection connection) {
-        if (null == connection || StringUtils.isBlank(poolKey)) {
+        if (connection == null || StringUtils.isBlank(poolKey)) {
             return;
         } else {
             ConnectionPool connectionPool = this.getConnectionPool(this.connectionTasks.get(poolKey));
@@ -239,14 +251,8 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
         if (StringUtils.isBlank(poolKey)) {
             return;
         } else {
-            RunStateRecordedFutureTask<ConnectionPool> task = this.connectionTasks.remove(poolKey);
-            if (null != task) {
-                ConnectionPool connectionPool = this.getConnectionPool(task);
-                if (null != connectionPool) {
-                    connectionPool.removeAllAndTryClose();
-                    log.warn("Remove and close all connections in ConnectionPool of poolKey={}", poolKey);
-                }
-            }
+            this.removeTask(poolKey);
+            log.warn("Remove and close all connections in ConnectionPool of poolKey={}", poolKey);
         }
     }
 
@@ -277,16 +283,6 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
         if (!connection.getChannel().isWritable()) {
             // No remove. Most of the time it is unwritable temporarily.
             throw new RemotingException("Check connection failed for address: " + connection.getConnectionURL() + ", maybe write overflow!");
-        }
-    }
-
-    @Override
-    public int count(String poolKey) {
-        if (StringUtils.isBlank(poolKey)) {
-            return 0;
-        } else {
-            ConnectionPool connectionPool;
-            return (connectionPool = this.getConnectionPool(this.connectionTasks.get(poolKey))) == null ? 0 : connectionPool.size();
         }
     }
 
@@ -388,8 +384,8 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
      */
     private void removeTask(String poolKey) {
         RunStateRecordedFutureTask<ConnectionPool> task = this.connectionTasks.remove(poolKey);
-        if (null != task) {
-            ConnectionPool connectionPool = FutureTaskUtil.getFutureTaskResult(task, log);
+        if (task != null) {
+            ConnectionPool connectionPool = this.getConnectionPool(task);
             if (null != connectionPool) {
                 connectionPool.removeAllAndTryClose();
             }
@@ -417,10 +413,10 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
         RunStateRecordedFutureTask<ConnectionPool> initialTask;
         for (int i = 0; (i < retry) && (pool == null); ++i) {
             initialTask = this.connectionTasks.get(poolKey);
-            if (null == initialTask) {
+            if (initialTask == null) {
                 initialTask = new RunStateRecordedFutureTask<>(callable);
                 initialTask = this.connectionTasks.putIfAbsent(poolKey, initialTask);
-                if (null == initialTask) {
+                if (initialTask == null) {
                     initialTask = this.connectionTasks.get(poolKey);
                     initialTask.run();
                 }
@@ -428,14 +424,14 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
 
             try {
                 pool = initialTask.get();
-                if (null == pool) {
+                if (pool == null) {
                     if (i + 1 < retry) {
                         timesOfResultNull++;
                         continue;
                     }
                     this.connectionTasks.remove(poolKey);
-                    String errMsg = "Get future task result null for poolKey [" + poolKey + "] after [" + (timesOfResultNull + 1) + "] times try.";
-                    throw new RemotingException(errMsg);
+                    String errorMessage = "Get future task result null for poolKey [" + poolKey + "] after [" + (timesOfResultNull + 1) + "] times try.";
+                    throw new RemotingException(errorMessage);
                 }
             } catch (InterruptedException e) {
                 if (i + 1 < retry) {
@@ -461,7 +457,7 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
 
     /**
      * 功能描述: <br>
-     * 〈do create connections〉
+     * 〈do create connections.〉
      *
      * whether the warm up connection is required by the ConnectionURL.connectionWarmup property
      *
@@ -534,7 +530,7 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
 
     /**
      * 功能描述: <br>
-     * 〈initialize executor〉
+     * 〈initialize executor.〉
      *
      * @author HuangTaiHong
      * @date 2019.01.08 11:32:01
@@ -563,10 +559,10 @@ public class DefaultConnectionManager implements ConnectionManager, HeartbeatSta
         // and the actual size of connections less than expected, the healing task can be run.
         if (connectionPool.isAsyncCreationDone() && connectionPool.size() < connectionURL.getConnectionNumber()) {
             FutureTask<Integer> task = this.healTasks.get(poolKey);
-            if (null == task) {
+            if (task == null) {
                 task = new FutureTask<>(new HealConnectionCall(connectionURL, connectionPool));
                 task = this.healTasks.putIfAbsent(poolKey, task);
-                if (null == task) {
+                if (task == null) {
                     task = this.healTasks.get(poolKey);
                     task.run();
                 }

@@ -33,12 +33,12 @@ import roberto.group.process.netty.practice.command.processor.processor.Remoting
 import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.configuration.switches.impl.GlobalSwitch;
 import roberto.group.process.netty.practice.connection.Connection;
-import roberto.group.process.netty.practice.connection.ConnectionEventListener;
-import roberto.group.process.netty.practice.connection.ConnectionEventProcessor;
+import roberto.group.process.netty.practice.connection.processor.ConnectionEventListener;
+import roberto.group.process.netty.practice.connection.processor.ConnectionEventProcessor;
 import roberto.group.process.netty.practice.connection.ConnectionURL;
 import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
-import roberto.group.process.netty.practice.connection.manager.impl.DefaultConnectionManager;
-import roberto.group.process.netty.practice.connection.strategy.impl.RandomSelectStrategy;
+import roberto.group.process.netty.practice.connection.manager.DefaultConnectionManager;
+import roberto.group.process.netty.practice.connection.RandomConnectionSelectStrategy;
 import roberto.group.process.netty.practice.exception.RemotingException;
 import roberto.group.process.netty.practice.handler.AcceptorIdleStateTrigger;
 import roberto.group.process.netty.practice.handler.ConnectionEventHandler;
@@ -150,7 +150,7 @@ public class RGPDefaultRemoteServer extends AbstractRemotingServer {
         if (this.switches().isOn(GlobalSwitch.SERVER_MANAGE_CONNECTION_SWITCH)) {
             this.connectionEventHandler = new RPCConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);
-            this.connectionEventHandler.setConnectionManager(this.connectionManager = new DefaultConnectionManager(new RandomSelectStrategy()));
+            this.connectionEventHandler.setConnectionManager(this.connectionManager = new DefaultConnectionManager(new RandomConnectionSelectStrategy()));
         } else {
             this.connectionEventHandler = new ConnectionEventHandler(switches());
             this.connectionEventHandler.setConnectionEventListener(this.connectionEventListener);

@@ -2,20 +2,18 @@
  * FileName: ConnectionSelectStrategy
  * Author:   HuangTaiHong
  * Date:     2019/1/5 14:00
- * Description: Select strategy from connection pool
+ * Description: Select strategy from connection pool.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection.strategy;
-
-import roberto.group.process.netty.practice.connection.Connection;
+package roberto.group.process.netty.practice.connection;
 
 import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈Select strategy from connection pool〉
+ * 〈Select strategy from connection pool.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/5
@@ -24,7 +22,7 @@ import java.util.List;
 public interface ConnectionSelectStrategy {
     /**
      * 功能描述: <br>
-     * 〈select strategy〉
+     * 〈select strategy.〉
      *
      * @param connections
      * @return > roberto.group.process.netty.practice.connection.Connection

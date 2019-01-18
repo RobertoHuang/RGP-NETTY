@@ -2,13 +2,14 @@
  * FileName: ConnectionEventListener
  * Author:   HuangTaiHong
  * Date:     2019/1/3 14:40
- * Description: 连接事件监听器
+ * Description: Listen and dispatch connection events.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package roberto.group.process.netty.practice.connection;
+package roberto.group.process.netty.practice.connection.processor;
 
+import roberto.group.process.netty.practice.connection.Connection;
 import roberto.group.process.netty.practice.connection.enums.ConnectionEventTypeEnum;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈连接事件监听器〉
+ * 〈Listen and dispatch connection events.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/3
@@ -29,7 +30,7 @@ public class ConnectionEventListener {
 
     /**
      * 功能描述: <br>
-     * 〈处理连接事件〉
+     * 〈Dispatch events.〉
      *
      *  获取对应事件类型对应的处理器
      *  遍历调用处理器的onEvent方法对连接事件进行处理
@@ -51,7 +52,7 @@ public class ConnectionEventListener {
 
     /**
      * 功能描述: <br>
-     * 〈注册连接事件处理器〉
+     * 〈Add event processor.〉
      *
      * @param type
      * @param processor

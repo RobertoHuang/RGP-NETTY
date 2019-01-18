@@ -2,7 +2,7 @@
  * FileName: ConnectionURL
  * Author:   HuangTaiHong
  * Date:     2019/1/3 13:52
- * Description: 连接定义
+ * Description: Connection URL definition.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈连接定义〉
+ * 〈Connection URL definition.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/3
