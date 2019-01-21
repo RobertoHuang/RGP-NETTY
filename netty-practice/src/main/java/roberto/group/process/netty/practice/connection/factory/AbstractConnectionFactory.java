@@ -23,8 +23,6 @@ import io.netty.channel.WriteBufferWaterMark;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
-import roberto.group.process.netty.practice.codec.ProtocolCodeBasedDecoder;
-import roberto.group.process.netty.practice.codec.ProtocolCodeBasedEncoder;
 import roberto.group.process.netty.practice.configuration.configs.ConfigurableInstance;
 import roberto.group.process.netty.practice.configuration.manager.ConfigManager;
 import roberto.group.process.netty.practice.connection.Connection;
@@ -91,8 +89,8 @@ public abstract class AbstractConnectionFactory implements ConnectionFactory {
             @Override
             protected void initChannel(SocketChannel channel) {
                 ChannelPipeline pipeline = channel.pipeline();
-                pipeline.addLast("decoder", new ProtocolCodeBasedDecoder(RPCProtocol.DEFAULT_PROTOCOL_CODE_LENGTH));
-                pipeline.addLast("encoder", new ProtocolCodeBasedEncoder(ProtocolCode.fromBytes(RPCProtocol.PROTOCOL_CODE)));
+                pipeline.addLast("decoder", AbstractConnectionFactory.this.decoder);
+                pipeline.addLast("encoder", AbstractConnectionFactory.this.encoder);
                 boolean idleSwitch = ConfigManager.tcp_idle_switch();
                 if (idleSwitch) {
                     pipeline.addLast("idleStateHandler", new IdleStateHandler(ConfigManager.tcp_client_idle(), ConfigManager.tcp_client_idle(), 0, TimeUnit.MILLISECONDS));
