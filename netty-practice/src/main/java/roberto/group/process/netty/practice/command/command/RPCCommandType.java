@@ -19,9 +19,9 @@ package roberto.group.process.netty.practice.command.command;
  */
 public class RPCCommandType {
     /** RPC response */
-    public static final byte RESPONSE       = (byte) 0x00;
+    public static final byte RESPONSE = (byte) 0x00;
     /** RPC request */
-    public static final byte REQUEST        = (byte) 0x01;
+    public static final byte REQUEST = (byte) 0x01;
     /** RPC oneway request */
     public static final byte REQUEST_ONEWAY = (byte) 0x02;
 }

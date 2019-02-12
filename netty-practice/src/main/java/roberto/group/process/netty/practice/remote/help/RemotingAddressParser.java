@@ -24,7 +24,7 @@ import roberto.group.process.netty.practice.connection.ConnectionURL;
 public interface RemotingAddressParser {
     /**
      * 功能描述: <br>
-     * 〈Parse a simple string url to get ConnectionURL〉
+     * 〈Parse a simple string url to get ConnectionURL.〉
      *
      * @param url
      * @return > roberto.group.process.netty.practice.connection.ConnectionURL
@@ -35,7 +35,7 @@ public interface RemotingAddressParser {
 
     /**
      * 功能描述: <br>
-     * 〈Initialize ConnectionURL arguments〉
+     * 〈Initialize ConnectionURL arguments.〉
      *
      * @param connectionURL
      * @author HuangTaiHong

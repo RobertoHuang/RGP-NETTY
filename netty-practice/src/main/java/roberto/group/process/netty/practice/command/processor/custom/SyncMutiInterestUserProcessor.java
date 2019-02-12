@@ -22,7 +22,7 @@ import java.util.List;
  * @create 2019/1/9
  * @since 1.0.0
  */
-public abstract class SyncMutiInterestUserProcessor <T> extends MultiInterestUserProcessor<T>{
+public abstract class SyncMutiInterestUserProcessor<T> extends MultiInterestUserProcessor<T>{
     @Override
     public abstract Object handleRequest(BizContext bizCtx, T request) throws Exception;
 

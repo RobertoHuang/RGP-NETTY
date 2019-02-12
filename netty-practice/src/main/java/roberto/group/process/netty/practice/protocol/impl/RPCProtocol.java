@@ -25,10 +25,10 @@ import roberto.group.process.netty.practice.protocol.Protocol;
  * 〈一句话功能简述〉<br>
  * 〈RPC Protocol.〉
  *
- *  Request command protocol for v2
+ *  Request command protocol
  *  0     1     2           4           6           8          10     11     12          14         16
  *  +-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+-----+-----+
- *  |proto| ver1|type | cmdcode   |ver2 |   requestId           |codec|switch|   timeout             |
+ *  |proto| ver1| type| cmdcode   |ver2 |   requestId           |codec|switch|   timeout             |
  *  +-----------+-----------+-----------+-----------+-----------+------------+-----------+-----------+
  *  |classLen   |headerLen  |contentLen             |           ...                                  |
  *  +-----------+-----------+-----------+-----------+                                                +

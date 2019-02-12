@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
  * @since 1.0.0
  */
 @NoArgsConstructor
-public class FutureTaskNotRunYetException extends Exception{
+public class FutureTaskNotRunYetException extends Exception {
     /** For serialization */
     private static final long serialVersionUID = 2929126204324060632L;
 

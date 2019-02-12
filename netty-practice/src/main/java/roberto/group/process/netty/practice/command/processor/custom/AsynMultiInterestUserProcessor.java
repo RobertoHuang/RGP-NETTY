@@ -22,7 +22,7 @@ import java.util.List;
  * @create 2019/1/9
  * @since 1.0.0
  */
-public abstract class AsynMultiInterestUserProcessor <T> extends MultiInterestUserProcessor<T>{
+public abstract class AsynMultiInterestUserProcessor<T> extends MultiInterestUserProcessor<T> {
     @Override
     public Object handleRequest(BizContext bizCtx, T request) throws Exception {
         throw new UnsupportedOperationException("SYNC handle request is unsupported in AsynMultiInterestUserProcessor!");

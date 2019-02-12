@@ -259,7 +259,6 @@ public class RGPDefaultRemoteClient extends AbstractConfigurableInstance {
     public void invokeWithCallback(final Connection connection, final Object request, final InvokeContext invokeContext, final InvokeCallback invokeCallback, final int timeoutMillis) throws RemotingException {
         this.remoting.invokeWithCallback(connection, request, invokeContext, invokeCallback, timeoutMillis);
     }
-
     /*********************************************网络通信相关方法结束*********************************************/
 
     public void registerUserProcessor(UserProcessor<?> processor) {

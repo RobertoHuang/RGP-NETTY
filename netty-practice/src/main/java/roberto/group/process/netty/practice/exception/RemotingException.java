@@ -17,7 +17,7 @@ package roberto.group.process.netty.practice.exception;
  * @create 2019/1/3
  * @since 1.0.0
  */
-public class RemotingException extends Exception{
+public class RemotingException extends Exception {
     private static final long serialVersionUID = 6183635628271812505L;
 
     public RemotingException() {

@@ -49,14 +49,17 @@ public class GlobalSwitch implements Switch {
         }
     }
 
+    @Override
     public void turnOn(int index) {
         this.userSettings.set(index);
     }
 
+    @Override
     public void turnOff(int index) {
         this.userSettings.clear(index);
     }
 
+    @Override
     public boolean isOn(int index) {
         return this.userSettings.get(index);
     }

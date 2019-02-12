@@ -2,7 +2,7 @@
  * FileName: ProtocolCodeBasedDecoder
  * Author:   HuangTaiHong
  * Date:     2019/1/2 19:07
- * Description: Protocol code based decoder, the main decoder for a certain protocol, which is lead by one or multi bytes (magic code).
+ * Description: Protocol code based decoder.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述

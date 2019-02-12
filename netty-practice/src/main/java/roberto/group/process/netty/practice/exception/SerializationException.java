@@ -9,6 +9,8 @@
  */
 package roberto.group.process.netty.practice.exception;
 
+import lombok.NoArgsConstructor;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈Exception when serialize failed.〉
@@ -17,14 +19,11 @@ package roberto.group.process.netty.practice.exception;
  * @create 2019/1/4
  * @since 1.0.0
  */
+@NoArgsConstructor
 public class SerializationException extends CodecException {
     private static final long serialVersionUID = 5668965722686668067L;
 
     private boolean serverSide = false;
-
-    public SerializationException() {
-
-    }
 
     public SerializationException(String message) {
         super(message);

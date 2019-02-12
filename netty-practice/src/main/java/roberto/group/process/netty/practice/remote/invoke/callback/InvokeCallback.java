@@ -2,7 +2,7 @@
  * FileName: InvokeCallback
  * Author:   HuangTaiHong
  * Date:     2019/1/2 11:01
- * Description: 回调处理器
+ * Description: Invoke callback.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈回调处理器〉
+ * 〈Invoke callback.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/2

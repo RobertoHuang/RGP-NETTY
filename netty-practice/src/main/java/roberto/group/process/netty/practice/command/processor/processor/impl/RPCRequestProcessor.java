@@ -231,10 +231,10 @@ public class RPCRequestProcessor extends RPCRemotingProcessor<RPCRequestCommand>
 
             context.writeAndFlush(serializedResponse).addListener((ChannelFutureListener) future -> {
                 if (log.isDebugEnabled()) {
-                    log.debug("Rpc response sent! requestId=" + id + ". The address is " + RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()));
+                    log.debug("RPC response sent! requestId=" + id + ". The address is " + RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()));
                 }
                 if (!future.isSuccess()) {
-                    log.error("Rpc response send failed! id=" + id + ". The address is " + RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()), future.cause());
+                    log.error("RPC response send failed! id=" + id + ". The address is " + RemotingAddressUtil.parseRemoteAddress(context.getChannelContext().channel()), future.cause());
                 }
             });
         }

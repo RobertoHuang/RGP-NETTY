@@ -9,6 +9,8 @@
  */
 package roberto.group.process.netty.practice.exception;
 
+import lombok.NoArgsConstructor;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈Exception when deserialize failed.〉
@@ -17,14 +19,11 @@ package roberto.group.process.netty.practice.exception;
  * @create 2019/1/4
  * @since 1.0.0
  */
+@NoArgsConstructor
 public class DeserializationException extends CodecException {
     private static final long serialVersionUID = 310446237157256052L;
 
     private boolean serverSide = false;
-
-    public DeserializationException() {
-
-    }
 
     public DeserializationException(String message) {
         super(message);

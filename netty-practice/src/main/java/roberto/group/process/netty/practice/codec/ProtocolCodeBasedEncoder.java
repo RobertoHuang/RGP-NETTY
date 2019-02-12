@@ -2,7 +2,7 @@
  * FileName: ProtocolCodeBasedEncoder
  * Author:   HuangTaiHong
  * Date:     2019/1/2 19:46
- * Description: Protocol code based newEncoder, the main newEncoder for a certain protocol, which is lead by one or multi bytes (magic code).
+ * Description: Protocol code based encoder.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -23,7 +23,9 @@ import java.io.Serializable;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈Protocol code based newEncoder, the main newEncoder for a certain protocol, which is lead by one or multi bytes (magic code).〉
+ * 〈Protocol code based encoder.〉
+ *
+ *  the main newEncoder for a certain protocol, which is lead by one or multi bytes (magic code).
  *
  * @author HuangTaiHong
  * @create 2019/1/2

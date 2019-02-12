@@ -22,7 +22,7 @@ import roberto.group.process.netty.practice.connection.Connection;
 public interface ConnectionEventProcessor {
     /**
      * 功能描述: <br>
-     * 〈处理连接事件〉
+     * 〈Process event.〉
      *
      * @param remoteAddress
      * @param connection

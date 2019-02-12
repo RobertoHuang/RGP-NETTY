@@ -10,8 +10,7 @@
 package roberto.group.process.netty.practice.entrance.server.impl;
 
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import roberto.group.process.netty.practice.configuration.configs.impl.AbstractConfigurableInstance;
 import roberto.group.process.netty.practice.configuration.container.ConfigTypeEnum;
 import roberto.group.process.netty.practice.entrance.server.RemotingServer;
@@ -27,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @create 2018/12/29
  * @since 1.0.0
  */
+@Slf4j
 public abstract class AbstractRemotingServer extends AbstractConfigurableInstance implements RemotingServer {
     @Getter
     private String ip;
@@ -35,8 +35,6 @@ public abstract class AbstractRemotingServer extends AbstractConfigurableInstanc
     private int port;
 
     private AtomicBoolean started = new AtomicBoolean(false);
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(AbstractRemotingServer.class);
 
     public AbstractRemotingServer(int port) {
         this(new InetSocketAddress(port).getAddress().getHostAddress(), port);
@@ -52,12 +50,12 @@ public abstract class AbstractRemotingServer extends AbstractConfigurableInstanc
         if (started.compareAndSet(false, true)) {
             try {
                 doInit();
-                LOGGER.info("Prepare to start server on port {}", port);
+                log.info("Prepare to start server on port {}", port);
                 if (doStart()) {
-                    LOGGER.info("Server started on port {}", port);
+                    log.info("Server started on port {}", port);
                     return true;
                 } else {
-                    LOGGER.warn("Failed starting server on port {}", port);
+                    log.warn("Failed starting server on port {}", port);
                     return false;
                 }
             } catch (Throwable throwable) {

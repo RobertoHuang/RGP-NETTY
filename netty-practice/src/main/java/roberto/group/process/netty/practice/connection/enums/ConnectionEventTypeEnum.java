@@ -18,5 +18,5 @@ package roberto.group.process.netty.practice.connection.enums;
  * @since 1.0.0
  */
 public enum ConnectionEventTypeEnum {
-    CONNECT, CLOSE, EXCEPTION;
+    CONNECT, CLOSE, EXCEPTION
 }

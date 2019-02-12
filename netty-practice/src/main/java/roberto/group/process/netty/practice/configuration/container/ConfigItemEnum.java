@@ -17,7 +17,7 @@ package roberto.group.process.netty.practice.configuration.container;
  * @create 2018/12/29
  * @since 1.0.0
  */
-public enum  ConfigItemEnum {
+public enum ConfigItemEnum {
     /** netty writer buffer low water mark **/
     NETTY_BUFFER_LOW_WATER_MARK,
 

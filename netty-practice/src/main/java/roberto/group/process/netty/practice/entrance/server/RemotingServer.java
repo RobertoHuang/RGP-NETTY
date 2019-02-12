@@ -2,7 +2,7 @@
  * FileName: RemotingServer
  * Author:   HuangTaiHong
  * Date:     2018/12/29 14:56
- * Description: RPC Server接口
+ * Description: RPC Server.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈RPC Server接口〉
+ * 〈RPC Server.〉
  *
  * @author HuangTaiHong
  * @create 2018/12/29
@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutorService;
 public interface RemotingServer {
     /**
      * 功能描述: <br>
-     * 〈启动服务端〉
+     * 〈Start the server.〉
      *
      * @author HuangTaiHong
      * @date 2018.12.29 14:57:24
@@ -35,7 +35,7 @@ public interface RemotingServer {
 
     /**
      * 功能描述: <br>
-     * 〈停止服务端〉
+     * 〈Stop the server.〉
      *
      * @return > boolean
      * @author HuangTaiHong
@@ -46,7 +46,7 @@ public interface RemotingServer {
 
     /**
      * 功能描述: <br>
-     * 〈获取服务端IP地址〉
+     * 〈Get the ip of the server.〉
      *
      * @return > java.lang.String
      * @author HuangTaiHong
@@ -56,7 +56,7 @@ public interface RemotingServer {
 
     /**
      * 功能描述: <br>
-     * 〈获取服务端端口号〉
+     * 〈Get the port of the server.〉
      *
      * @return > int
      * @author HuangTaiHong
@@ -66,7 +66,7 @@ public interface RemotingServer {
 
     /**
      * 功能描述: <br>
-     * 〈注册默认线程执行器〉
+     * 〈Register default executor service for server.〉
      *
      * @param protocolCode
      * @param executor
@@ -77,7 +77,7 @@ public interface RemotingServer {
 
     /**
      * 功能描述: <br>
-     * 〈注册认证处理器〉
+     * 〈Register user processor.〉
      *
      * @param processor
      * @author HuangTaiHong
@@ -87,7 +87,7 @@ public interface RemotingServer {
 
     /**
      * 功能描述: <br>
-     * 〈注册指令处理器〉
+     * 〈Register processor for command with the command code.〉
      *
      * @param protocolCode
      * @param commandCode

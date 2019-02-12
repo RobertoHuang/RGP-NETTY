@@ -2,7 +2,7 @@
  * FileName: RPCRemotingCommand
  * Author:   HuangTaiHong
  * Date:     2019/1/4 16:14
- * Description: Remoting command.
+ * Description: RPC Remoting command.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -24,7 +24,7 @@ import roberto.group.process.netty.practice.serialize.serialize.manager.Deserial
 
 /**
  * 〈一句话功能简述〉<br>
- * 〈Remoting command.〉
+ * 〈RPC Remoting command.〉
  *
  * @author HuangTaiHong
  * @create 2019/1/4

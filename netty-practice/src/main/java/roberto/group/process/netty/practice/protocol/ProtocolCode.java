@@ -2,7 +2,7 @@
  * FileName: ProtocolCode
  * Author:   HuangTaiHong
  * Date:     2019/1/2 19:11
- * Description: Protocol code definition, you can define your own protocol code in byte array ProtocolCode.version.
+ * Description: Protocol code definition.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -13,7 +13,9 @@ import java.util.Arrays;
 
 /**
  * 〈一句话功能简述〉<br> 
- * 〈Protocol code definition, you can define your own protocol code in byte array ProtocolCode.version.〉
+ * 〈Protocol code definition.〉
+ *
+ *  you can define your own protocol code in byte array ProtocolCode.version.
  *
  *  We suggest to use just one byte for simplicity.
  *

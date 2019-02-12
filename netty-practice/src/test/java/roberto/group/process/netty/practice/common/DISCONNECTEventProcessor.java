@@ -28,7 +28,6 @@ public class DISCONNECTEventProcessor implements ConnectionEventProcessor {
     private AtomicBoolean disConnected = new AtomicBoolean();
     private AtomicInteger disConnectTimes = new AtomicInteger();
 
-
     @Override
     public void onEvent(String remoteAddress, Connection connection) {
         Assert.assertNotNull(connection);

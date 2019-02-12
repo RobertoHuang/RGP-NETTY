@@ -11,9 +11,9 @@ package roberto.group.process.netty.practice.serialize.custom;
 
 import roberto.group.process.netty.practice.command.command.request.RequestCommand;
 import roberto.group.process.netty.practice.command.command.response.ResponseCommand;
+import roberto.group.process.netty.practice.context.InvokeContext;
 import roberto.group.process.netty.practice.exception.DeserializationException;
 import roberto.group.process.netty.practice.exception.SerializationException;
-import roberto.group.process.netty.practice.context.InvokeContext;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -25,7 +25,7 @@ import roberto.group.process.netty.practice.context.InvokeContext;
  * @create 2019/1/16
  * @since 1.0.0
  */
-public class DefaultCustomSerializer implements CustomSerializer{
+public class DefaultCustomSerializer implements CustomSerializer {
     @Override
     public <T extends RequestCommand> boolean serializeHeader(T request, InvokeContext invokeContext) throws SerializationException {
         return false;

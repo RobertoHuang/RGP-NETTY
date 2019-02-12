@@ -26,9 +26,11 @@ import java.util.List;
  * 〈一句话功能简述〉<br>
  * 〈Abstract Message Decoder - Support Batch Processing.〉
  *
- * 1.如果当前读取的数据不足以拼接成一个完整的业务数据包，那就保留该数据继续从TCP缓冲区中读取，直到得到一个完整的数据包
+ *  该类主要解决问题:ByteToMessageDecoder不支持批量消息处理
  *
- * 2.如果当前读到的数据加上已经读取的数据足够拼接成一个数据包，那就将已经读取的数据拼接上本次读取的数据够成一个完整的业务数据包传递到业务逻辑。多余的数据仍然保留，以便和下次读到的数据尝试拼接
+ *  1.如果当前读取的数据不足以拼接成一个完整的业务数据包，那就保留该数据继续从TCP缓冲区中读取，直到得到一个完整的数据包
+ *
+ *  2.如果当前读到的数据加上已经读取的数据足够拼接成一个数据包，那就将已经读取的数据拼接上本次读取的数据够成一个完整的业务数据包传递到业务逻辑。多余的数据仍然保留，以便和下次读到的数据尝试拼接
  *
  * @author HuangTaiHong
  * @create 2019/1/2
@@ -94,7 +96,7 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     public void handlerRemoved(ChannelHandlerContext ctx) {
         ByteBuf byteBuf = internalBuffer();
         int readable = byteBuf.readableBytes();
-        if (readable < 0) {
+        if (readable > 0) {
             // fireChannelRead if there has data in the current buffer
             ctx.fireChannelRead(byteBuf.readBytes(readable));
         }
@@ -290,6 +292,8 @@ public abstract class AbstractBatchDecoder extends ChannelInboundHandlerAdapter 
     /**
      * 功能描述: <br>
      * 〈通道转为非激活状态最后一次解码.〉
+     *
+     *  在这里它的实际作用是用来释放缓冲区资源，只是将释放资源的操作委托给了decode方法
      *
      * @param ctx
      * @param in

@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 public class RPCInvokeCallbackListener implements InvokeCallbackListener {
     private String address;
 
-    private static final ExecutorService DEFAULT_CALLBACK_EXECUTOR = new ThreadPoolExecutor(30, 50, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(10000), new NamedThreadFactory("RGP-CALLBACK-EXECUTOR", false));
+    private static final ExecutorService DEFAULT_CALLBACK_EXECUTOR = new ThreadPoolExecutor(30, 50, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(10000), new NamedThreadFactory("BOLT-CALLBACK-EXECUTOR", false));
 
     @Override
     public String getRemoteAddress() {

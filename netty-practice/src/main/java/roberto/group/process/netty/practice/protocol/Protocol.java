@@ -26,7 +26,7 @@ import roberto.group.process.netty.practice.heartbeat.HeartbeatTrigger;
 public interface Protocol {
     /**
      * 功能描述: <br>
-     * 〈Get the newEncoder for the protocol.〉
+     * 〈Get the encoder for the protocol.〉
      *
      * @return > roberto.group.process.netty.practice.command.codec.CommandEncoder
      * @author HuangTaiHong
