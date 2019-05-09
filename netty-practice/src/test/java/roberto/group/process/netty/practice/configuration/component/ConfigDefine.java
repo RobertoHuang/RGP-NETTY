@@ -1,8 +1,8 @@
 /**
  * FileName: ConfigDefine
  * Author:   HuangTaiHong
- * Date:     2019/2/15 11:23
- * Description: config define.
+ * Date:     2019/5/9 10:50
+ * Description: 配置定义解析校验类.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 〈config define.〉
+ * 〈配置定义解析校验类.〉
  *
  * @author HuangTaiHong
- * @create 2019/2/15
+ * @create 2019/5/9
  * @since 1.0.0
  */
 public class ConfigDefine {

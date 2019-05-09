@@ -1,8 +1,8 @@
 /**
  * FileName: AbstractConfigManager
  * Author:   HuangTaiHong
- * Date:     2019/2/15 14:01
- * Description: config manager.
+ * Date:     2019/5/9 15:06
+ * Description: abstract config manager.
  * History:
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
@@ -12,23 +12,23 @@ package roberto.group.process.netty.practice.configuration.manager;
 import roberto.group.process.netty.practice.configuration.component.ConfigDefine;
 import roberto.group.process.netty.practice.configuration.component.ConfigKey;
 import roberto.group.process.netty.practice.configuration.component.ConfigType;
+import roberto.group.process.netty.practice.configuration.utils.ReflexUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 〈config manager.〉
+ * 〈abstract config manager.〉
  *
  * @author HuangTaiHong
- * @create 2019/2/15
+ * @create 2019/5/9
  * @since 1.0.0
  */
 public abstract class AbstractConfigManager {
     private final ConfigDefine configDefine;
     private final Map<String, Object> params;
 
-    @SuppressWarnings("unchecked")
     public AbstractConfigManager(ConfigDefine configDefine, Map<?, ?> params) {
         for (Map.Entry<?, ?> entry : params.entrySet()) {
             if (!(entry.getKey() instanceof String)) {
@@ -70,7 +70,6 @@ public abstract class AbstractConfigManager {
         return (Class<?>) get(key);
     }
 
-    @SuppressWarnings("unchecked")
     protected List<String> getList(String key) {
         return (List<String>) get(key);
     }
@@ -85,7 +84,7 @@ public abstract class AbstractConfigManager {
         if (c == null) {
             return null;
         }
-        Object o = this.newInstance(c);
+        Object o = ReflexUtils.newInstance(c);
         if (!t.isInstance(o)) {
             throw new RuntimeException(c.getName() + " is not an instance of " + t.getName());
         }
@@ -103,9 +102,9 @@ public abstract class AbstractConfigManager {
         for (Object clazz : classNames) {
             T o;
             if (clazz instanceof String) {
-                o = AbstractConfigManager.getInstanceByClassName((String) clazz, t);
+                o = ReflexUtils.getInstanceByClassName((String) clazz, t);
             } else if (clazz instanceof Class<?>) {
-                Object instance = AbstractConfigManager.newInstance((Class<?>) clazz);
+                Object instance = ReflexUtils.newInstance((Class<?>) clazz);
                 if (!t.isInstance(instance)) {
                     throw new RuntimeException(((Class<?>) clazz).getName() + " is not an instance of " + t.getName());
                 } else {
@@ -117,39 +116,5 @@ public abstract class AbstractConfigManager {
             objects.add(o);
         }
         return objects;
-    }
-
-    /*********************************工具类*********************************/
-    public static <T> T newInstance(Class<T> c) {
-        if (c == null) {
-            throw new RuntimeException("class cannot be null");
-        }
-
-        try {
-            return c.getDeclaredConstructor().newInstance();
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Could not find a public no-argument constructor for " + c.getName(), e);
-        } catch (ReflectiveOperationException | RuntimeException e) {
-            throw new RuntimeException("Could not instantiate class " + c.getName(), e);
-        }
-    }
-
-    public static <T> T getInstanceByClassName(String className, Class<T> t) {
-        Class<?> c;
-        try {
-            c = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("class not found,name:" + className, e);
-        }
-
-        if (c == null) {
-            return null;
-        }
-
-        Object o = AbstractConfigManager.newInstance(c);
-        if (!t.isInstance(o)) {
-            throw new RuntimeException(c.getName() + " is not an instance of " + t.getName());
-        }
-        return t.cast(o);
     }
 }
