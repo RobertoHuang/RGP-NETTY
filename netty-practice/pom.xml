@@ -25,7 +25,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <lombok.version>1.16.20</lombok.version>
-        <netty.version>4.1.6.Final</netty.version>
+        <netty.version>4.1.42.Final</netty.version>
         <hessian.version>3.3.2</hessian.version>
     </properties>
 
